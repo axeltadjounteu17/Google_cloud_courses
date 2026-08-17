@@ -32,7 +32,7 @@ export default function SlideViewer({ cid, deckId, page }) {
 
   const navBtn = (target, iconName, label) =>
     target ? (
-      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-cyan/40 hover:bg-cyan/15">
+      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-violet/40 hover:bg-violet/15">
         <Icon name={iconName} size={24} />
       </Link>
     ) : (
@@ -47,7 +47,7 @@ export default function SlideViewer({ cid, deckId, page }) {
         <Breadcrumb items={[{ label: `${c.title} · Diapositives`, href: `#/slides/${cid}` }, { label: deck.title }]} />
         <h1 className="mb-3.5 text-2xl leading-snug">{deck.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Badge color="blue">Diapositive {p} / {n}</Badge>
+          <Badge color="violet">Diapositive {p} / {n}</Badge>
           <Link href={`#/course/${cid}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
             <Icon name="arrow-left" size={16} /> Cours
           </Link>
@@ -144,7 +144,7 @@ export default function SlideViewer({ cid, deckId, page }) {
           <ul className="list-none">
             {pg.bullets.map((b, i) => (
               <li key={i} className="relative border-b border-dashed border-borderline px-0 py-1.5 pl-5 text-[14.5px] leading-relaxed last:border-none">
-                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[2px] bg-gradient-to-br from-blue to-cyan" />
+                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[2px] bg-gradient-to-br from-violet to-cyan" />
                 {b}
               </li>
             ))}
@@ -163,7 +163,7 @@ export default function SlideViewer({ cid, deckId, page }) {
             href={`#/slide/${cid}/${deck.id}/${i + 1}`}
             title={`Diapositive ${i + 1}`}
             className={`h-[70px] w-[124px] shrink-0 overflow-hidden rounded-lg border-2 transition-opacity max-sm:h-[56px] max-sm:w-[96px] ${
-              i + 1 === p ? "border-cyan opacity-100 shadow-[0_0_0_3px_rgba(56,189,248,0.25)]" : "border-borderline opacity-75 hover:opacity-100 hover:border-cyan/50"
+              i + 1 === p ? "border-violet opacity-100 shadow-[0_0_0_3px_rgba(124,92,255,0.25)]" : "border-borderline opacity-75 hover:opacity-100 hover:border-violet/50"
             }`}
           >
             <img loading="lazy" src={x.img} alt={`Diapositive ${i + 1}`} className="block h-full w-full object-cover" />
@@ -178,7 +178,7 @@ export default function SlideViewer({ cid, deckId, page }) {
           </Link>
         ) : <span />}
         {nextPage ? (
-          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(37,99,235,0.7)] transition-opacity hover:opacity-90">
+          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
             Diapositive {nextPage} <Icon name="chevron-right" size={16} />
           </Link>
         ) : (

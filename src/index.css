@@ -13,6 +13,7 @@
   --blue: #4f9dff;
   --cyan: #38bdf8;
   --green: #3ddc84;
+  --violet: #7c5cff;
   --orange: #ffa94d;
   --yellow: #ffd43b;
 }
@@ -30,6 +31,7 @@ html[data-theme="light"] {
   --blue: #2563eb;
   --cyan: #0aa2c0;
   --green: #129a52;
+  --violet: #6d3fd1;
   --orange: #e8590c;
   --yellow: #c98a00;
 }
@@ -47,6 +49,7 @@ html[data-theme="light"] {
   --color-blue: var(--blue);
   --color-cyan: var(--cyan);
   --color-green: var(--green);
+  --color-violet: var(--violet);
   --color-orange: var(--orange);
   --color-yellow: var(--yellow);
 }

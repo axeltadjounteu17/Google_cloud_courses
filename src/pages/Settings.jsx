@@ -8,14 +8,14 @@ const Toggle = ({ on, onClick }) => (
     onClick={onClick}
     role="switch"
     aria-checked={on}
-    className={`relative h-[26px] w-[46px] rounded-full transition-colors ${on ? "bg-cyan" : "bg-borderline"}`}
+    className={`relative h-[26px] w-[46px] rounded-full transition-colors ${on ? "bg-textmuted" : "bg-borderline"}`}
   >
     <span className={`absolute top-[3px] left-[3px] h-5 w-5 rounded-full bg-white shadow transition-transform ${on ? "translate-x-5" : ""}`} />
   </button>
 );
 
 const Chip = ({ label, active, onClick }) => (
-  <button onClick={onClick} className={`rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${active ? "border-blue bg-blue text-white" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"}`}>
+  <button onClick={onClick} className={`rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${active ? "border-borderline bg-textmain text-bg" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"}`}>
     {label}
   </button>
 );
@@ -25,7 +25,7 @@ export default function Settings() {
 
   return (
     <div className="container mx-auto max-w-[720px]">
-      <h1 className="mb-1.5 text-[26px]">Réglages</h1>
+      <h1 className="mb-1.5 text-[26px] text-textmuted">Réglages</h1>
       <p className="mb-6 text-sm text-textmuted">Personnalisez la lecture et gérez vos données.</p>
 
       <SectionTitle>Lecture</SectionTitle>
@@ -64,7 +64,7 @@ export default function Settings() {
 
       <Card className="p-6 max-sm:p-4">
         <div className="mb-1.5 flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue/15 text-cyan"><Icon name="book" size={18} /></span>
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-hover text-textmuted"><Icon name="book" size={18} /></span>
           <div className="text-sm font-bold">À propos</div>
         </div>
         <p className="text-[12.5px] leading-relaxed text-textmuted">

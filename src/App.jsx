@@ -15,6 +15,7 @@ import Settings from "./pages/Settings.jsx";
 import QuizList from "./pages/QuizList.jsx";
 import QuizReader from "./pages/QuizReader.jsx";
 import Onboarding from "./components/Onboarding.jsx";
+import { SECTION } from "./components/ui.jsx";
 
 const NAV = [
   { path: "home", label: "Accueil", icon: "home" },
@@ -44,6 +45,7 @@ function Page({ route }) {
 function Sidebar({ active }) {
   const store = useStore();
   const st = store.globalStats();
+  const sec = SECTION[active] || SECTION.home;
   const [theme, setTheme] = useState(() => localStorage.getItem("gcp_theme") || "dark");
   const [open, setOpen] = useState(false);
 
@@ -75,7 +77,9 @@ function Sidebar({ active }) {
             key={n.path}
             href={`#/${n.path}`}
             onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 rounded-[10px] px-3.5 py-2.5 text-sm font-semibold no-underline transition-colors ${active === n.path ? "bg-cyan/15 text-cyan" : "text-textmuted hover:bg-hover hover:text-textmain"}`}
+            className={`flex items-center gap-3 rounded-[10px] px-3.5 py-2.5 text-sm font-semibold no-underline transition-colors ${
+              active === n.path ? `${sec.active}` : "text-textmuted hover:bg-hover hover:text-textmain"
+            }`}
           >
             <Icon name={n.icon} size={18} className="shrink-0" />
             {n.label}
@@ -131,7 +135,11 @@ function Sidebar({ active }) {
 export default function App() {
   const route = useRoute();
   const { onboarding, closeOnboarding } = useStore();
-  const active = NAV.some((n) => n.path === route.page) ? route.page : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide" || route.page === "quizc") ? "courses" : "home";
+  const active = NAV.some((n) => n.path === route.page)
+    ? route.page
+    : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide")
+      ? "courses"
+      : route.page === "quizc" ? "quiz" : "home";
 
   useEffect(() => {
     window.scrollTo(0, 0);

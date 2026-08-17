@@ -65,15 +65,15 @@ export default function QuizReader({ qid }) {
     <div className="container mx-auto max-w-[760px]">
       <div className="mb-4">
         <Breadcrumb items={[{ label: "Quiz", href: "#/quiz" }, { label: quiz.title }]} />
-        <h1 className="mb-3 text-2xl leading-snug">{quiz.title}</h1>
+        <h1 className="mb-3 text-2xl leading-snug text-orange">{quiz.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Badge color="cyan">{quiz.questions.length} questions</Badge>
+          <Badge color="orange">{quiz.questions.length} questions</Badge>
           <div className="flex rounded-[10px] border border-borderline p-1">
             {MODES.map((m) => (
               <button
                 key={m.k}
                 onClick={() => setMode(m.k)}
-                className={`rounded-[7px] px-3 py-1.5 text-[12.5px] font-bold transition-colors ${mode === m.k ? "bg-cyan/15 text-cyan" : "text-textmuted hover:text-textmain"}`}
+                className={`rounded-[7px] px-3 py-1.5 text-[12.5px] font-bold transition-colors ${mode === m.k ? "bg-orange/15 text-orange" : "text-textmuted hover:text-textmain"}`}
               >
                 {m.l}
               </button>
@@ -83,7 +83,7 @@ export default function QuizReader({ qid }) {
       </div>
 
       <div className="mb-4 h-[6px] overflow-hidden rounded-full bg-borderline">
-        <div className="h-full rounded-full bg-gradient-to-r from-cyan to-blue transition-[width] duration-300" style={{ width: `${((done ? nb : idx) / nb) * 100}%` }} />
+        <div className="h-full rounded-full bg-orange transition-[width] duration-300" style={{ width: `${((done ? nb : idx) / nb) * 100}%` }} />
       </div>
 
       {done ? (
@@ -102,7 +102,7 @@ export default function QuizReader({ qid }) {
             <button onClick={restart} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
               <Icon name="rotate" size={15} /> Recommencer
             </button>
-            <Link href="#/quiz" className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90">
+            <Link href="#/quiz" className="inline-flex items-center gap-2 rounded-[10px] bg-orange px-4 py-2.5 text-sm font-bold text-[#241604] no-underline transition-opacity hover:opacity-90">
               <Icon name="book" size={15} /> Choisir un autre cours
             </Link>
           </div>
@@ -111,7 +111,7 @@ export default function QuizReader({ qid }) {
         <div className="rounded-[16px] border border-borderline bg-secondary p-6 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] max-sm:p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <span className="text-[11px] font-bold tracking-wider text-textmuted uppercase">Question {idx + 1} / {nb}</span>
-            <Badge color={isFlash ? "cyan" : "blue"}>{isFlash ? "Flashcard" : "QCM"}</Badge>
+            <Badge color={isFlash ? "orange" : "orange"}>{isFlash ? "Flashcard" : "QCM"}</Badge>
           </div>
 
           {isFlash ? (
@@ -121,11 +121,11 @@ export default function QuizReader({ qid }) {
                 className={`preserve relative h-[320px] cursor-pointer max-sm:h-[300px] ${flipped ? "rotate-y-180" : ""}`}
               >
                 <div className="backface-hidden absolute inset-0 flex flex-col items-center justify-center rounded-[14px] border border-borderline bg-hover/60 p-6 text-center">
-                  <Icon name="target" size={22} className="text-cyan" />
+                  <Icon name="target" size={22} className="text-orange" />
                   <div className="mt-3 text-[16px] leading-relaxed font-semibold">{q.q}</div>
                   <div className="mt-4 text-[11px] font-bold text-textmuted uppercase">Cliquez pour voir la réponse</div>
                 </div>
-                <div className="backface-hidden rotate-y-180 absolute inset-0 flex flex-col items-center justify-center overflow-y-auto rounded-[14px] border border-cyan/30 bg-cyan/5 p-6 text-center">
+                <div className="backface-hidden rotate-y-180 absolute inset-0 flex flex-col items-center justify-center overflow-y-auto rounded-[14px] border border-orange/30 bg-orange/5 p-6 text-center">
                   <div className="text-[15px] leading-relaxed text-textmain">{q.answer || "Réponse non disponible."}</div>
                 </div>
               </div>
@@ -141,10 +141,10 @@ export default function QuizReader({ qid }) {
                       key={oi}
                       onClick={() => setSel(oi)}
                       className={`flex items-start gap-3 rounded-[12px] border px-4 py-3 text-left text-[14px] leading-snug transition-colors ${
-                        selected ? "border-cyan bg-cyan/10 text-textmain" : "border-borderline bg-transparent text-textmuted hover:border-cyan/40 hover:bg-hover"
+                        selected ? "border-orange bg-orange/10 text-textmain" : "border-borderline bg-transparent text-textmuted hover:border-orange/40 hover:bg-hover"
                       }`}
                     >
-                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold ${selected ? "border-cyan text-cyan" : "border-borderline text-textmuted"}`}>
+                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold ${selected ? "border-orange text-orange" : "border-borderline text-textmuted"}`}>
                         {String.fromCharCode(65 + oi)}
                       </span>
                       <span className="min-w-0">{o}</span>
@@ -190,7 +190,7 @@ export default function QuizReader({ qid }) {
         <button
           onClick={next}
           disabled={done}
-          className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-5 text-sm font-bold text-white shadow-[0_6px_18px_-8px_rgba(37,99,235,0.7)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-35"
+          className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-orange px-5 text-sm font-bold text-[#241604] shadow-[0_6px_18px_-8px_rgba(255,169,77,0.7)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-35"
         >
           {idx === nb - 1 ? "Voir le résultat" : "Suivant"} <Icon name="chevron-right" size={16} />
         </button>

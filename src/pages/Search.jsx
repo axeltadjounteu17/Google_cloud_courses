@@ -52,7 +52,7 @@ export default function Search() {
 
   return (
     <div className="container mx-auto max-w-[860px]">
-      <h1 className="mb-1.5 text-[26px]">Recherche dans les cours</h1>
+      <h1 className="mb-1.5 text-[26px] text-cyan">Recherche dans les cours</h1>
       <p className="mb-5 text-sm text-textmuted">Cherchez dans {DATA.courses.length} cours et {DATA.courses.reduce((a, c) => a + (c.lessons?.length || 0), 0)} leçons.</p>
 
       <div className="mb-6 flex items-center gap-3 rounded-xl border border-borderline bg-secondary px-4">

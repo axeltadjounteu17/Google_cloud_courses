@@ -6,7 +6,7 @@ import { Badge, Breadcrumb, EmptyState } from "../components/ui.jsx";
 
 export default function LessonReader({ cid, lidx }) {
   const store = useStore();
-  const { findCourse, deckForLesson, setLessonPos, toggleRead, setRead, setSettings, settings } = store;
+  const { findCourse, deckForLesson, setLessonPos, toggleRead, setRead, setSettings, settings, toggleBookmark, isBookmarked } = store;
   const c = findCourse(cid);
   const lesson = c ? c.lessons[lidx] : null;
   const didSet = useRef(false);
@@ -26,6 +26,7 @@ export default function LessonReader({ cid, lidx }) {
   }, [c, lesson, lidx, setLessonPos]);
 
   const read = !!((store.progress[String(c.id)] || {})[lidx]);
+  const marked = c ? isBookmarked(c.id, lidx) : false;
   const prev = lidx > 0 && c ? c.lessons[lidx - 1] : null;
   const next = lidx < (c ? c.lessons.length - 1 : -1) ? c.lessons[lidx + 1] : null;
   const deck = c ? deckForLesson(c.id, lidx) : null;
@@ -67,7 +68,15 @@ export default function LessonReader({ cid, lidx }) {
         <Breadcrumb items={[{ label: c.title, href: `#/course/${c.id}` }, { label: `Leçon ${lidx + 1} / ${c.lessons.length}` }]} />
         <h1 className="mb-3.5 text-2xl leading-snug">{lesson.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Badge color={read ? "green" : "blue"}>{read ? "Leçon lue" : `Leçon ${lidx + 1} / ${c.lessons.length}`}</Badge>
+          <Badge color={read ? "green" : "violet"}>{read ? "Leçon lue" : `Leçon ${lidx + 1} / ${c.lessons.length}`}</Badge>
+          <button
+            onClick={() => toggleBookmark(c.id, lidx)}
+            className={`inline-flex items-center gap-2 rounded-[10px] border px-4 py-2.5 text-sm font-bold transition-colors ${
+              marked ? "border-yellow/40 bg-yellow/15 text-yellow hover:bg-yellow/25" : "border-borderline bg-transparent text-textmain hover:bg-hover"
+            }`}
+          >
+            <Icon name="bookmark" size={15} /> {marked ? "Marquée à réviser" : "À réviser"}
+          </button>
           <button
             onClick={() => setSettings((s) => ({ ...s, timestamps: !s.timestamps }))}
             className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
@@ -104,14 +113,14 @@ export default function LessonReader({ cid, lidx }) {
         <Link
           href={`#/lesson/${c.id}/${lidx + 1}`}
           onClick={() => setRead(c.id, lidx, true)}
-          className="mt-5 flex items-center justify-between gap-4 rounded-[14px] border border-borderline bg-secondary p-5 no-underline shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-colors hover:border-cyan/40 hover:bg-hover max-sm:p-4"
+          className="mt-5 flex items-center justify-between gap-4 rounded-[14px] border border-borderline bg-secondary p-5 no-underline shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-colors hover:border-violet/40 hover:bg-hover max-sm:p-4"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-bold text-textmuted uppercase tracking-wide">À suivre</div>
             <div className="mt-1 truncate text-[15px] font-semibold text-textmain">{next.title}</div>
             <div className="mt-0.5 text-[12px] text-textmuted">Leçon {lidx + 2} / {c.lessons.length}</div>
           </div>
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue text-white"><Icon name="arrow-right" size={18} /></span>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet text-white"><Icon name="arrow-right" size={18} /></span>
         </Link>
       ) : (
         <div className="mt-5 flex items-center justify-between gap-4 rounded-[14px] border border-borderline bg-secondary p-5 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] max-sm:p-4">
@@ -119,7 +128,7 @@ export default function LessonReader({ cid, lidx }) {
             <div className="text-[11px] font-bold text-textmuted uppercase tracking-wide">Fin du cours</div>
             <div className="mt-1 text-[15px] font-semibold text-textmain">Vous avez terminé toutes les leçons.</div>
           </div>
-          <Link href={`#/course/${c.id}`} className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90">
+          <Link href={`#/course/${c.id}`} className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90">
             <Icon name="check" size={14} /> Terminer
           </Link>
         </div>
@@ -140,11 +149,11 @@ export default function LessonReader({ cid, lidx }) {
         </button>
 
         {next ? (
-          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-4 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(37,99,235,0.7)] transition-opacity hover:opacity-90">
+          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-violet px-4 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
             Suivant <Icon name="chevron-right" size={16} />
           </button>
         ) : (
-          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-4 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(37,99,235,0.7)] transition-opacity hover:opacity-90">
+          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-violet px-4 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
             Terminer <Icon name="check" size={15} />
           </button>
         )}

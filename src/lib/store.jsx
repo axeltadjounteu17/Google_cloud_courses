@@ -13,7 +13,25 @@ const KEYS = {
   settings: "gcp_settings",
   theme: "gcp_theme",
   onboarded: "gcp_onboarded",
+  studyDays: "gcp_study_days",
+  bookmarks: "gcp_bookmarks",
 };
+
+function dayKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function computeStreak(days) {
+  const set = new Set(days);
+  let streak = 0;
+  const d = new Date();
+  if (!set.has(dayKey(d))) d.setDate(d.getDate() - 1);
+  while (set.has(dayKey(d))) {
+    streak += 1;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
 
 function slideCourses() {
   const ids = new Set(DATA.courses.map((c) => c.id));
@@ -40,6 +58,8 @@ export function StoreProvider({ children }) {
   const [recent, setRecent] = useState(LS.get(KEYS.recent, []));
   const [settings, setSettings] = useState(LS.get(KEYS.settings, { font: "md", timestamps: true, dots: true }));
   const [theme, setTheme] = useState(LS.get(KEYS.theme, "dark"));
+  const [studyDays, setStudyDays] = useState(LS.get(KEYS.studyDays, []));
+  const [bookmarks, setBookmarks] = useState(LS.get(KEYS.bookmarks, {}));
   const [route, setRoute] = useState("");
   const [onboarding, setOnboarding] = useState(() => !LS.get(KEYS.onboarded, false));
 
@@ -53,7 +73,9 @@ export function StoreProvider({ children }) {
     LS.set(KEYS.position, position);
     LS.set(KEYS.recent, recent);
     LS.set(KEYS.settings, settings);
-  }, [progress, position, recent, settings]);
+    LS.set(KEYS.studyDays, studyDays);
+    LS.set(KEYS.bookmarks, bookmarks);
+  }, [progress, position, recent, settings, studyDays, bookmarks]);
 
   useEffect(() => {
     const parse = () => setRoute(location.hash.replace(/^#\/?/, "") || "home");
@@ -121,7 +143,19 @@ export function StoreProvider({ children }) {
     const setLessonPos = (cid, lidx) => {
       setPosition({ courseId: cid, lessonIdx: lidx });
       setRecent((r) => [{ c: cid, l: lidx, ts: Date.now() }, ...r.filter((x) => !(x.c === cid && x.l === lidx))].slice(0, 8));
+      const today = dayKey(new Date());
+      setStudyDays((s) => (s.includes(today) ? s : [...s, today].slice(-400)));
     };
+    const toggleBookmark = (cid, lidx) => {
+      setBookmarks((b) => {
+        const c = { ...(b[String(cid)] || {}) };
+        if (c[lidx]) delete c[lidx];
+        else c[lidx] = true;
+        return { ...b, [String(cid)]: c };
+      });
+    };
+    const isBookmarked = (cid, lidx) => !!((bookmarks[String(cid)] || {})[lidx]);
+    const bookmarkedCount = () => Object.values(bookmarks).reduce((n, c) => n + Object.keys(c).length, 0);
     const resetAll = () => {
       setProgress({});
       setPosition({});
@@ -154,6 +188,12 @@ export function StoreProvider({ children }) {
       theme,
       toggleTheme,
       route,
+      studyDays,
+      bookmarks,
+      toggleBookmark,
+      isBookmarked,
+      bookmarkedCount,
+      computeStreak: () => computeStreak(studyDays),
       onboarding,
       openOnboarding,
       closeOnboarding,
@@ -174,7 +214,7 @@ export function StoreProvider({ children }) {
       resetAll,
       importData,
     };
-  }, [progress, position, recent, settings, theme, route, onboarding]);
+  }, [progress, position, recent, settings, theme, route, onboarding, studyDays, bookmarks]);
 
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }

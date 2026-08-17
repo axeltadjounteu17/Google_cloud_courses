@@ -21,7 +21,7 @@ export default function Courses() {
 
   return (
     <div className="container mx-auto max-w-[1080px]">
-      <h1 className="mb-1.5 text-[26px]">Tous les cours</h1>
+      <h1 className="mb-1.5 text-[26px] text-violet">Tous les cours</h1>
       <p className="mb-5 text-sm text-textmuted">{DATA.courses.length} cours · {totalLessons()} leçons</p>
 
       <div className="mb-5 flex flex-wrap gap-3">
@@ -29,7 +29,7 @@ export default function Courses() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Filtrer les cours…"
-          className="w-full max-w-[360px] rounded-xl border border-borderline bg-secondary px-4 py-3 pl-10 text-[15px] text-textmain outline-none transition-[border,box-shadow] focus:border-cyan focus:shadow-[0_0_0_3px_rgba(56,189,248,0.15)]"
+          className="w-full max-w-[360px] rounded-xl border border-borderline bg-secondary px-4 py-3 pl-10 text-[15px] text-textmain outline-none transition-[border,box-shadow] focus:border-violet focus:shadow-[0_0_0_3px_rgba(124,92,255,0.15)]"
           style={{ backgroundImage: "url(data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237b8aab' stroke-width='2'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>)", backgroundRepeat: "no-repeat", backgroundPosition: "14px 50%" }}
         />
         <div className="flex gap-2">
@@ -42,7 +42,7 @@ export default function Courses() {
               key={x.f}
               onClick={() => setFilter(x.f)}
               className={`rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
-                filter === x.f ? "border-blue bg-blue text-white" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"
+                filter === x.f ? "border-violet bg-violet text-white" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"
               }`}
             >
               {x.l}

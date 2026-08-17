@@ -8,7 +8,7 @@ import QUIZ from "../data/quizzes.js";
 
 export default function CourseDetail({ id }) {
   const store = useStore();
-  const { findCourse, slideForCourse, slidesTotal, progress, position, markAll, unmarkAll } = store;
+  const { findCourse, slideForCourse, slidesTotal, progress, position, markAll, unmarkAll, isBookmarked } = store;
   const c = findCourse(id);
   const quizCourse = (QUIZ.quizzes || []).find((q) => q.folder === c?.folder);
 
@@ -24,11 +24,11 @@ export default function CourseDetail({ id }) {
         <Card className="mb-5 p-6 max-sm:p-4">
           <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
           <div className="mb-2 flex items-center gap-3">
-            <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-blue/15 text-cyan"><Icon name={c.icon} size={22} /></span>
+            <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
             <h1 className="text-[22px]">{c.title}</h1>
           </div>
           <div className="mb-3 flex flex-wrap gap-2.5">
-            <Badge color="cyan">Diapositives du cours</Badge>
+            <Badge color="violet">Diapositives du cours</Badge>
             <Badge>{s.decks.length} modules</Badge>
             <Badge>{total} diapositives</Badge>
           </div>
@@ -50,21 +50,26 @@ export default function CourseDetail({ id }) {
       <Card className="mb-5 p-6 max-sm:p-4">
         <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
         <div className="mb-2 flex items-center gap-3">
-          <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-blue/15 text-cyan"><Icon name={c.icon} size={22} /></span>
+          <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
           <h1 className="text-[22px]">{c.title}</h1>
         </div>
         <div className="mb-4 flex flex-wrap gap-2.5">
-          <Badge color="cyan">{c.mode === "atelier" ? "Ateliers pratiques" : "Transcript vidéo"}</Badge>
+          <Badge color="violet">{c.mode === "atelier" ? "Ateliers pratiques" : "Transcript vidéo"}</Badge>
           {c.level && <Badge>{c.level}</Badge>}
           {c.hours && <Badge>{c.hours}</Badge>}
           <Badge>{c.lessons.length} leçons</Badge>
-          {hasSlides && <Badge color="blue">{slidesTotal(c.id)} diapositives</Badge>}
+          {hasSlides && <Badge color="violet">{slidesTotal(c.id)} diapositives</Badge>}
         </div>
         <div className="mb-3.5">
           <ProgressBar pct={pct} />
           <span className="mt-2 block text-[11px] text-textmuted">{done} / {c.lessons.length} leçons lues · {pct}%</span>
         </div>
         <div className="flex flex-wrap gap-2.5">
+          {position.courseId === c.id && position.lessonIdx != null && c.lessons[position.lessonIdx] && (
+            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
+              <Icon name="play" size={15} /> Continuer la lecture
+            </Link>
+          )}
           <button onClick={() => markAll(c)} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
             <Icon name="check" size={14} /> Tout marquer comme lu
           </button>
@@ -72,7 +77,7 @@ export default function CourseDetail({ id }) {
             Réinitialiser
           </button>
           {quizCourse && (
-            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-cyan/15 px-4 py-2.5 text-sm font-bold text-cyan no-underline transition-colors hover:bg-cyan/25">
+            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet/15 px-4 py-2.5 text-sm font-bold text-violet no-underline transition-colors hover:bg-violet/25">
               <Icon name="target" size={15} /> Quiz du cours
             </Link>
           )}
@@ -104,7 +109,10 @@ export default function CourseDetail({ id }) {
               </span>
               <span className="w-[26px] font-mono text-xs text-textmuted">{String(i + 1).padStart(2, "0")}</span>
               <span className="min-w-0 flex-1">
-                <div className="text-sm font-semibold">{l.title}</div>
+                <div className="flex items-center gap-1.5 text-sm font-semibold">
+                  <span className="truncate">{l.title}</span>
+                  {isBookmarked(c.id, i) && <Icon name="bookmark" size={13} className="shrink-0 text-yellow" />}
+                </div>
                 <div className="mt-0.5 text-[11.5px] text-textmuted">
                   {l.segments.length} segments{l.segments[0] && l.segments[0].t ? " · horodaté" : ""}{isPos ? " · en cours de lecture" : ""}
                 </div>
