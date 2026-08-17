@@ -111,7 +111,7 @@ function Sidebar({ active }) {
     <>
       <aside
         aria-label="Navigation principale"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] flex-col border-r border-borderline bg-bg/60 backdrop-blur-2xl transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] flex-col border-r border-borderline bg-bg/95 backdrop-blur-2xl transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -123,7 +123,7 @@ function Sidebar({ active }) {
         className={`fixed inset-0 z-40 bg-black/55 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       />
 
-      <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft/70 px-3.5 backdrop-blur-xl lg:hidden">
+      <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft/95 px-3.5 backdrop-blur-xl lg:hidden">
         <button className="icon-btn" onClick={() => setOpen(true)} aria-label="Ouvrir le menu"><Icon name="menu" size={20} /></button>
         <div className="flex-1 truncate text-[15px] font-bold">GCP Étude</div>
         <button className="icon-btn" onClick={toggleTheme} aria-label="Basculer le thème"><Icon name={dark ? "moon" : "sun"} size={18} /></button>

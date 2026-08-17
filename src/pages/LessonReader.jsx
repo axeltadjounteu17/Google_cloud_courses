@@ -134,7 +134,7 @@ export default function LessonReader({ cid, lidx }) {
         </div>
       )}
 
-      <div className="sticky bottom-3 z-20 mt-5 flex items-center justify-between gap-3 rounded-[14px] border border-borderline bg-bgsoft/80 p-3 shadow-[0_12px_34px_-14px_rgba(0,0,0,0.65)] backdrop-blur-xl max-sm:gap-2 max-sm:p-2.5">
+      <div className="sticky bottom-3 z-20 mt-5 flex items-center justify-between gap-3 rounded-[14px] border border-borderline bg-bgsoft/95 p-3 shadow-[0_12px_34px_-14px_rgba(0,0,0,0.65)] backdrop-blur-xl max-sm:gap-2 max-sm:p-2.5">
         {prev ? (
           <Link href={`#/lesson/${c.id}/${lidx - 1}`} aria-label="Leçon précédente" className="inline-flex h-11 items-center gap-1.5 rounded-[10px] border border-borderline bg-transparent px-3.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover max-sm:px-3">
             <Icon name="chevron-left" size={16} /> <span className="max-sm:hidden">Précédent</span>
