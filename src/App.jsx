@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Icon from "./lib/icons.jsx";
 import { useStore } from "./lib/store.jsx";
 import { useRoute } from "./lib/router.jsx";
+import SecurityGuard from "./components/SecurityGuard.jsx";
 import Home from "./pages/Home.jsx";
 import Courses from "./pages/Courses.jsx";
 import CourseDetail from "./pages/CourseDetail.jsx";
@@ -130,13 +131,16 @@ export default function App() {
   }, [route.hash]);
 
   return (
-    <div className="app">
-      <Sidebar active={active} />
-      <main className="main" tabIndex="-1">
-        <div key={route.hash} className="page-fade">
-          <Page route={route} />
-        </div>
-      </main>
-    </div>
+    <SecurityGuard>
+      <div className="app">
+        <Sidebar active={active} />
+        <main className="main" tabIndex="-1">
+          <div key={route.hash} className="page-fade">
+            <Page route={route} />
+          </div>
+        </main>
+      </div>
+    </SecurityGuard>
   );
 }
+

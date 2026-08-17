@@ -52,7 +52,16 @@ html[data-theme="light"] {
 }
 
 @layer base {
-  * { border-color: var(--borderline); }
+  * { 
+    border-color: var(--borderline); 
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-user-drag: none !important;
+    -webkit-touch-callout: none !important;
+  }
+
   html { scroll-behavior: smooth; }
 
   body {
@@ -78,14 +87,22 @@ html[data-theme="light"] {
       linear-gradient(180deg, var(--bg-soft), var(--bg));
   }
 
-  /* ===== Protection : contenu non copiable / non téléchargeable ===== */
-  * { -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
-  input, textarea, select, [contenteditable] { -webkit-user-select: text; user-select: text; }
-  img, a, button { -webkit-touch-callout: none; }
-  img { -webkit-user-drag: none; pointer-events: auto; }
+  img {
+    -webkit-user-drag: none !important;
+    pointer-events: none !important;
+  }
 
-  ::selection { background: var(--cyan); color: #061325; }
+  ::selection { background: transparent; color: inherit; }
   mark { background: transparent; }
+}
+
+/* ===== Bloquage de l'impression (Print / Capture PDF) ===== */
+@media print {
+  html, body, #root {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
 }
 
 @layer utilities {
@@ -176,7 +193,6 @@ html[data-theme="light"] {
   }
 }
 
-/* Toutes les surfaces translucides (bg-secondary) deviennent du verre */
 .bg-secondary {
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
@@ -191,13 +207,36 @@ html[data-theme="light"] {
   50% { transform: translate3d(50px, -50px, 0) scale(1.08); }
 }
 
-/* Transition douce entre les pages */
 .page-fade {
   animation: pageFade 0.28s ease;
 }
 @keyframes pageFade {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tatouage Numérique Flottant (Watermark Anti-Capture) */
+.security-watermark {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+  opacity: 0.12;
+  overflow: hidden;
+  user-select: none;
+}
+.security-watermark-item {
+  transform: rotate(-25deg);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding: 40px;
 }
 
 @media (prefers-reduced-motion: reduce) {

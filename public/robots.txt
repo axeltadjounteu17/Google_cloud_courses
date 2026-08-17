@@ -1,0 +1,3 @@
+# Bloquer tous les bots, scrapers et moteurs de recherche
+User-agent: *
+Disallow: /
