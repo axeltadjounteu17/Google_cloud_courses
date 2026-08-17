@@ -1,0 +1,5 @@
+{
+  "framework": "vite",
+  "buildCommand": "vite build --config vite.singlefile.config.js",
+  "outputDirectory": "dist"
+}
