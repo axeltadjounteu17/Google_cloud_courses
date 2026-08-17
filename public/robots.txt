@@ -1,3 +1,5 @@
-# Bloquer tous les bots, scrapers et moteurs de recherche
 User-agent: *
 Disallow: /
+
+# Bloque l'indexation et le crawl du contenu (cours, slides, quiz).
+# Le site est accessible uniquement via l'interface web.

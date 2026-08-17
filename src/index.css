@@ -215,6 +215,12 @@ html[data-theme="light"] {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Flip 3D pour les cartes flash du quiz */
+.persp { perspective: 1200px; }
+.preserve { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }
+
 /* Tatouage Numérique Flottant (Watermark Anti-Capture) */
 .security-watermark {
   position: fixed;

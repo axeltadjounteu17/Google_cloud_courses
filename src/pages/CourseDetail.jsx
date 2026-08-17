@@ -4,11 +4,13 @@ import { useStore } from "../lib/store.jsx";
 import { Link } from "../lib/router.jsx";
 import { DeckGrid, ResourcesGrid } from "../components/cards.jsx";
 import { Card, Badge, Breadcrumb, EmptyState, ProgressBar } from "../components/ui.jsx";
+import QUIZ from "../data/quizzes.js";
 
 export default function CourseDetail({ id }) {
   const store = useStore();
   const { findCourse, slideForCourse, slidesTotal, progress, position, markAll, unmarkAll } = store;
   const c = findCourse(id);
+  const quizCourse = (QUIZ.quizzes || []).find((q) => q.folder === c?.folder);
 
   if (!c) return (
     <div className="container mx-auto max-w-[1080px]"><EmptyState title="Cours introuvable" sub="" /></div>
@@ -69,6 +71,11 @@ export default function CourseDetail({ id }) {
           <button onClick={() => unmarkAll(c)} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
             Réinitialiser
           </button>
+          {quizCourse && (
+            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-cyan/15 px-4 py-2.5 text-sm font-bold text-cyan no-underline transition-colors hover:bg-cyan/25">
+              <Icon name="target" size={15} /> Quiz du cours
+            </Link>
+          )}
         </div>
       </Card>
 

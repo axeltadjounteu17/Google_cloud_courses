@@ -12,10 +12,14 @@ import SlideViewer from "./pages/SlideViewer.jsx";
 import Search from "./pages/Search.jsx";
 import Progress from "./pages/Progress.jsx";
 import Settings from "./pages/Settings.jsx";
+import QuizList from "./pages/QuizList.jsx";
+import QuizReader from "./pages/QuizReader.jsx";
+import Onboarding from "./components/Onboarding.jsx";
 
 const NAV = [
   { path: "home", label: "Accueil", icon: "home" },
   { path: "courses", label: "Cours", icon: "book" },
+  { path: "quiz", label: "Quiz", icon: "target" },
   { path: "search", label: "Recherche", icon: "search" },
   { path: "progress", label: "Progression", icon: "chart" },
   { path: "settings", label: "Paramètres", icon: "settings" },
@@ -28,6 +32,8 @@ function Page({ route }) {
     case "lesson": return <LessonReader cid={route.params[0]} lidx={Number(route.params[1])} />;
     case "slides": return <Slides cid={route.params[0]} />;
     case "slide": return <SlideViewer cid={route.params[0]} deckId={route.params[1]} page={route.params[2]} />;
+    case "quiz": return <QuizList />;
+    case "quizc": return <QuizReader qid={route.params[0]} />;
     case "search": return <Search />;
     case "progress": return <Progress />;
     case "settings": return <Settings />;
@@ -124,7 +130,8 @@ function Sidebar({ active }) {
 
 export default function App() {
   const route = useRoute();
-  const active = NAV.some((n) => n.path === route.page) ? route.page : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide") ? "courses" : "home";
+  const { onboarding, closeOnboarding } = useStore();
+  const active = NAV.some((n) => n.path === route.page) ? route.page : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide" || route.page === "quizc") ? "courses" : "home";
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -140,6 +147,7 @@ export default function App() {
           </div>
         </main>
       </div>
+      {onboarding && <Onboarding onClose={closeOnboarding} />}
     </SecurityGuard>
   );
 }

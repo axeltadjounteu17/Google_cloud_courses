@@ -9,6 +9,8 @@ const ROUTES = {
   search: /^search$/,
   progress: /^progress$/,
   settings: /^settings$/,
+  quiz: /^quiz$/,
+  quizc: /^quiz\/(\d+)$/,
 };
 
 function parse(hash) {

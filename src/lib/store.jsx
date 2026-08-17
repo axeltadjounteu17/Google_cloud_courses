@@ -12,6 +12,7 @@ const KEYS = {
   recent: "gcp_recent",
   settings: "gcp_settings",
   theme: "gcp_theme",
+  onboarded: "gcp_onboarded",
 };
 
 function slideCourses() {
@@ -40,6 +41,7 @@ export function StoreProvider({ children }) {
   const [settings, setSettings] = useState(LS.get(KEYS.settings, { font: "md", timestamps: true, dots: true }));
   const [theme, setTheme] = useState(LS.get(KEYS.theme, "dark"));
   const [route, setRoute] = useState("");
+  const [onboarding, setOnboarding] = useState(() => !LS.get(KEYS.onboarded, false));
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -131,6 +133,14 @@ export function StoreProvider({ children }) {
       if (Array.isArray(d.recent)) setRecent(d.recent);
     };
     const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+    const openOnboarding = () => {
+      LS.set(KEYS.onboarded, false);
+      setOnboarding(true);
+    };
+    const closeOnboarding = () => {
+      LS.set(KEYS.onboarded, true);
+      setOnboarding(false);
+    };
 
     return {
       DATA,
@@ -144,6 +154,9 @@ export function StoreProvider({ children }) {
       theme,
       toggleTheme,
       route,
+      onboarding,
+      openOnboarding,
+      closeOnboarding,
       findCourse,
       slideForCourse,
       slidesTotal,
@@ -161,7 +174,7 @@ export function StoreProvider({ children }) {
       resetAll,
       importData,
     };
-  }, [progress, position, recent, settings, theme, route]);
+  }, [progress, position, recent, settings, theme, route, onboarding]);
 
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }
