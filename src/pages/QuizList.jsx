@@ -28,7 +28,7 @@ export default function QuizList() {
   return (
     <div className="container mx-auto max-w-[1080px]">
       <div className="mb-6 rounded-[16px] border border-orange/25 bg-gradient-to-br from-orange/20 via-orange/5 p-6 backdrop-blur-2xl max-sm:p-4">
-        <h1 className="mb-1 text-2xl font-semibold text-orange max-sm:text-xl">Quiz de révision</h1>
+        <h1 className="mb-1 text-h2 font-semibold text-orange">Quiz de révision</h1>
         <p className="text-sm text-textmuted">
           <strong className="text-textmain">{items.length} cours</strong>, <strong className="text-textmain">{total} questions</strong> pour consolider vos acquis avant l'examen. Vérifiez ce que vous retenez de chaque module.
         </p>

@@ -21,7 +21,7 @@ export default function Courses() {
 
   return (
     <div className="container mx-auto max-w-[1080px]">
-      <h1 className="mb-1.5 text-[26px] text-violet">Tous les cours</h1>
+      <h1 className="mb-1.5 text-h2 text-violet">Tous les cours</h1>
       <p className="mb-5 text-sm text-textmuted">{DATA.courses.length} cours · {totalLessons()} leçons</p>
 
       <div className="mb-5 flex flex-wrap gap-3">

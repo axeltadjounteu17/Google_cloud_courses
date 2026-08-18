@@ -9,13 +9,13 @@
   --borderline: rgba(255, 255, 255, 0.13);
   --text-main: #eef3fc;
   --text-muted: #94a3b8;
-  --red: #ff5b5b;
-  --blue: #4f9dff;
-  --cyan: #38bdf8;
-  --green: #3ddc84;
-  --violet: #7c5cff;
-  --orange: #ffa94d;
-  --yellow: #ffd43b;
+  --red: 0 100% 68%;
+  --blue: 215 100% 65%;
+  --cyan: 199 93% 60%;
+  --green: 146 70% 55%;
+  --violet: 249 100% 68%;
+  --orange: 33 100% 65%;
+  --yellow: 48 100% 62%;
 }
 
 html[data-theme="light"] {
@@ -27,13 +27,13 @@ html[data-theme="light"] {
   --borderline: rgba(15, 23, 42, 0.12);
   --text-main: #0f1b33;
   --text-muted: #5a6a8a;
-  --red: #e03131;
-  --blue: #2563eb;
-  --cyan: #0aa2c0;
-  --green: #129a52;
-  --violet: #6d3fd1;
-  --orange: #e8590c;
-  --yellow: #c98a00;
+  --red: 0 73% 54%;
+  --blue: 221 83% 53%;
+  --cyan: 188 89% 40%;
+  --green: 149 79% 34%;
+  --violet: 258 61% 53%;
+  --orange: 21 91% 48%;
+  --yellow: 41 100% 39%;
 }
 
 @theme inline {
@@ -45,13 +45,13 @@ html[data-theme="light"] {
   --color-borderline: var(--borderline);
   --color-textmain: var(--text-main);
   --color-textmuted: var(--text-muted);
-  --color-red: var(--red);
-  --color-blue: var(--blue);
-  --color-cyan: var(--cyan);
-  --color-green: var(--green);
-  --color-violet: var(--violet);
-  --color-orange: var(--orange);
-  --color-yellow: var(--yellow);
+  --color-red: hsl(var(--red));
+  --color-blue: hsl(var(--blue));
+  --color-cyan: hsl(var(--cyan));
+  --color-green: hsl(var(--green));
+  --color-violet: hsl(var(--violet));
+  --color-orange: hsl(var(--orange));
+  --color-yellow: hsl(var(--yellow));
 }
 
 @layer base {
@@ -223,6 +223,20 @@ html[data-theme="light"] {
 .preserve { transform-style: preserve-3d; }
 .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .rotate-y-180 { transform: rotateY(180deg); }
+
+/* ===== Typographie fluide (clamp) ===== */
+.text-h1 { font-size: clamp(2rem, 2rem + 2vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; }
+.text-h2 { font-size: clamp(1.375rem, 1.375rem + 1.1vw, 1.75rem); line-height: 1.15; letter-spacing: -0.02em; }
+.text-h3 { font-size: clamp(1.125rem, 1.125rem + 0.5vw, 1.375rem); line-height: 1.2; }
+
+/* ===== Marquee infini (kiro.dev) ===== */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 40s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* ===== Curseur terminal clignotant (step-end) ===== */
+@keyframes term-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.terminal-cursor { display: inline-block; width: 0.55em; height: 1em; margin-left: 2px; vertical-align: text-bottom; background: hsl(var(--green)); animation: term-blink 1s step-end infinite; }
 
 /* Tatouage Numérique Flottant (Watermark Anti-Capture) */
 .security-watermark {

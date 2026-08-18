@@ -18,7 +18,7 @@ export default function Slides({ cid }) {
         <Breadcrumb items={[{ label: c.title, href: `#/course/${cid}` }, { label: "Diapositives" }]} />
         <div className="mb-2 flex items-center gap-3">
           <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name="layers" size={22} /></span>
-          <h1 className="text-[22px]">Diapositives du cours</h1>
+          <h1 className="text-h3">Diapositives du cours</h1>
         </div>
         <div className="mb-3 flex flex-wrap gap-2.5">
           <Badge color="violet">{s.decks.length} modules</Badge>

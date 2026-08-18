@@ -65,7 +65,7 @@ export default function QuizReader({ qid }) {
     <div className="container mx-auto max-w-[760px]">
       <div className="mb-4">
         <Breadcrumb items={[{ label: "Quiz", href: "#/quiz" }, { label: quiz.title }]} />
-        <h1 className="mb-3 text-2xl leading-snug text-orange">{quiz.title}</h1>
+        <h1 className="mb-3 text-h2 leading-snug text-orange">{quiz.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
           <Badge color="orange">{quiz.questions.length} questions</Badge>
           <div className="flex rounded-[10px] border border-borderline p-1">

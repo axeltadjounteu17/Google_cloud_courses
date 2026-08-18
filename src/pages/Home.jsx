@@ -5,6 +5,8 @@ import { Link } from "../lib/router.jsx";
 import { CourseCard } from "../components/cards.jsx";
 import { Card, Badge, SectionTitle, ProgressBar } from "../components/ui.jsx";
 
+const TOPICS = ["IAM", "VPC", "Cloud Storage", "Kubernetes", "Cloud Run", "BigQuery", "Pub/Sub", "Terraform", "Cloud SQL", "Load Balancing", "Secret Manager", "Compute Engine", "Cloud Functions", "Monitoring"];
+
 export default function Home() {
   const store = useStore();
   const { ALL_COURSES, globalStats, recent, findCourse, coursePct, computeStreak, bookmarkedCount, isBookmarked } = store;
@@ -48,7 +50,7 @@ export default function Home() {
       <div className="relative mb-8 overflow-hidden rounded-[18px] border border-borderline bg-gradient-to-br from-violet/25 via-cyan/10 to-transparent p-6 backdrop-blur-2xl max-sm:p-4">
         <Icon name="cloud" size={52} className="pointer-events-none absolute -right-3 -bottom-4 text-cyan/20" />
         <div className="mb-2 flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold text-cyan max-sm:text-xl">Bienvenue sur votre espace d'étude</h1>
+          <h1 className="text-h2 font-semibold text-cyan">Bienvenue sur votre espace d'étude</h1>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan/30 bg-cyan/10 px-3 py-1 text-[12px] font-bold text-cyan">
             <Icon name="flame" size={13} /> {streak} jour{streak > 1 ? "s" : ""} d'affilée
           </span>
@@ -57,6 +59,20 @@ export default function Home() {
           Préparez la certification <strong className="text-textmain">Google Cloud Professional Cloud Architect</strong> — lecture de{" "}
           <strong className="text-textmain">{st.courses} cours</strong>, {st.total} leçons, en français.
         </p>
+      </div>
+
+      <div className="relative mb-8 overflow-hidden border-y border-borderline bg-secondary/60 py-2.5">
+        <div className="animate-marquee flex w-max whitespace-nowrap">
+          {[0, 1].map((dup) => (
+            <div key={dup} aria-hidden={dup === 1} className="flex items-center">
+              {TOPICS.map((t) => (
+                <span key={`${dup}-${t}`} className="mx-5 flex items-center gap-5 text-[11.5px] font-semibold tracking-wide text-textmuted uppercase">
+                  {t} <span className="text-violet/60">·</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
       {resume && (

@@ -22,7 +22,7 @@ export default function Progress() {
 
   return (
     <div className="container mx-auto max-w-[1080px]">
-      <h1 className="mb-1.5 text-[26px] text-green">Progression</h1>
+      <h1 className="mb-1.5 text-h2 text-green">Progression</h1>
       <p className="mb-5 text-sm text-textmuted">Votre avancement vers la certification Google Cloud Professional Cloud Architect.</p>
 
       <Card className="mb-6 p-6 max-sm:p-4">

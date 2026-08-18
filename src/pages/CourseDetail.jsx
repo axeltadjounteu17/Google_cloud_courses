@@ -25,7 +25,7 @@ export default function CourseDetail({ id }) {
           <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
           <div className="mb-2 flex items-center gap-3">
             <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
-            <h1 className="text-[22px]">{c.title}</h1>
+            <h1 className="text-h3">{c.title}</h1>
           </div>
           <div className="mb-3 flex flex-wrap gap-2.5">
             <Badge color="violet">Diapositives du cours</Badge>
@@ -51,7 +51,7 @@ export default function CourseDetail({ id }) {
         <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
         <div className="mb-2 flex items-center gap-3">
           <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
-          <h1 className="text-[22px]">{c.title}</h1>
+          <h1 className="text-h3">{c.title}</h1>
         </div>
         <div className="mb-4 flex flex-wrap gap-2.5">
           <Badge color="violet">{c.mode === "atelier" ? "Ateliers pratiques" : "Transcript vidéo"}</Badge>

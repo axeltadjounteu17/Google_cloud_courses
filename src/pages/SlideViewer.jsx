@@ -45,7 +45,7 @@ export default function SlideViewer({ cid, deckId, page }) {
     <div className="container mx-auto max-w-[1100px]">
       <div className="mb-5">
         <Breadcrumb items={[{ label: `${c.title} · Diapositives`, href: `#/slides/${cid}` }, { label: deck.title }]} />
-        <h1 className="mb-3.5 text-2xl leading-snug">{deck.title}</h1>
+        <h1 className="mb-3.5 text-h2 leading-snug">{deck.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
           <Badge color="violet">Diapositive {p} / {n}</Badge>
           <Link href={`#/course/${cid}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">

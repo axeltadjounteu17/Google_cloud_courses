@@ -66,7 +66,7 @@ export default function LessonReader({ cid, lidx }) {
     <div className="container mx-auto max-w-[820px]">
       <div className="mb-5">
         <Breadcrumb items={[{ label: c.title, href: `#/course/${c.id}` }, { label: `Leçon ${lidx + 1} / ${c.lessons.length}` }]} />
-        <h1 className="mb-3.5 text-2xl leading-snug">{lesson.title}</h1>
+        <h1 className="mb-3.5 text-h2 leading-snug">{lesson.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
           <Badge color={read ? "green" : "violet"}>{read ? "Leçon lue" : `Leçon ${lidx + 1} / ${c.lessons.length}`}</Badge>
           <button

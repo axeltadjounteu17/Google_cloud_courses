@@ -25,7 +25,7 @@ export default function Settings() {
 
   return (
     <div className="container mx-auto max-w-[720px]">
-      <h1 className="mb-1.5 text-[26px] text-textmuted">Réglages</h1>
+      <h1 className="mb-1.5 text-h2 text-textmuted">Réglages</h1>
       <p className="mb-6 text-sm text-textmuted">Personnalisez la lecture et gérez vos données.</p>
 
       <SectionTitle>Lecture</SectionTitle>
@@ -70,6 +70,10 @@ export default function Settings() {
         <p className="text-[12.5px] leading-relaxed text-textmuted">
           Plateforme d'étude hors-ligne pour la certification <strong className="text-textmain">Google Cloud Professional Cloud Architect</strong>. Cours compilés depuis des transcripts vidéo officiels et les diapositives des modules, traduits en français.
         </p>
+        <div className="mt-4 overflow-hidden rounded-[10px] border border-borderline bg-bg px-4 py-3 font-mono text-[12px] text-textmuted">
+          <span className="text-cyan">$</span> gcloud certifications describe cloud-architect
+          <span className="terminal-cursor" />
+        </div>
         <button
           onClick={openOnboarding}
           className="mt-4 inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
