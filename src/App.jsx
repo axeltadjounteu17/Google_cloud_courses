@@ -14,6 +14,9 @@ import Progress from "./pages/Progress.jsx";
 import Settings from "./pages/Settings.jsx";
 import QuizList from "./pages/QuizList.jsx";
 import QuizReader from "./pages/QuizReader.jsx";
+import ExamHome from "./pages/ExamHome.jsx";
+import ExamRunner from "./pages/ExamRunner.jsx";
+import CaseStudy from "./pages/CaseStudy.jsx";
 import Onboarding from "./components/Onboarding.jsx";
 import { SECTION } from "./components/ui.jsx";
 
@@ -21,6 +24,7 @@ const NAV = [
   { path: "home", label: "Accueil", icon: "home" },
   { path: "courses", label: "Cours", icon: "book" },
   { path: "quiz", label: "Quiz", icon: "target" },
+  { path: "exam", label: "Examen", icon: "award" },
   { path: "search", label: "Recherche", icon: "search" },
   { path: "progress", label: "Progression", icon: "chart" },
   { path: "settings", label: "Paramètres", icon: "settings" },
@@ -35,6 +39,10 @@ function Page({ route }) {
     case "slide": return <SlideViewer cid={route.params[0]} deckId={route.params[1]} page={route.params[2]} />;
     case "quiz": return <QuizList />;
     case "quizc": return <QuizReader qid={route.params[0]} />;
+    case "exam": return <ExamHome />;
+    case "examrun": return <ExamRunner key={route.hash} mode={route.params[0]} target={null} />;
+    case "examrunt": return <ExamRunner key={route.hash} mode={route.params[0]} target={route.params[1]} />;
+    case "case": return <CaseStudy id={route.params[0]} />;
     case "search": return <Search />;
     case "progress": return <Progress />;
     case "settings": return <Settings />;
@@ -139,7 +147,9 @@ export default function App() {
     ? route.page
     : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide")
       ? "courses"
-      : route.page === "quizc" ? "quiz" : "home";
+      : route.page === "quizc" ? "quiz"
+      : (route.page === "examrun" || route.page === "examrunt" || route.page === "case") ? "exam"
+      : "home";
 
   useEffect(() => {
     window.scrollTo(0, 0);

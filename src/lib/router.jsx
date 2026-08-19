@@ -11,6 +11,10 @@ const ROUTES = {
   settings: /^settings$/,
   quiz: /^quiz$/,
   quizc: /^quiz\/(\d+)$/,
+  exam: /^exam$/,
+  examrun: /^exam\/run\/(full|review)$/,
+  examrunt: /^exam\/run\/(section|case)\/([^/]+)$/,
+  case: /^case\/([^/]+)$/,
 };
 
 function parse(hash) {

@@ -5,6 +5,7 @@ export const SECTION = {
   home:     { title: "text-cyan",       chip: "bg-cyan/15 text-cyan",         active: "bg-cyan/15 text-cyan",         btn: "bg-cyan text-white",         shadow: "rgba(56,189,248,0.7)",   badge: "cyan" },
   courses:  { title: "text-violet",     chip: "bg-violet/15 text-violet",     active: "bg-violet/15 text-violet",     btn: "bg-violet text-white",       shadow: "rgba(124,92,255,0.7)",  badge: "violet" },
   quiz:     { title: "text-orange",     chip: "bg-orange/15 text-orange",     active: "bg-orange/15 text-orange",     btn: "bg-orange text-[#241604]",  shadow: "rgba(255,169,77,0.7)",  badge: "orange" },
+  exam:     { title: "text-blue",       chip: "bg-blue/15 text-blue",         active: "bg-blue/15 text-blue",         btn: "bg-blue text-white",         shadow: "rgba(74,144,255,0.7)",  badge: "blue" },
   progress: { title: "text-green",      chip: "bg-green/15 text-green",       active: "bg-green/15 text-green",       btn: "bg-green text-[#06110c]",    shadow: "rgba(61,220,132,0.7)",  badge: "green" },
   search:   { title: "text-cyan",       chip: "bg-cyan/15 text-cyan",         active: "bg-cyan/15 text-cyan",         btn: "bg-cyan text-white",         shadow: "rgba(56,189,248,0.7)",   badge: "cyan" },
   settings: { title: "text-textmain",   chip: "bg-hover text-textmuted",      active: "bg-hover text-textmain",       btn: "bg-textmain text-bg",        shadow: "rgba(148,163,184,0.4)", badge: "" },
