@@ -36,11 +36,11 @@ const STEPS = [
 ];
 
 const COLORS = {
-  cyan: "bg-cyan/15 text-cyan border-cyan/30",
-  blue: "bg-blue/15 text-blue border-blue/30",
-  green: "bg-green/15 text-green border-green/30",
-  orange: "bg-orange/15 text-orange border-orange/30",
-  red: "bg-red/15 text-red border-red/30",
+  cyan: "bg-tintcyan text-cyan border-edgecyan",
+  blue: "bg-tintblue text-blue border-edgeblue",
+  green: "bg-tintgreen text-green border-edgegreen",
+  orange: "bg-tintorange text-orange border-edgeorange",
+  red: "bg-tintred text-red border-edgered",
 };
 
 export default function Onboarding({ onClose }) {
@@ -59,12 +59,9 @@ export default function Onboarding({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-scrim/85" />
 
-      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[22px] border border-borderline bg-bgsoft/90 shadow-2xl backdrop-blur-2xl">
-        <div className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-blue/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-cyan/15 blur-3xl" />
-
+      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[12px] border border-borderline bg-bgsoft">
         <button
           onClick={onClose}
           className="absolute top-3.5 right-3.5 z-10 rounded-[9px] border border-borderline bg-transparent px-3 py-1.5 text-[12px] font-bold text-textmuted transition-colors hover:bg-hover hover:text-textmain"
@@ -85,7 +82,7 @@ export default function Onboarding({ onClose }) {
               initial={{ scale: 0.4, rotate: -12 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.08 }}
-              className={`flex h-[72px] w-[72px] items-center justify-center rounded-[20px] border ${COLORS[s.color]}`}
+              className={`flex h-[72px] w-[72px] items-center justify-center rounded-[14px] border ${COLORS[s.color]}`}
             >
               <Icon name={s.icon} size={34} />
             </motion.div>
@@ -115,7 +112,7 @@ export default function Onboarding({ onClose }) {
 
           <button
             onClick={next}
-            className="inline-flex h-10 items-center gap-2 rounded-[10px] bg-blue px-4 text-[13px] font-bold text-white shadow-[0_6px_18px_-8px_rgba(37,99,235,0.7)] transition-opacity hover:opacity-90"
+            className="inline-flex h-10 items-center gap-2 rounded-[10px] bg-blue px-4 text-[13px] font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             {last ? "Commencer" : "Suivant"} <Icon name="chevron-right" size={15} />
           </button>

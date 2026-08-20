@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .gemini/
+
+# Captures de revue visuelle produites par tools/shot.mjs
+shots/
+shots*/
+refs/

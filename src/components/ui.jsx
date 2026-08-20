@@ -2,23 +2,25 @@ import React from "react";
 import Icon from "../lib/icons.jsx";
 
 export const SECTION = {
-  home:     { title: "text-cyan",       chip: "bg-cyan/15 text-cyan",         active: "bg-cyan/15 text-cyan",         btn: "bg-cyan text-white",         shadow: "rgba(56,189,248,0.7)",   badge: "cyan" },
-  courses:  { title: "text-violet",     chip: "bg-violet/15 text-violet",     active: "bg-violet/15 text-violet",     btn: "bg-violet text-white",       shadow: "rgba(124,92,255,0.7)",  badge: "violet" },
-  quiz:     { title: "text-orange",     chip: "bg-orange/15 text-orange",     active: "bg-orange/15 text-orange",     btn: "bg-orange text-[#241604]",  shadow: "rgba(255,169,77,0.7)",  badge: "orange" },
-  progress: { title: "text-green",      chip: "bg-green/15 text-green",       active: "bg-green/15 text-green",       btn: "bg-green text-[#06110c]",    shadow: "rgba(61,220,132,0.7)",  badge: "green" },
-  search:   { title: "text-cyan",       chip: "bg-cyan/15 text-cyan",         active: "bg-cyan/15 text-cyan",         btn: "bg-cyan text-white",         shadow: "rgba(56,189,248,0.7)",   badge: "cyan" },
-  settings: { title: "text-textmain",   chip: "bg-hover text-textmuted",      active: "bg-hover text-textmain",       btn: "bg-textmain text-bg",        shadow: "rgba(148,163,184,0.4)", badge: "" },
+  home:     { title: "text-cyan",       chip: "bg-tintcyan text-cyan",         active: "bg-tintcyan text-cyan",         btn: "bg-cyan text-onaccent",   badge: "cyan" },
+  courses:  { title: "text-violet",     chip: "bg-tintviolet text-violet",     active: "bg-tintviolet text-violet",     btn: "bg-violet text-onaccent",  badge: "violet" },
+  quiz:     { title: "text-orange",     chip: "bg-tintorange text-orange",     active: "bg-tintorange text-orange",     btn: "bg-orange text-onaccent",  badge: "orange" },
+  exam:     { title: "text-blue",       chip: "bg-tintblue text-blue",         active: "bg-tintblue text-blue",         btn: "bg-blue text-onaccent",  badge: "blue" },
+  cases:    { title: "text-violet",   chip: "bg-tintviolet text-violet", active: "bg-tintviolet text-violet", btn: "bg-violet text-onaccent",  badge: "violet" },
+  progress: { title: "text-green",      chip: "bg-tintgreen text-green",       active: "bg-tintgreen text-green",       btn: "bg-green text-onaccent",  badge: "green" },
+  search:   { title: "text-cyan",       chip: "bg-tintcyan text-cyan",         active: "bg-tintcyan text-cyan",         btn: "bg-cyan text-onaccent",   badge: "cyan" },
+  settings: { title: "text-textmain",   chip: "bg-hover text-textmuted",      active: "bg-hover text-textmain",       btn: "bg-textmain text-bg", badge: "" },
 };
 
 export function Badge({ children, color = "" }) {
   const colors = {
-    blue: "bg-blue/15 text-blue",
-    green: "bg-green/15 text-green",
-    cyan: "bg-cyan/15 text-cyan",
-    red: "bg-red/15 text-red",
-    violet: "bg-violet/15 text-violet",
-    orange: "bg-orange/15 text-orange",
-    yellow: "bg-yellow/15 text-yellow",
+    blue: "bg-tintblue text-blue",
+    green: "bg-tintgreen text-green",
+    cyan: "bg-tintcyan text-cyan",
+    red: "bg-tintred text-red",
+    violet: "bg-tintviolet text-violet",
+    orange: "bg-tintorange text-orange",
+    yellow: "bg-tintyellow text-yellow",
   };
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${colors[color] || "bg-hover text-textmuted"}`}>
@@ -31,7 +33,7 @@ export function ProgressBar({ pct = 0, h = "h-1.5" }) {
   return (
     <div className={`w-full overflow-hidden rounded-full bg-hover ${h}`}>
       <div
-        className="h-full rounded-full bg-gradient-to-r from-blue to-green transition-[width] duration-500 ease-out"
+        className="h-full rounded-full bg-blue transition-[width] duration-500 ease-out"
         style={{ width: `${Math.max(0, Math.min(100, pct))}%` }}
       />
     </div>
@@ -51,7 +53,7 @@ export function EmptyState({ title, sub }) {
 export function SectionTitle({ children, link, linkHref, className = "" }) {
   return (
     <div className={`mb-3.5 mt-7 flex items-baseline justify-between gap-2 max-sm:flex-col max-sm:items-start ${className}`}>
-      <h2 className="text-[17px] font-semibold">{children}</h2>
+      <h2 className="text-h3">{children}</h2>
       {link && (
         <a className="text-[13px] font-semibold text-cyan no-underline" href={linkHref}>
           {link}
@@ -63,7 +65,7 @@ export function SectionTitle({ children, link, linkHref, className = "" }) {
 
 export function Card({ children, className = "", style }) {
   return (
-    <div className={`rounded-[14px] border border-borderline bg-secondary shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] ${className}`} style={style}>
+    <div className={`rounded-[12px] border border-borderline bg-secondary ${className}`} style={style}>
       {children}
     </div>
   );

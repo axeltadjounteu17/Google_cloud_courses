@@ -32,7 +32,7 @@ export default function SlideViewer({ cid, deckId, page }) {
 
   const navBtn = (target, iconName, label) =>
     target ? (
-      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-violet/40 hover:bg-violet/15">
+      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-edgeviolet hover:bg-tintviolet">
         <Icon name={iconName} size={24} />
       </Link>
     ) : (
@@ -54,7 +54,7 @@ export default function SlideViewer({ cid, deckId, page }) {
         </div>
       </div>
 
-      <div className="mb-4 flex items-center gap-3.5 rounded-[14px] border border-borderline bg-secondary p-4 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] max-sm:gap-2 max-sm:p-2">
+      <div className="mb-4 flex items-center gap-3.5 rounded-[12px] border border-borderline bg-secondary p-4 max-sm:gap-2 max-sm:p-2">
         {navBtn(prevPage, "chevron-left", "Précédente")}
         <button
           onClick={() => setZoom(true)}
@@ -93,12 +93,12 @@ export default function SlideViewer({ cid, deckId, page }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-[90] flex items-center justify-center bg-black/92 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-[90] flex items-center justify-center bg-bg p-4"
             onClick={() => setZoom(false)}
           >
             <div className="absolute right-4 top-4 flex items-center gap-2">
-              <span className="rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-bold text-white">Diapositive {p} / {n}</span>
-              <button onClick={() => setZoom(false)} aria-label="Fermer le zoom" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25">
+              <span className="rounded-full bg-hover px-3.5 py-1.5 text-sm font-bold text-textmain">Diapositive {p} / {n}</span>
+              <button onClick={() => setZoom(false)} aria-label="Fermer le zoom" className="flex h-10 w-10 items-center justify-center rounded-full bg-hover text-textmain transition-colors hover:bg-active">
                 <Icon name="x" size={20} />
               </button>
             </div>
@@ -119,7 +119,7 @@ export default function SlideViewer({ cid, deckId, page }) {
                 href={`#/slide/${cid}/${deck.id}/${prevPage}`}
                 onClick={(e) => e.stopPropagation()}
                 aria-label="Diapositive précédente"
-                className="absolute left-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white no-underline transition-colors hover:bg-white/25 max-sm:h-10 max-sm:w-10"
+                className="absolute left-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-hover text-textmain no-underline transition-colors hover:bg-active max-sm:h-10 max-sm:w-10"
               >
                 <Icon name="chevron-left" size={26} />
               </Link>
@@ -129,7 +129,7 @@ export default function SlideViewer({ cid, deckId, page }) {
                 href={`#/slide/${cid}/${deck.id}/${nextPage}`}
                 onClick={(e) => e.stopPropagation()}
                 aria-label="Diapositive suivante"
-                className="absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white no-underline transition-colors hover:bg-white/25 max-sm:h-10 max-sm:w-10"
+                className="absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-hover text-textmain no-underline transition-colors hover:bg-active max-sm:h-10 max-sm:w-10"
               >
                 <Icon name="chevron-right" size={26} />
               </Link>
@@ -139,19 +139,19 @@ export default function SlideViewer({ cid, deckId, page }) {
       </AnimatePresence>
 
       {pg.bullets?.length ? (
-        <div className="mb-4 rounded-[14px] border border-borderline bg-secondary p-5 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] max-sm:p-3.5">
+        <div className="mb-4 rounded-[12px] border border-borderline bg-secondary p-5 max-sm:p-3.5">
           {pg.title && <h3 className="mb-3 text-[17px] font-semibold">{pg.title}</h3>}
           <ul className="list-none">
             {pg.bullets.map((b, i) => (
               <li key={i} className="relative border-b border-dashed border-borderline px-0 py-1.5 pl-5 text-[14.5px] leading-relaxed last:border-none">
-                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[2px] bg-gradient-to-br from-violet to-cyan" />
+                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[2px] bg-violet" />
                 {b}
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="mb-4 rounded-[14px] border border-borderline bg-secondary p-5 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)]">
+        <div className="mb-4 rounded-[12px] border border-borderline bg-secondary p-5">
           <p className="text-sm text-textmuted">Schéma — aucun texte exploitable sur cette diapositive.</p>
         </div>
       )}
@@ -163,7 +163,7 @@ export default function SlideViewer({ cid, deckId, page }) {
             href={`#/slide/${cid}/${deck.id}/${i + 1}`}
             title={`Diapositive ${i + 1}`}
             className={`h-[70px] w-[124px] shrink-0 overflow-hidden rounded-lg border-2 transition-opacity max-sm:h-[56px] max-sm:w-[96px] ${
-              i + 1 === p ? "border-violet opacity-100 shadow-[0_0_0_3px_rgba(124,92,255,0.25)]" : "border-borderline opacity-75 hover:opacity-100 hover:border-violet/50"
+              i + 1 === p ? "border-violet opacity-100" : "border-borderline opacity-75 hover:opacity-100 hover:border-edgeviolet"
             }`}
           >
             <img loading="lazy" src={x.img} alt={`Diapositive ${i + 1}`} className="block h-full w-full object-cover" />
@@ -178,7 +178,7 @@ export default function SlideViewer({ cid, deckId, page }) {
           </Link>
         ) : <span />}
         {nextPage ? (
-          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
+          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             Diapositive {nextPage} <Icon name="chevron-right" size={16} />
           </Link>
         ) : (

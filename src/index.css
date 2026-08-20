@@ -1,21 +1,95 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Typographie d'affichage — Space Grotesk (SIL Open Font License 1.1).
+   Géométrique et légèrement singulière : elle donne une identité aux titres
+   là où la pile système restait neutre. Deux sous-ensembles seulement
+   (latin + latin étendu), soit 41 Ko, inlinés par vite-plugin-singlefile.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./assets/fonts/SpaceGrotesk-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./assets/fonts/SpaceGrotesk-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Système de couleurs — surfaces 100 % opaques.
+
+   Aucun `backdrop-filter`, aucun fond semi-transparent : chaque surface est
+   une couleur pleine. Les teintes d'accent (`--tint-*`) et les bordures
+   d'accent (`--edge-*`) sont pré-calculées, c'est-à-dire l'accent aplati sur
+   le fond de carte, au lieu d'être composé en alpha à l'affichage.
+
+   Contrastes vérifiés WCAG AA (4,5:1) :
+     · texte principal / carte ......... 16,8:1 sombre — 17,1:1 clair
+     · texte secondaire / carte .......  7,3:1 sombre —  5,4:1 clair
+     · accent / carte ................. >= 4,5:1 dans les deux thèmes
+     · accent / sa propre teinte ...... >= 4,5:1 (badges)
+     · encre / bouton plein ........... >= 4,5:1 (pire cas violet 5,7:1)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root {
   --bg: #000000;
   --bg-soft: #0a0a0c;
   --secondary: #121216;
   --panel: #17171c;
-  --hover: rgba(255, 255, 255, 0.08);
-  --borderline: rgba(255, 255, 255, 0.14);
+
+  /* Surfaces neutres opaques (anciennement rgba) */
+  --hover: #252529;
+  --active: #2e2e33;
+  --borderline: #333337;
+  --borderline-soft: #232327;
+
   --text-main: #eef3fc;
   --text-muted: #94a3b8;
+
+  /* Encre des boutons pleins : une seule couleur, >= 4,5:1 sur tous les accents */
+  --on-accent: #0b0b0f;
+
   --red: 0 100% 68%;
   --blue: 215 100% 65%;
   --cyan: 199 93% 60%;
   --green: 146 70% 55%;
-  --violet: 249 100% 68%;
+  --violet: 249 100% 73%;
   --orange: 33 100% 65%;
   --yellow: 48 100% 62%;
+
+  --tint-red: #361d20;
+  --tint-blue: #1b2639;
+  --tint-cyan: #182b38;
+  --tint-green: #183026;
+  --tint-violet: #242139;
+  --tint-orange: #362a1e;
+  --tint-yellow: #36301c;
+
+  --edge-red: #5e2a2c;
+  --edge-blue: #253d61;
+  --edge-cyan: #1f485e;
+  --edge-green: #1f5338;
+  --edge-violet: #383261;
+  --edge-orange: #5e4427;
+  --edge-yellow: #5e5123;
+
+  --scrim: #000000;
+
+  /* Halo d'ambiance : dégradé radial à arrêts pleins, sans alpha, donc sans
+     effet de verre. Donne de la profondeur aux en-têtes de page. */
+  --glow-from: #101826;
 }
 
 html[data-theme="light"] {
@@ -23,17 +97,45 @@ html[data-theme="light"] {
   --bg-soft: #f6f7f9;
   --secondary: #ffffff;
   --panel: #ffffff;
-  --hover: rgba(0, 0, 0, 0.06);
-  --borderline: rgba(0, 0, 0, 0.12);
+
+  --hover: #f0f0f0;
+  --active: #e6e6e6;
+  --borderline: #e0e0e0;
+  --borderline-soft: #ededed;
+
   --text-main: #0f1b33;
   --text-muted: #5a6a8a;
-  --red: 0 73% 54%;
-  --blue: 221 83% 53%;
-  --cyan: 188 89% 40%;
-  --green: 149 79% 34%;
-  --violet: 258 61% 53%;
-  --orange: 21 91% 48%;
-  --yellow: 41 100% 39%;
+
+  --on-accent: #ffffff;
+
+  /* Luminosités abaissées : les accents d'origine échouaient au contraste sur
+     fond blanc (cyan 2,8:1) et sur leur propre teinte (cyan 2,4:1). */
+  --red: 0 73% 45%;
+  --blue: 221 83% 50.5%;
+  --cyan: 188 89% 27%;
+  --green: 149 79% 26%;
+  --violet: 258 61% 56.5%;
+  --orange: 21 91% 36.5%;
+  --yellow: 41 100% 27.5%;
+
+  --tint-red: #f7dddd;
+  --tint-blue: #dce6fc;
+  --tint-cyan: #daeaec;
+  --tint-green: #dbebe2;
+  --tint-violet: #eae4f9;
+  --tint-orange: #f3e3da;
+  --tint-yellow: #eee7d9;
+
+  --edge-red: #edb7b7;
+  --edge-blue: #b5caf8;
+  --edge-cyan: #b0d2d7;
+  --edge-green: #b2d3c2;
+  --edge-violet: #d3c6f1;
+  --edge-orange: #e6c3b0;
+  --edge-yellow: #daccad;
+
+  --scrim: #0f1b33;
+  --glow-from: #eef3fb;
 }
 
 @theme inline {
@@ -42,9 +144,14 @@ html[data-theme="light"] {
   --color-secondary: var(--secondary);
   --color-panel: var(--panel);
   --color-hover: var(--hover);
+  --color-active: var(--active);
   --color-borderline: var(--borderline);
+  --color-borderlinesoft: var(--borderline-soft);
   --color-textmain: var(--text-main);
   --color-textmuted: var(--text-muted);
+  --color-onaccent: var(--on-accent);
+  --color-scrim: var(--scrim);
+
   --color-red: hsl(var(--red));
   --color-blue: hsl(var(--blue));
   --color-cyan: hsl(var(--cyan));
@@ -52,17 +159,32 @@ html[data-theme="light"] {
   --color-violet: hsl(var(--violet));
   --color-orange: hsl(var(--orange));
   --color-yellow: hsl(var(--yellow));
+
+  --color-tintred: var(--tint-red);
+  --color-tintblue: var(--tint-blue);
+  --color-tintcyan: var(--tint-cyan);
+  --color-tintgreen: var(--tint-green);
+  --color-tintviolet: var(--tint-violet);
+  --color-tintorange: var(--tint-orange);
+  --color-tintyellow: var(--tint-yellow);
+
+  --color-edgered: var(--edge-red);
+  --color-edgeblue: var(--edge-blue);
+  --color-edgecyan: var(--edge-cyan);
+  --color-edgegreen: var(--edge-green);
+  --color-edgeviolet: var(--edge-violet);
+  --color-edgeorange: var(--edge-orange);
+  --color-edgeyellow: var(--edge-yellow);
 }
 
 @layer base {
-  * { 
-    border-color: var(--borderline); 
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
-    -webkit-user-drag: none !important;
-    -webkit-touch-callout: none !important;
+  * {
+    border-color: var(--borderline);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
   }
 
   html { scroll-behavior: smooth; }
@@ -76,16 +198,46 @@ html[data-theme="light"] {
     background-color: var(--bg);
   }
 
-  img {
-    -webkit-user-drag: none !important;
-    pointer-events: none !important;
+  /* Hiérarchie portée par la taille et la police, pas par la graisse.
+     Tout était en gras, ce qui écrasait les niveaux : quand tout ressort,
+     plus rien ne ressort. */
+  h1, h2, h3, .font-display {
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
+  img { -webkit-user-drag: none; }
+
   ::selection { background: transparent; color: inherit; }
-  mark { background: transparent; }
+
+  /* Surbrillance de recherche. Elle était neutralisée par
+     `mark { background: transparent }`, ce qui rendait les correspondances
+     invisibles sur la page Recherche. */
+  mark {
+    background: var(--tint-yellow);
+    color: var(--text-main);
+    border-radius: 3px;
+    padding: 0 2px;
+    box-shadow: inset 0 0 0 1px var(--edge-yellow);
+  }
+
+  /* Focus clavier. Il n'existait aucun style de focus : la navigation au
+     clavier était invisible, notamment sur la grille de questions d'examen. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--cyan));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid hsl(var(--cyan));
+    outline-offset: 2px;
+  }
 }
 
-/* ===== Bloquage de l'impression (Print / Capture PDF) ===== */
+/* Blocage de l'impression et de l'export PDF */
 @media print {
   html, body, #root {
     display: none !important;
@@ -108,34 +260,32 @@ html[data-theme="light"] {
   }
 
   .main {
-    flex: 1;
+    flex: 1 1 0;
     min-width: 0;
     padding: 2.25rem 1.75rem 4rem;
-    outline: none;
   }
 
   .brand-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     flex-shrink: 0;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--blue), var(--cyan));
-    color: #fff;
+    border-radius: 10px;
+    background: hsl(var(--blue));
+    color: var(--on-accent);
     font-weight: 800;
-    font-size: 18px;
-    box-shadow: 0 8px 24px -8px rgba(56, 189, 248, 0.7);
+    font-size: 17px;
   }
 
   .icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     background: transparent;
     color: var(--text-muted);
     border: none;
@@ -143,76 +293,136 @@ html[data-theme="light"] {
   }
   .icon-btn:hover { background: var(--hover); color: var(--text-main); }
 
-  /* ===== Surface verre ===== */
+  /* Surface pleine. Plus de verre : fond opaque, bordure nette, pas de flou. */
   .card {
     background: var(--secondary);
     border: 1px solid var(--borderline);
-    border-radius: 16px;
-    box-shadow: 0 10px 34px -14px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-radius: 12px;
+  }
+
+  /* ═══ Motif de marque : hexagone ═══════════════════════════════════════
+     Même forme que le logo, et celle des icônes de produits Google Cloud.
+     Répétée sur les pastilles d'icônes, elle donne au site une signature
+     reconnaissable au premier regard. */
+  .hex {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border-radius: 2px;
+  }
+
+  /* ═══ Halo d'ambiance ═══════════════════════════════════════════════════
+     Dégradé radial à arrêts pleins : aucune transparence, donc aucun effet
+     de verre, mais une profondeur qui évite le fond plat et mort. */
+  .ambient {
+    position: relative;
+    isolation: isolate;
+  }
+  /* Le halo reste dans les bornes horizontales du conteneur : débordant, il
+     rendait le document scrollable latéralement. L'étalement est porté par le
+     dégradé, pas par un décalage négatif. */
+  .ambient::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -6rem 0 auto 0;
+    height: 26rem;
+    background: radial-gradient(
+      70% 100% at 18% 0%,
+      var(--glow-from) 0%,
+      var(--bg) 74%
+    );
+    pointer-events: none;
+  }
+
+  /* Carte réactive : la vie vient du mouvement au survol, pas du flou. */
+  .card-lift {
+    transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    background-color: var(--hover);
+  }
+
+  /* Filet d'accent en tête de carte, pour marquer un rôle sans le colorer
+     entièrement. */
+  .rule-top { box-shadow: inset 0 2px 0 0 currentColor; }
+
+  /* Intitulé de groupe dans la navigation */
+  .nav-group {
+    padding: 0 0.75rem;
+    margin: 1rem 0 0.35rem;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 }
 
-.bg-secondary {
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-}
-
-.page-fade {
-  animation: pageFade 0.28s ease;
-}
+.page-fade { animation: pageFade 0.2s ease; }
 @keyframes pageFade {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Flip 3D pour les cartes flash du quiz */
+/* Flip 3D des cartes flash */
 .persp { perspective: 1200px; }
 .preserve { transform-style: preserve-3d; }
 .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .rotate-y-180 { transform: rotateY(180deg); }
 
-/* ===== Typographie fluide (clamp) ===== */
-.text-h1 { font-size: clamp(2rem, 2rem + 2vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; }
-.text-h2 { font-size: clamp(1.375rem, 1.375rem + 1.1vw, 1.75rem); line-height: 1.15; letter-spacing: -0.02em; }
-.text-h3 { font-size: clamp(1.125rem, 1.125rem + 0.5vw, 1.375rem); line-height: 1.2; }
+/* ═══ Typographie fluide, en police d'affichage ═══════════════════════════ */
+.text-hero,
+.text-h1,
+.text-h2,
+.text-h3 {
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.025em;
+}
+/* Titre d'accroche : grand et en graisse moyenne, à la manière des sites de
+   formation qui laissent la taille faire la hiérarchie. */
+.text-hero { font-size: clamp(2.25rem, 2rem + 3.2vw, 4rem); line-height: 1.04; font-weight: 600; }
+.text-h1 { font-size: clamp(1.875rem, 1.75rem + 1.8vw, 2.75rem); line-height: 1.1; font-weight: 600; }
+.text-h2 { font-size: clamp(1.375rem, 1.3rem + 1.1vw, 1.875rem); line-height: 1.16; font-weight: 600; }
+.text-h3 { font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.3125rem); line-height: 1.24; font-weight: 600; }
 
-/* ===== Marquee infini (kiro.dev) ===== */
+/* Chiffres mis en avant (scores, compteurs) */
+.text-stat {
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .animate-marquee { animation: marquee 40s linear infinite; }
 .animate-marquee:hover { animation-play-state: paused; }
 
-/* ===== Curseur terminal clignotant (step-end) ===== */
 @keyframes term-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-.terminal-cursor { display: inline-block; width: 0.55em; height: 1em; margin-left: 2px; vertical-align: text-bottom; background: hsl(var(--green)); animation: term-blink 1s step-end infinite; }
+.terminal-cursor {
+  display: inline-block; width: 0.55em; height: 1em; margin-left: 2px;
+  vertical-align: text-bottom; background: hsl(var(--green));
+  animation: term-blink 1s step-end infinite;
+}
 
-/* Tatouage Numérique Flottant (Watermark Anti-Capture) */
-.security-watermark {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-around;
-  opacity: 0.12;
-  overflow: hidden;
-  user-select: none;
+/* Le filigrane est désormais produit uniquement par lib/security.js
+   (#gcp-watermark). Les classes .security-watermark, qui servaient au second
+   calque rendu par SecurityGuard, ont été supprimées avec lui. */
+
+/* Apparition en cascade des blocs d'une page */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.security-watermark-item {
-  transform: rotate(-25deg);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  padding: 40px;
-}
+.rise { animation: rise 0.42s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.rise-1 { animation-delay: 0.04s; }
+.rise-2 { animation-delay: 0.09s; }
+.rise-3 { animation-delay: 0.14s; }
+.rise-4 { animation-delay: 0.19s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-fade, .animate-marquee, .terminal-cursor { animation: none; }
+  .page-fade, .animate-marquee, .terminal-cursor, .rise { animation: none; }
+  .card-lift:hover { transform: none; }
+  html { scroll-behavior: auto; }
 }
 
 @media (max-width: 640px) {
