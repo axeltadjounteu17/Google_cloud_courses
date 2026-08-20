@@ -72,7 +72,9 @@ let wmEl = null;
 function initWatermark() {
   const svg =
     "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='150'>" +
-    "<g transform='rotate(-28 160 75)' fill='rgba(148,163,184,0.13)' font-family='system-ui,sans-serif' font-size='13'>" +
+    // 6 % au lieu de 13 % : le filigrane reste visible sur une capture d'écran
+    // sans gêner la lecture prolongée, désormais qu'il n'y a plus qu'un calque.
+    "<g transform='rotate(-28 160 75)' fill='rgba(148,163,184,0.06)' font-family='system-ui,sans-serif' font-size='13'>" +
     "<text x='14' y='42'>GCP Étude — Accès privé</text>" +
     "<text x='14' y='62'>Session " + SESSION + "</text>" +
     "<text x='14' y='82'>Lecture suivie · " + new Date().toLocaleDateString("fr-FR") + "</text>" +
@@ -86,27 +88,13 @@ function initWatermark() {
 }
 
 /* Flou du contenu quand la fenêtre perd le focus */
-let appBlur = false;
-function setAppBlur(on) {
-  if (appBlur === on) return;
-  appBlur = on;
-  const app = document.querySelector(".app");
-  if (!app) return;
-  if (on) {
-    app.style.filter = "blur(16px)";
-    app.style.pointerEvents = "none";
-  } else {
-    app.style.filter = "";
-    app.style.pointerEvents = "";
-  }
-}
-
-function initFocusLock() {
-  const apply = () => setAppBlur(document.hidden || !document.hasFocus());
-  window.addEventListener("blur", apply);
-  window.addEventListener("focus", apply);
-  document.addEventListener("visibilitychange", apply);
-  setTimeout(apply, 600);
+/**
+ * Signale une action bloquée à l'interface.
+ * SecurityGuard écoute cet événement pour afficher un message : la logique de
+ * blocage reste ici, l'affichage reste dans React, sans doublon.
+ */
+function notifyBlocked(message) {
+  window.dispatchEvent(new CustomEvent("gcp:blocked", { detail: { message } }));
 }
 
 /* Bots / navigateurs automatisés / headless */
@@ -145,13 +133,23 @@ export function initSecurity() {
   document.addEventListener("dragstart", blocked, true);
   document.addEventListener("drop", blocked, true);
 
+  /* Raccourcis bloqués. Un seul gestionnaire, ici : SecurityGuard avait le
+     sien, ce qui doublait le traitement de chaque touche. L'interface est
+     prévenue par l'événement `gcp:blocked`. */
   document.addEventListener("keydown", (e) => {
     const mod = e.ctrlKey || e.metaKey;
     const k = (e.key || "").toLowerCase();
-    if (e.key === "F12") return blocked(e);
-    if (mod && e.shiftKey && ["i", "j", "c", "s", "p"].includes(k)) return blocked(e);
+    if (e.key === "F12") {
+      notifyBlocked("Les outils de développement sont désactivés.");
+      return blocked(e);
+    }
+    if (mod && e.shiftKey && ["i", "j", "c", "s", "p"].includes(k)) {
+      notifyBlocked("Les outils de développement sont désactivés.");
+      return blocked(e);
+    }
     if (mod && ["c", "x", "s", "p", "u", "a"].includes(k)) {
       if (isEditable(e.target)) return;
+      notifyBlocked(`Action ${e.metaKey ? "Cmd" : "Ctrl"}+${k.toUpperCase()} bloquée : contenu protégé.`);
       return blocked(e);
     }
     return undefined;
@@ -166,7 +164,6 @@ export function initSecurity() {
 
   initPrintBlock();
   initWatermark();
-  initFocusLock();
 
   /* Détection DevTools (heuristique sur la largeur de la fenêtre) */
   let open = false;

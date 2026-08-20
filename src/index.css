@@ -404,29 +404,9 @@ html[data-theme="light"] {
   animation: term-blink 1s step-end infinite;
 }
 
-/* Filigrane anti-capture. Discret et sans flou. */
-.security-watermark {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-around;
-  opacity: 0.05;
-  overflow: hidden;
-  user-select: none;
-}
-.security-watermark-item {
-  transform: rotate(-25deg);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  padding: 40px;
-}
+/* Le filigrane est désormais produit uniquement par lib/security.js
+   (#gcp-watermark). Les classes .security-watermark, qui servaient au second
+   calque rendu par SecurityGuard, ont été supprimées avec lui. */
 
 /* Apparition en cascade des blocs d'une page */
 @keyframes rise {

@@ -206,3 +206,38 @@ test("le thème n'a qu'une source de vérité", () => {
   assert.doesNotMatch(app, /localStorage\.getItem\(\s*["']gcp_theme["']\s*\)/, "lecture directe du thème dans App.jsx");
   assert.doesNotMatch(app, /localStorage\.setItem\(\s*["']gcp_theme["']/, "écriture directe du thème dans App.jsx");
 });
+
+// ── Couche de sécurité : une seule implémentation ──────────────────────────
+
+test("le filigrane n'est produit qu'à un seul endroit", () => {
+  const guard = readFileSync(join(SRC, "components", "SecurityGuard.jsx"), "utf8");
+  const sec = readFileSync(join(SRC, "lib", "security.js"), "utf8");
+  // security.js détient le filigrane ; SecurityGuard n'en rend plus.
+  assert.match(sec, /gcp-watermark/, "filigrane absent de security.js");
+  assert.doesNotMatch(guard, /watermark/i, "second calque de filigrane réintroduit dans SecurityGuard");
+  assert.doesNotMatch(css, /\.security-watermark/, "styles du second filigrane réintroduits");
+});
+
+test("les raccourcis clavier ne sont interceptés qu'une fois", () => {
+  const guard = readFileSync(join(SRC, "components", "SecurityGuard.jsx"), "utf8");
+  const sec = readFileSync(join(SRC, "lib", "security.js"), "utf8");
+  assert.match(sec, /addEventListener\("keydown"/, "blocage clavier absent de security.js");
+  assert.doesNotMatch(guard, /addEventListener\("keydown"/, "second gestionnaire clavier dans SecurityGuard");
+  // La communication passe par un événement, pas par une duplication de logique.
+  assert.match(sec, /gcp:blocked/, "security.js ne signale pas les actions bloquées");
+  assert.match(guard, /gcp:blocked/, "SecurityGuard n'écoute pas les actions bloquées");
+});
+
+test("le contenu n'est pas masqué sur une simple perte de focus", () => {
+  // Écouter `blur` sur la fenêtre masquait le contenu dès qu'on cliquait dans
+  // une autre application, y compris la documentation ouverte à côté.
+  const guard = readFileSync(join(SRC, "components", "SecurityGuard.jsx"), "utf8");
+  const sec = readFileSync(join(SRC, "lib", "security.js"), "utf8");
+  for (const [name, src] of [["SecurityGuard.jsx", guard], ["security.js", sec]]) {
+    assert.doesNotMatch(src, /addEventListener\(\s*["']blur["']/, `${name} masque encore sur blur`);
+    assert.doesNotMatch(src, /hasFocus\s*\(/, `${name} s'appuie encore sur hasFocus`);
+  }
+  // Le masquage reste actif sur passage réel en arrière-plan, avec un délai.
+  assert.match(guard, /visibilitychange/, "masquage sur arrière-plan supprimé");
+  assert.match(guard, /HIDE_DELAY_MS/, "délai de grâce absent");
+});
