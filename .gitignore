@@ -27,4 +27,5 @@ dist-ssr
 # Captures de revue visuelle produites par tools/shot.mjs
 shots/
 shots*/
+*-shots/
 refs/
