@@ -156,3 +156,32 @@ test("une route inconnue retombe sur l'accueil", { skip: !hasBundle }, async () 
   assert.match(appText(dom), /GCP Étude/, "aucun rendu de repli");
   dom.window.close();
 });
+
+test("le logo et le compteur de régularité sont rendus", { skip: !hasBundle }, async () => {
+  const dom = await mount("#/home");
+  const doc = dom.window.document;
+  // Le logo est un SVG porteur d'un libellé accessible.
+  const logo = [...doc.querySelectorAll("svg[role='img']")].find((s) =>
+    (s.getAttribute("aria-label") || "").includes("GCP Étude")
+  );
+  assert.ok(logo, "marque du logo absente");
+  assert.match(appText(dom), /CLOUD ARCHITECT/i, "sous-titre du logo absent");
+  assert.match(appText(dom), /jours? d'affilée|Série à démarrer/, "compteur de régularité absent");
+  dom.window.close();
+});
+
+test("aucune règle ne déborde horizontalement du conteneur", { skip: !hasBundle }, () => {
+  // `.ambient::before` a déjà rendu le document scrollable latéralement en
+  // débordant de 12rem de chaque côté ; le halo doit rester dans les bornes.
+  const css = readFileSync(BUNDLE, "utf8");
+  const rule = css.match(/\.ambient:before\{[^}]*\}/);
+  assert.ok(rule, "règle .ambient::before absente du bundle");
+  const inset = rule[0].match(/inset:([^;}]+)/);
+  assert.ok(inset, "propriété inset absente");
+  // Les composantes horizontales (2e et 4e) ne doivent pas être négatives.
+  const parts = inset[1].trim().split(/\s+/);
+  const horizontals = parts.length >= 4 ? [parts[1], parts[3]] : [parts[1] ?? "0"];
+  for (const h of horizontals) {
+    assert.ok(!h.startsWith("-"), `halo débordant horizontalement (inset: ${inset[1].trim()})`);
+  }
+});

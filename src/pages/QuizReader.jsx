@@ -88,7 +88,7 @@ export default function QuizReader({ qid }) {
 
       {done ? (
         <div className="rounded-[12px] border border-borderline bg-secondary p-8 text-center max-sm:p-5">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-[14px] bg-tintgreen text-green"><Icon name="check" size={30} /></span>
+          <span className="mx-auto flex h-16 w-16 items-center justify-center hex bg-tintgreen text-green"><Icon name="check" size={30} /></span>
           <div className="mt-4 text-xl font-bold">Révision terminée</div>
           <div className="mt-1 text-sm text-textmuted">
             {nknown} / {nb} questions maîtrisées — vous avez parcouru toutes les questions de ce cours.

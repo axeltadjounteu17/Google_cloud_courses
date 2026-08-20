@@ -53,7 +53,7 @@ export function EmptyState({ title, sub }) {
 export function SectionTitle({ children, link, linkHref, className = "" }) {
   return (
     <div className={`mb-3.5 mt-7 flex items-baseline justify-between gap-2 max-sm:flex-col max-sm:items-start ${className}`}>
-      <h2 className="text-[17px] font-semibold">{children}</h2>
+      <h2 className="text-h3">{children}</h2>
       {link && (
         <a className="text-[13px] font-semibold text-cyan no-underline" href={linkHref}>
           {link}

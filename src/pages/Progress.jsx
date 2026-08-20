@@ -21,7 +21,7 @@ export default function Progress() {
   }
 
   return (
-    <div className="container mx-auto max-w-[1080px]">
+    <div className="ambient container mx-auto max-w-[1080px]">
       <h1 className="mb-1.5 text-h2 text-green">Progression</h1>
       <p className="mb-5 text-sm text-textmuted">Votre avancement vers la certification Google Cloud Professional Cloud Architect.</p>
 
@@ -53,7 +53,7 @@ export default function Progress() {
           return (
             <Link key={c.id} href={`#/course/${c.id}`} className="no-underline">
               <Card className="flex flex-wrap items-center gap-4 p-4.5 transition-colors hover:bg-hover max-sm:p-3.5">
-                <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] bg-tintgreen text-green"><Icon name={c.icon} size={20} /></span>
+                <span className="flex h-[40px] w-[40px] shrink-0 items-center justify-center hex bg-tintgreen text-green"><Icon name={c.icon} size={20} /></span>
                 <div className="min-w-0 flex-1">
                   <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
                     <span className="text-sm font-bold">{c.title}</span>

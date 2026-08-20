@@ -13,7 +13,7 @@ const TONE = {
 
 export default function CaseStudies() {
   return (
-    <div className="container mx-auto max-w-[900px]">
+    <div className="ambient container mx-auto max-w-[900px]">
       <header className="mb-6">
         <h1 className="text-h2 leading-snug text-violet">Études de cas</h1>
         <p className="mt-1.5 max-w-[680px] text-[13.5px] leading-relaxed text-textmuted">
@@ -30,7 +30,7 @@ export default function CaseStudies() {
           return (
             <Card key={c.id} className="p-5 max-sm:p-4">
               <div className="flex items-start gap-4 max-sm:gap-3">
-                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[12px] ${t.chip}`}>
+                <span className={`flex h-12 w-12 shrink-0 items-center justify-center hex  ${t.chip}`}>
                   <Icon name={c.icon} size={22} />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -79,7 +79,7 @@ export default function CaseStudies() {
 
       <Card className="mt-6 p-5 max-sm:p-4">
         <div className="flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-tintyellow text-yellow">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center hex  bg-tintyellow text-yellow">
             <Icon name="help-circle" size={17} />
           </span>
           <div className="min-w-0">

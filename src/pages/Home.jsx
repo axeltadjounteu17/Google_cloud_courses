@@ -46,22 +46,54 @@ export default function Home() {
   ];
 
   return (
-    <div className="container mx-auto max-w-[1080px]">
-      <div className="relative mb-8 overflow-hidden rounded-[12px] border border-borderline bg-tintviolet p-6 max-sm:p-4">
-        <Icon name="cloud" size={52} className="pointer-events-none absolute -right-3 -bottom-4 text-cyan" />
-        <div className="mb-2 flex flex-wrap items-center gap-3">
-          <h1 className="text-h2 font-semibold text-cyan">Bienvenue sur votre espace d'étude</h1>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-edgecyan bg-tintcyan px-3 py-1 text-[12px] font-bold text-cyan">
-            <Icon name="flame" size={13} /> {streak} jour{streak > 1 ? "s" : ""} d'affilée
-          </span>
+    <div className="ambient container mx-auto max-w-[1080px]">
+      {/* Accroche : une phrase large, la hiérarchie portée par la taille. */}
+      <header className="rise pt-6 pb-12 max-sm:pt-2 max-sm:pb-8">
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-borderline bg-secondary px-3 py-1.5 text-[11.5px] font-semibold tracking-wide text-textmuted uppercase">
+          <span className="h-1.5 w-1.5 rounded-full bg-green" />
+          Professional Cloud Architect · guide v6.1
         </div>
-        <p className="text-sm text-textmuted">
-          Préparez la certification <strong className="text-textmain">Google Cloud Professional Cloud Architect</strong> — lecture de{" "}
-          <strong className="text-textmain">{st.courses} cours</strong>, {st.total} leçons, en français.
-        </p>
-      </div>
 
-      <div className="relative mb-8 overflow-hidden border-y border-borderline bg-secondary py-2.5">
+        <h1 className="text-hero max-w-[19ch]">
+          Préparez la certification <span className="text-cyan">sans y passer vos nuits</span>.
+        </h1>
+
+        <p className="mt-5 max-w-[58ch] text-[15.5px] leading-relaxed text-textmuted">
+          {st.courses} cours en français, {st.total} leçons, {" "}
+          <strong className="font-semibold text-textmain">71 questions type examen</strong> corrigées
+          et les quatre études de cas officielles. Tout hors ligne, tout à votre rythme.
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center gap-2.5">
+          <Link
+            href={resume ? `#/lesson/${resume.course.id}/${resume.index}` : "#/courses"}
+            className="inline-flex items-center gap-2 rounded-[10px] bg-cyan px-5 py-3 text-[14px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+          >
+            <Icon name="play" size={17} /> {resume ? "Reprendre la lecture" : "Commencer un cours"}
+          </Link>
+          <Link
+            href="#/exam"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-borderline px-5 py-3 text-[14px] font-bold text-textmain no-underline transition-colors hover:bg-hover"
+          >
+            <Icon name="award" size={17} /> Passer un examen blanc
+          </Link>
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
+          {[
+            { n: `${st.pct}%`, l: "du programme lu", c: "text-cyan" },
+            { n: streak, l: `jour${streak > 1 ? "s" : ""} d'affilée`, c: "text-orange" },
+            { n: st.doneCourses, l: `cours terminé${st.doneCourses > 1 ? "s" : ""}`, c: "text-green" },
+          ].map((s, i) => (
+            <div key={i} className="flex items-baseline gap-2">
+              <span className={`text-stat text-[26px] leading-none ${s.c}`}>{s.n}</span>
+              <span className="text-[12.5px] text-textmuted">{s.l}</span>
+            </div>
+          ))}
+        </div>
+      </header>
+
+      <div className="relative mb-12 overflow-hidden border-y border-borderline bg-secondary py-2.5">
         <div className="animate-marquee flex w-max whitespace-nowrap">
           {[0, 1].map((dup) => (
             <div key={dup} aria-hidden={dup === 1} className="flex items-center">
@@ -76,10 +108,10 @@ export default function Home() {
       </div>
 
       {resume && (
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[12px] border border-edgecyan bg-tintcyan p-5 max-sm:p-4">
+        <div className="rise rise-1 mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[12px] border border-edgecyan bg-tintcyan p-5 max-sm:p-4">
           <div className="min-w-0 flex-1">
             <div className="text-[11px] font-extrabold tracking-wider text-cyan uppercase">Reprendre la lecture</div>
-            <div className="mt-1.5 truncate text-lg font-bold">{resume.lesson.title}</div>
+            <div className="mt-1.5 truncate text-h3">{resume.lesson.title}</div>
             <div className="text-xs text-textmuted">
               {resume.course.title} · Leçon {resume.index + 1} sur {resume.course.lessons.length}
             </div>
@@ -94,21 +126,21 @@ export default function Home() {
         </div>
       )}
 
-      <SectionTitle link="Tout voir" linkHref="#/courses" className="mt-10">Vos cours</SectionTitle>
-      <div className="grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+      <SectionTitle link="Tout voir" linkHref="#/courses" className="mt-14">Vos cours</SectionTitle>
+      <div className="rise rise-2 grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
         {ALL_COURSES.map((c) => <CourseCard key={c.id} c={c} />)}
       </div>
 
-      <SectionTitle className="mt-12">Statistiques rapides</SectionTitle>
-      <div className="grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-2">
+      <SectionTitle className="mt-16">Votre activité</SectionTitle>
+      <div className="rise rise-3 grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-2">
         {stats.map((s, i) => (
-          <Card key={i} className="flex items-center gap-3.5 p-4">
-            <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px] ${s.chip}`}>
-              <Icon name={s.icon} size={20} />
+          <Card key={i} className="card-lift flex items-center gap-3.5 p-4">
+            <span className={`hex flex h-11 w-11 shrink-0 items-center justify-center ${s.chip}`}>
+              <Icon name={s.icon} size={19} className={s.color} />
             </span>
             <div className="min-w-0">
-              <div className={`text-[22px] leading-none font-extrabold tracking-tight ${s.color}`}>{s.num}</div>
-              <div className="mt-1 text-[11px] text-textmuted">{s.lbl}</div>
+              <div className={`text-stat text-[24px] leading-none ${s.color}`}>{s.num}</div>
+              <div className="mt-1 text-[11.5px] text-textmuted">{s.lbl}</div>
             </div>
           </Card>
         ))}
@@ -116,10 +148,12 @@ export default function Home() {
 
       {recentItems.length > 0 && (
         <>
-          <SectionTitle className="mt-12">Dernières leçons consultées</SectionTitle>
-          <Card className="p-2">{recentItems}</Card>
+          <SectionTitle className="mt-16">Dernières leçons consultées</SectionTitle>
+          <Card className="rise rise-4 p-2">{recentItems}</Card>
         </>
       )}
+
+      <div className="h-10" />
     </div>
   );
 }

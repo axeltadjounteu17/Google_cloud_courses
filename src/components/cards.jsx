@@ -11,9 +11,9 @@ export function CourseCard({ c }) {
     const total = slidesTotal(c.id);
     const decks = slideForCourse(c.id).decks.length;
     return (
-      <Link href={`#/course/${c.id}`} className="card group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
+      <Link href={`#/course/${c.id}`} className="card card-lift card-lift group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
         <div className="flex items-center justify-between">
-          <div className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
+          <div className="flex h-[44px] w-[44px] items-center justify-center hex bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
           <Badge color="violet">Slides</Badge>
         </div>
         <div className="flex-1 text-[15px] font-bold leading-snug">{c.title}</div>
@@ -28,9 +28,9 @@ export function CourseCard({ c }) {
   const doneClass = done === c.lessons.length ? "green" : pct > 0 ? "violet" : "";
   const status = done === c.lessons.length ? "Terminé" : pct > 0 ? "En cours" : "À venir";
   return (
-    <Link href={`#/course/${c.id}`} className="card group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
+    <Link href={`#/course/${c.id}`} className="card card-lift card-lift group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
       <div className="flex items-center justify-between">
-        <div className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
+        <div className="flex h-[44px] w-[44px] items-center justify-center hex bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
         <Badge color={doneClass}>{status}</Badge>
       </div>
       <div className="flex-1 text-[15px] font-bold leading-snug">{c.title}</div>
@@ -50,7 +50,7 @@ export function DeckGrid({ cid }) {
         const first = d.pages[0] ? d.pages[0].img : "";
         const range = d.lessonStart != null ? `Leçons ${d.lessonStart}–${d.lessonEnd}` : "";
         return (
-          <Link key={d.id} href={`#/slide/${cid}/${d.id}/1`} className="card flex gap-3.5 p-3 no-underline transition-transform duration-150 hover:-translate-y-0.5">
+          <Link key={d.id} href={`#/slide/${cid}/${d.id}/1`} className="card card-lift card-lift flex gap-3.5 p-3 no-underline transition-transform duration-150 hover:-translate-y-0.5">
             {first ? (
               <div className="h-[76px] w-[132px] shrink-0 overflow-hidden rounded-[10px] border border-borderline bg-hover">
                 <img loading="lazy" src={first} alt="" className="block h-full w-full object-cover" />
@@ -78,7 +78,7 @@ export function ResourcesGrid({ resources }) {
       <div className="mb-3.5 mt-7"><h2 className="text-[17px] font-semibold">Ressources &amp; liens</h2></div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3.5">
         {resources.map((r, i) => (
-          <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" className="card flex gap-3.5 p-3 no-underline transition-transform duration-150 hover:-translate-y-0.5">
+          <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" className="card card-lift card-lift flex gap-3.5 p-3 no-underline transition-transform duration-150 hover:-translate-y-0.5">
             <div className="flex h-[76px] w-[132px] shrink-0 items-center justify-center rounded-[10px] border border-borderline bg-hover text-textmuted opacity-60">
               <Icon name="link" size={22} />
             </div>

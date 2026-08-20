@@ -99,7 +99,7 @@ function Results({ session, result, elapsed, onRestart }) {
   return (
     <div>
       <Card className="p-6 text-center max-sm:p-4">
-        <span className={`mx-auto flex h-16 w-16 items-center justify-center rounded-[14px] ${tone.chip}`}>
+        <span className={`mx-auto flex h-16 w-16 items-center justify-center hex ${tone.chip}`}>
           <Icon name={result.passed ? "award" : "target"} size={30} />
         </span>
         <div className={`mt-3 text-[34px] leading-none font-bold ${tone.text}`}>{result.score} %</div>

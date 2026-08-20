@@ -40,7 +40,7 @@ function ModeCard({ mode, href, children, disabled }) {
   const inner = (
     <>
       <div className="flex items-start gap-3">
-        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] ${disabled ? "bg-hover text-textmuted" : "bg-tintblue text-blue"}`}>
+        <span className={`flex h-10 w-10 shrink-0 items-center justify-center hex  ${disabled ? "bg-hover text-textmuted" : "bg-tintblue text-blue"}`}>
           <Icon name={m.icon} size={19} />
         </span>
         <div className="min-w-0 flex-1">
@@ -78,7 +78,7 @@ export default function ExamHome() {
   };
 
   return (
-    <div className="container mx-auto max-w-[900px]">
+    <div className="ambient container mx-auto max-w-[900px]">
       <div className="mb-5">
         <h1 className="text-h2 leading-snug text-blue">Mode Examen</h1>
         <p className="mt-1.5 max-w-[640px] text-[13.5px] leading-relaxed text-textmuted">
@@ -159,7 +159,7 @@ export default function ExamHome() {
         {CASE_STUDIES.map((c) => (
           <Card key={c.id} className="p-4">
             <div className="flex items-start gap-3">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] ${CASE_TONE[c.color] || CASE_TONE.blue}`}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center hex  ${CASE_TONE[c.color] || CASE_TONE.blue}`}>
                 <Icon name={c.icon} size={19} />
               </span>
               <div className="min-w-0 flex-1">

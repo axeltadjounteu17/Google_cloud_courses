@@ -215,9 +215,11 @@ function Sidebar({ active }) {
 
   return (
     <>
+      {/* `shrink-0` est indispensable : sans lui, la largeur intrinsèque du
+          titre d'accroche comprime la barre latérale et tronque le menu. */}
       <aside
         aria-label="Navigation principale"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] flex-col border-r border-borderline bg-bg transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] shrink-0 flex-col border-r border-borderline bg-bg transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >

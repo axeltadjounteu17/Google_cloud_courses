@@ -51,7 +51,7 @@ export default function CaseStudy({ id }) {
 
   if (!c) {
     return (
-      <div className="container mx-auto max-w-[820px]">
+      <div className="ambient container mx-auto max-w-[820px]">
         <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: "Étude de cas" }]} />
         <EmptyState title="Étude de cas introuvable" sub="Choisissez une étude de cas depuis le mode Examen." />
         <div className="mt-4 flex flex-wrap gap-2">
@@ -69,11 +69,11 @@ export default function CaseStudy({ id }) {
   const nq = QUESTIONS.filter((q) => q.caseStudy === c.id).length;
 
   return (
-    <div className="container mx-auto max-w-[860px]">
+    <div className="ambient container mx-auto max-w-[860px]">
       <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: c.name }]} />
 
       <div className="mb-5 flex items-start gap-4">
-        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[12px] ${tone.chip}`}>
+        <span className={`flex h-14 w-14 shrink-0 items-center justify-center hex  ${tone.chip}`}>
           <Icon name={c.icon} size={26} />
         </span>
         <div className="min-w-0 flex-1">
