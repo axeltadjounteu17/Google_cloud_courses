@@ -44,7 +44,7 @@ export default function Search() {
     return (
       <>
         {txt.slice(0, i)}
-        <mark className="rounded bg-cyan/25 px-0.5 text-inherit">{txt.slice(i, i + q.length)}</mark>
+        <mark className="rounded bg-tintcyan px-0.5 text-inherit">{txt.slice(i, i + q.length)}</mark>
         {txt.slice(i + q.length)}
       </>
     );
@@ -104,7 +104,7 @@ export default function Search() {
       {!query && (
         <div className="mt-8">
           <SectionTitle>Suggestions</SectionTitle>
-          <div className="rounded-[14px] border border-borderline bg-secondary p-5 text-sm leading-relaxed text-textmuted">
+          <div className="rounded-[12px] border border-borderline bg-secondary p-5 text-sm leading-relaxed text-textmuted">
             La recherche parcourt les titres des leçons et le contenu des transcriptions vidéo. Tapez un sujet (ex : « bucket », « service account », « cluster ») pour trouver les leçons concernées.
           </div>
         </div>

@@ -14,6 +14,7 @@ const ROUTES = {
   exam: /^exam$/,
   examrun: /^exam\/run\/(full|review)$/,
   examrunt: /^exam\/run\/(section|case)\/([^/]+)$/,
+  cases: /^cases$/,
   case: /^case\/([^/]+)$/,
 };
 

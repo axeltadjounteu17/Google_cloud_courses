@@ -105,15 +105,15 @@ export default function SecurityGuard({ children }) {
 
       {/* Toast de notification de sécurité */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 rounded-xl bg-red/90 px-4 py-3 text-sm font-semibold text-white shadow-2xl backdrop-blur-md transition-all">
+        <div className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 rounded-xl bg-red px-4 py-3 text-sm font-semibold text-onaccent transition-all">
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Écran de blocage si HORS LIGNE (Connexion Internet Obligatoire) */}
       {!isOnline && (
-        <div className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-bg p-6 text-center backdrop-blur-3xl">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-red/20 text-3xl text-red">
+        <div className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-bg p-6 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-tintred text-3xl text-red">
             🌐
           </div>
           <h2 className="text-2xl font-bold text-textmain">Connexion Internet Obligatoire</h2>
@@ -131,8 +131,8 @@ export default function SecurityGuard({ children }) {
 
       {/* Écran de masquage dynamique en cas de perte de focus / outil de capture actif */}
       {isOnline && isBlurred && (
-        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-bg/95 p-6 text-center backdrop-blur-3xl">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan/20 text-3xl text-cyan">
+        <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-bg p-6 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-tintcyan text-3xl text-cyan">
             🔒
           </div>
           <h2 className="text-xl font-bold text-textmain">Contenu Masqué par Sécurité</h2>

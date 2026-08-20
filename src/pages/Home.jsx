@@ -23,7 +23,7 @@ export default function Home() {
     const marked = isBookmarked(c.id, r.l);
     return (
       <Link key={`${r.c}-${r.l}`} href={`#/lesson/${c.id}/${r.l}`} className="flex items-center gap-3 rounded-[10px] px-3.5 py-2.5 no-underline transition-colors hover:bg-hover">
-        <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-green bg-green text-[#06110c]" : "border-borderline text-transparent"}`}>
+        <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-green bg-green text-onaccent" : "border-borderline text-transparent"}`}>
           {read && <Icon name="check" size={12} />}
         </span>
         <span className="min-w-0 flex-1">
@@ -39,19 +39,19 @@ export default function Home() {
   }).filter(Boolean);
 
   const stats = [
-    { icon: "book", chip: "bg-violet/15", color: "text-violet", num: st.done, lbl: "Leçons lues" },
-    { icon: "award", chip: "bg-green/15", color: "text-green", num: st.doneCourses, lbl: "Cours terminés" },
-    { icon: "flame", chip: "bg-cyan/15", color: "text-cyan", num: streak, lbl: "Jours d'étude d'affilée" },
-    { icon: "bookmark", chip: "bg-yellow/15", color: "text-yellow", num: bookmarks, lbl: "Leçons à réviser" },
+    { icon: "book", chip: "bg-tintviolet", color: "text-violet", num: st.done, lbl: "Leçons lues" },
+    { icon: "award", chip: "bg-tintgreen", color: "text-green", num: st.doneCourses, lbl: "Cours terminés" },
+    { icon: "flame", chip: "bg-tintcyan", color: "text-cyan", num: streak, lbl: "Jours d'étude d'affilée" },
+    { icon: "bookmark", chip: "bg-tintyellow", color: "text-yellow", num: bookmarks, lbl: "Leçons à réviser" },
   ];
 
   return (
     <div className="container mx-auto max-w-[1080px]">
-      <div className="relative mb-8 overflow-hidden rounded-[18px] border border-borderline bg-gradient-to-br from-violet/25 via-cyan/10 to-transparent p-6 backdrop-blur-2xl max-sm:p-4">
-        <Icon name="cloud" size={52} className="pointer-events-none absolute -right-3 -bottom-4 text-cyan/20" />
+      <div className="relative mb-8 overflow-hidden rounded-[12px] border border-borderline bg-tintviolet p-6 max-sm:p-4">
+        <Icon name="cloud" size={52} className="pointer-events-none absolute -right-3 -bottom-4 text-cyan" />
         <div className="mb-2 flex flex-wrap items-center gap-3">
           <h1 className="text-h2 font-semibold text-cyan">Bienvenue sur votre espace d'étude</h1>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan/30 bg-cyan/10 px-3 py-1 text-[12px] font-bold text-cyan">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-edgecyan bg-tintcyan px-3 py-1 text-[12px] font-bold text-cyan">
             <Icon name="flame" size={13} /> {streak} jour{streak > 1 ? "s" : ""} d'affilée
           </span>
         </div>
@@ -61,13 +61,13 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative mb-8 overflow-hidden border-y border-borderline bg-secondary/60 py-2.5">
+      <div className="relative mb-8 overflow-hidden border-y border-borderline bg-secondary py-2.5">
         <div className="animate-marquee flex w-max whitespace-nowrap">
           {[0, 1].map((dup) => (
             <div key={dup} aria-hidden={dup === 1} className="flex items-center">
               {TOPICS.map((t) => (
                 <span key={`${dup}-${t}`} className="mx-5 flex items-center gap-5 text-[11.5px] font-semibold tracking-wide text-textmuted uppercase">
-                  {t} <span className="text-violet/60">·</span>
+                  {t} <span className="text-violet">·</span>
                 </span>
               ))}
             </div>
@@ -76,7 +76,7 @@ export default function Home() {
       </div>
 
       {resume && (
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[18px] border border-cyan/40 bg-gradient-to-br from-cyan/15 to-violet/10 p-5 backdrop-blur-2xl max-sm:p-4">
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[12px] border border-edgecyan bg-tintcyan p-5 max-sm:p-4">
           <div className="min-w-0 flex-1">
             <div className="text-[11px] font-extrabold tracking-wider text-cyan uppercase">Reprendre la lecture</div>
             <div className="mt-1.5 truncate text-lg font-bold">{resume.lesson.title}</div>
@@ -88,7 +88,7 @@ export default function Home() {
             </div>
             <div className="mt-1.5 text-[11.5px] text-textmuted">{coursePct(resume.course)}% du cours lu</div>
           </div>
-          <Link href={`#/lesson/${resume.course.id}/${resume.index}`} className="inline-flex items-center gap-2 rounded-[10px] bg-cyan px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(56,189,248,0.7)] transition-opacity hover:opacity-90">
+          <Link href={`#/lesson/${resume.course.id}/${resume.index}`} className="inline-flex items-center gap-2 rounded-[10px] bg-cyan px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             <Icon name="play" size={18} /> Continuer
           </Link>
         </div>

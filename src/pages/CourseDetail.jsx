@@ -24,7 +24,7 @@ export default function CourseDetail({ id }) {
         <Card className="mb-5 p-6 max-sm:p-4">
           <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
           <div className="mb-2 flex items-center gap-3">
-            <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
+            <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></span>
             <h1 className="text-h3">{c.title}</h1>
           </div>
           <div className="mb-3 flex flex-wrap gap-2.5">
@@ -50,7 +50,7 @@ export default function CourseDetail({ id }) {
       <Card className="mb-5 p-6 max-sm:p-4">
         <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
         <div className="mb-2 flex items-center gap-3">
-          <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-violet/15 text-violet"><Icon name={c.icon} size={22} /></span>
+          <span className="flex h-[42px] w-[42px] items-center justify-center rounded-xl bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></span>
           <h1 className="text-h3">{c.title}</h1>
         </div>
         <div className="mb-4 flex flex-wrap gap-2.5">
@@ -66,7 +66,7 @@ export default function CourseDetail({ id }) {
         </div>
         <div className="flex flex-wrap gap-2.5">
           {position.courseId === c.id && position.lessonIdx != null && c.lessons[position.lessonIdx] && (
-            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-white no-underline shadow-[0_6px_18px_-8px_rgba(124,92,255,0.7)] transition-opacity hover:opacity-90">
+            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
               <Icon name="play" size={15} /> Continuer la lecture
             </Link>
           )}
@@ -77,7 +77,7 @@ export default function CourseDetail({ id }) {
             Réinitialiser
           </button>
           {quizCourse && (
-            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet/15 px-4 py-2.5 text-sm font-bold text-violet no-underline transition-colors hover:bg-violet/25">
+            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-tintviolet px-4 py-2.5 text-sm font-bold text-violet no-underline transition-colors hover:bg-tintviolet">
               <Icon name="target" size={15} /> Quiz du cours
             </Link>
           )}
@@ -104,7 +104,7 @@ export default function CourseDetail({ id }) {
           const isPos = position.courseId === c.id && position.lessonIdx === i;
           return (
             <Link key={i} href={`#/lesson/${c.id}/${i}`} className="flex items-center gap-3.5 rounded-xl border border-borderline bg-secondary p-3.5 no-underline transition-colors hover:bg-hover max-sm:gap-2.5 max-sm:p-3">
-              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-green bg-green text-[#06110c]" : "border-borderline text-transparent"}`}>
+              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-green bg-green text-onaccent" : "border-borderline text-transparent"}`}>
                 {read && <Icon name="check" size={12} />}
               </span>
               <span className="w-[26px] font-mono text-xs text-textmuted">{String(i + 1).padStart(2, "0")}</span>

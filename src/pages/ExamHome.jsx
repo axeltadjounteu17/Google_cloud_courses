@@ -28,11 +28,11 @@ function ScoreRing({ score, size = 74 }) {
 
 // Classes statiques : Tailwind ne peut pas résoudre `bg-${var}` à la compilation.
 const CASE_TONE = {
-  violet: "bg-violet/15 text-violet",
-  orange: "bg-orange/15 text-orange",
-  cyan: "bg-cyan/15 text-cyan",
-  green: "bg-green/15 text-green",
-  blue: "bg-blue/15 text-blue",
+  violet: "bg-tintviolet text-violet",
+  orange: "bg-tintorange text-orange",
+  cyan: "bg-tintcyan text-cyan",
+  green: "bg-tintgreen text-green",
+  blue: "bg-tintblue text-blue",
 };
 
 function ModeCard({ mode, href, children, disabled }) {
@@ -40,7 +40,7 @@ function ModeCard({ mode, href, children, disabled }) {
   const inner = (
     <>
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] bg-blue/15 text-blue">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] bg-tintblue text-blue">
           <Icon name={m.icon} size={19} />
         </span>
         <div className="min-w-0 flex-1">
@@ -57,7 +57,7 @@ function ModeCard({ mode, href, children, disabled }) {
   return (
     <Link
       href={href}
-      className="block rounded-[14px] border border-borderline bg-secondary p-4 no-underline shadow-[0_8px_30px_-10px_rgba(0,0,0,0.5)] transition-colors hover:border-blue/45 hover:bg-hover"
+      className="block rounded-[12px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-edgeblue hover:bg-hover"
     >
       {inner}
     </Link>
@@ -135,7 +135,7 @@ export default function ExamHome() {
             <Link
               key={s.id}
               href={`#/exam/run/section/${s.id}`}
-              className="block rounded-[14px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-cyan/45 hover:bg-hover"
+              className="block rounded-[12px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-edgecyan hover:bg-hover"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -175,7 +175,7 @@ export default function ExamHome() {
               </Link>
               <Link
                 href={`#/exam/run/case/${c.id}`}
-                className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue px-3 py-1.5 text-[12px] font-bold text-white no-underline transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue px-3 py-1.5 text-[12px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
               >
                 <Icon name="target" size={13} /> {bank.perCase[c.id]} questions
               </Link>

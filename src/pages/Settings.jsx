@@ -56,7 +56,7 @@ export default function Settings() {
         </p>
         <button
           onClick={() => { if (confirm("Réinitialiser toute la progression ? Cette action est irréversible.")) resetAll(); }}
-          className="inline-flex items-center gap-2 rounded-[10px] border border-red/40 bg-red/10 px-4 py-2.5 text-sm font-bold text-red transition-colors hover:bg-red/20"
+          className="inline-flex items-center gap-2 rounded-[10px] border border-edgered bg-tintred px-4 py-2.5 text-sm font-bold text-red transition-colors hover:bg-tintred"
         >
           <Icon name="trash" size={14} /> Réinitialiser toute la progression
         </button>

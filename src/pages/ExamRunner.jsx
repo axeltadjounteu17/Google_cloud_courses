@@ -11,24 +11,24 @@ const LETTER = (i) => String.fromCharCode(65 + i);
 
 // Classes statiques : Tailwind ne résout pas `bg-${var}` à la compilation.
 const TONE = {
-  green: { chip: "bg-green/15 text-green", text: "text-green" },
-  yellow: { chip: "bg-yellow/15 text-yellow", text: "text-yellow" },
-  red: { chip: "bg-red/15 text-red", text: "text-red" },
+  green: { chip: "bg-tintgreen text-green", text: "text-green" },
+  yellow: { chip: "bg-tintyellow text-yellow", text: "text-yellow" },
+  red: { chip: "bg-tintred text-red", text: "text-red" },
 };
 
 function OptionRow({ letter, text, state, onClick, disabled }) {
   const tone = {
-    idle: "border-borderline bg-transparent text-textmuted hover:border-blue/45 hover:bg-hover",
-    picked: "border-blue bg-blue/10 text-textmain",
-    correct: "border-green bg-green/10 text-textmain",
-    wrong: "border-red bg-red/10 text-textmain",
-    missed: "border-green/40 bg-transparent text-textmain",
+    idle: "border-borderline bg-transparent text-textmuted hover:border-edgeblue hover:bg-hover",
+    picked: "border-blue bg-tintblue text-textmain",
+    correct: "border-green bg-tintgreen text-textmain",
+    wrong: "border-red bg-tintred text-textmain",
+    missed: "border-edgegreen bg-transparent text-textmain",
   }[state];
   const badge = {
     idle: "border-borderline text-textmuted",
     picked: "border-blue text-blue",
-    correct: "border-green bg-green text-[#06110c]",
-    wrong: "border-red bg-red text-white",
+    correct: "border-green bg-green text-onaccent",
+    wrong: "border-red bg-red text-onaccent",
     missed: "border-green text-green",
   }[state];
   return (
@@ -48,7 +48,7 @@ function OptionRow({ letter, text, state, onClick, disabled }) {
 function Explanation({ q, order, picked }) {
   const expected = new Set(q.answer);
   return (
-    <div className="mt-4 rounded-[12px] border border-borderline bg-hover/40 p-4">
+    <div className="mt-4 rounded-[12px] border border-borderline bg-hover p-4">
       <div className="mb-2 flex items-center gap-2 text-[11px] font-bold tracking-wider text-textmuted uppercase">
         <Icon name="sparkles" size={13} /> Pourquoi
       </div>
@@ -99,7 +99,7 @@ function Results({ session, result, elapsed, onRestart }) {
   return (
     <div>
       <Card className="p-6 text-center max-sm:p-4">
-        <span className={`mx-auto flex h-16 w-16 items-center justify-center rounded-[20px] ${tone.chip}`}>
+        <span className={`mx-auto flex h-16 w-16 items-center justify-center rounded-[14px] ${tone.chip}`}>
           <Icon name={result.passed ? "award" : "target"} size={30} />
         </span>
         <div className={`mt-3 text-[34px] leading-none font-bold ${tone.text}`}>{result.score} %</div>
@@ -145,14 +145,14 @@ function Results({ session, result, elapsed, onRestart }) {
           {wrong.length > 0 && (
             <Link
               href="#/exam/run/review"
-              className="inline-flex items-center gap-2 rounded-[10px] bg-yellow px-4 py-2.5 text-sm font-bold text-[#1c1400] no-underline transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-[10px] bg-yellow px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
             >
               <Icon name="target" size={15} /> Rejouer mes {wrong.length} erreur(s)
             </Link>
           )}
           <Link
             href="#/exam"
-            className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
           >
             <Icon name="award" size={15} /> Mode Examen
           </Link>
@@ -169,7 +169,7 @@ function Results({ session, result, elapsed, onRestart }) {
           return (
             <Card key={d.id} className="overflow-hidden">
               <button onClick={() => toggle(d.id)} className="flex w-full items-start gap-3 p-4 text-left">
-                <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${d.correct ? "bg-green/15 text-green" : d.answered ? "bg-red/15 text-red" : "bg-hover text-textmuted"}`}>
+                <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${d.correct ? "bg-tintgreen text-green" : d.answered ? "bg-tintred text-red" : "bg-hover text-textmuted"}`}>
                   <Icon name={d.correct ? "check" : d.answered ? "x" : "help-circle"} size={13} />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -325,7 +325,7 @@ export default function ExamRunner({ mode, target }) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-h3 leading-snug text-blue">{session.label}</h1>
           {session.timed && (
-            <span className={`inline-flex items-center gap-1.5 rounded-[9px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-red/15 text-red" : "bg-hover text-textmain"}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-[9px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-tintred text-red" : "bg-hover text-textmain"}`}>
               <Icon name="clock" size={14} /> {fmtClock(remaining)}
             </span>
           )}
@@ -352,7 +352,7 @@ export default function ExamRunner({ mode, target }) {
         {cs && (
           <Link
             href={`#/case/${cs.id}`}
-            className="mb-3 flex items-center gap-2 rounded-[10px] border border-violet/30 bg-violet/5 px-3 py-2 text-[12.5px] font-semibold text-violet no-underline transition-colors hover:bg-violet/10"
+            className="mb-3 flex items-center gap-2 rounded-[10px] border border-edgeviolet bg-tintviolet px-3 py-2 text-[12.5px] font-semibold text-violet no-underline transition-colors hover:bg-tintviolet"
           >
             <Icon name="book-open" size={14} />
             Étude de cas : {cs.name}
@@ -383,7 +383,7 @@ export default function ExamRunner({ mode, target }) {
             <button
               onClick={reveal}
               disabled={picked.length === 0}
-              className="inline-flex items-center gap-1.5 rounded-[10px] border border-blue/50 px-3.5 py-2 text-[12.5px] font-bold text-blue transition-colors hover:bg-blue/10 disabled:cursor-not-allowed disabled:opacity-35"
+              className="inline-flex items-center gap-1.5 rounded-[10px] border border-edgeblue px-3.5 py-2 text-[12.5px] font-bold text-blue transition-colors hover:bg-tintblue disabled:cursor-not-allowed disabled:opacity-35"
             >
               <Icon name="check" size={13} /> Vérifier
             </button>
@@ -405,14 +405,14 @@ export default function ExamRunner({ mode, target }) {
         {idx === nb - 1 ? (
           <button
             onClick={finish}
-            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-green px-5 text-sm font-bold text-[#06110c] transition-opacity hover:opacity-90"
+            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-green px-5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             <Icon name="award" size={16} /> Terminer et corriger
           </button>
         ) : (
           <button
             onClick={() => go(idx + 1)}
-            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             Suivant <Icon name="chevron-right" size={16} />
           </button>
@@ -428,8 +428,8 @@ export default function ExamRunner({ mode, target }) {
               onClick={() => go(i)}
               title={`Question ${i + 1}`}
               className={`h-7 w-7 rounded-[7px] text-[11px] font-bold tabular-nums transition-colors ${
-                i === idx ? "bg-blue text-white"
-                : revealed.has(id) ? "bg-hover text-textmain ring-1 ring-blue/40"
+                i === idx ? "bg-blue text-onaccent"
+                : revealed.has(id) ? "bg-hover text-textmain ring-1 ring-edgeblue"
                 : done ? "bg-hover text-textmain"
                 : "border border-borderline text-textmuted hover:bg-hover"
               }`}

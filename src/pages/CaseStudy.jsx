@@ -5,10 +5,10 @@ import { Badge, Breadcrumb, Card, EmptyState } from "../components/ui.jsx";
 import { CASE_STUDIES, QUESTIONS, caseStudyById } from "../lib/exam.js";
 
 const TONE = {
-  violet: { chip: "bg-violet/15 text-violet", text: "text-violet", border: "border-violet/30", soft: "bg-violet/5" },
-  orange: { chip: "bg-orange/15 text-orange", text: "text-orange", border: "border-orange/30", soft: "bg-orange/5" },
-  cyan: { chip: "bg-cyan/15 text-cyan", text: "text-cyan", border: "border-cyan/30", soft: "bg-cyan/5" },
-  green: { chip: "bg-green/15 text-green", text: "text-green", border: "border-green/30", soft: "bg-green/5" },
+  violet: { chip: "bg-tintviolet text-violet", text: "text-violet", border: "border-edgeviolet", soft: "bg-tintviolet" },
+  orange: { chip: "bg-tintorange text-orange", text: "text-orange", border: "border-edgeorange", soft: "bg-tintorange" },
+  cyan: { chip: "bg-tintcyan text-cyan", text: "text-cyan", border: "border-edgecyan", soft: "bg-tintcyan" },
+  green: { chip: "bg-tintgreen text-green", text: "text-green", border: "border-edgegreen", soft: "bg-tintgreen" },
 };
 
 // Rend les **passages en gras** des fiches sans injecter de HTML.
@@ -73,7 +73,7 @@ export default function CaseStudy({ id }) {
       <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: c.name }]} />
 
       <div className="mb-5 flex items-start gap-4">
-        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[16px] ${tone.chip}`}>
+        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[12px] ${tone.chip}`}>
           <Icon name={c.icon} size={26} />
         </span>
         <div className="min-w-0 flex-1">
@@ -90,7 +90,7 @@ export default function CaseStudy({ id }) {
       <div className="mb-6 flex flex-wrap items-center gap-2.5">
         <Link
           href={`#/exam/run/case/${c.id}`}
-          className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-white no-underline transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
         >
           <Icon name="target" size={15} /> S'entraîner — {nq} questions
         </Link>
@@ -125,7 +125,7 @@ export default function CaseStudy({ id }) {
           <Bullets items={c.technical} />
         </Block>
 
-        <div className={`rounded-[14px] border ${tone.border} ${tone.soft} p-5 max-sm:p-4`}>
+        <div className={`rounded-[12px] border ${tone.border} ${tone.soft} p-5 max-sm:p-4`}>
           <div className="mb-2.5 flex items-center gap-2">
             <Icon name="award" size={16} className={tone.text} />
             <h2 className={`text-[14px] font-bold tracking-wide uppercase ${tone.text}`}>Déclaration de la direction</h2>

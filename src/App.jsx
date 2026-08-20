@@ -17,18 +17,49 @@ import QuizReader from "./pages/QuizReader.jsx";
 import ExamHome from "./pages/ExamHome.jsx";
 import ExamRunner from "./pages/ExamRunner.jsx";
 import CaseStudy from "./pages/CaseStudy.jsx";
+import CaseStudies from "./pages/CaseStudies.jsx";
 import Onboarding from "./components/Onboarding.jsx";
 import { SECTION } from "./components/ui.jsx";
 
-const NAV = [
-  { path: "home", label: "Accueil", icon: "home" },
-  { path: "courses", label: "Cours", icon: "book" },
-  { path: "quiz", label: "Quiz", icon: "target" },
-  { path: "exam", label: "Examen", icon: "award" },
-  { path: "search", label: "Recherche", icon: "search" },
-  { path: "progress", label: "Progression", icon: "chart" },
-  { path: "settings", label: "Paramètres", icon: "settings" },
+// Navigation groupée par intention : apprendre, s'entraîner, se situer.
+// L'ordre suit le parcours réel d'une révision de certification.
+const NAV_GROUPS = [
+  {
+    items: [{ path: "home", label: "Accueil", icon: "home" }],
+  },
+  {
+    label: "Apprendre",
+    items: [
+      { path: "courses", label: "Cours", icon: "book" },
+      { path: "search", label: "Recherche", icon: "search" },
+    ],
+  },
+  {
+    label: "S'entraîner",
+    items: [
+      { path: "quiz", label: "Quiz de révision", icon: "target" },
+      { path: "exam", label: "Examen blanc", icon: "award" },
+      { path: "cases", label: "Études de cas", icon: "book-open" },
+    ],
+  },
+  {
+    label: "Suivi",
+    items: [
+      { path: "progress", label: "Progression", icon: "chart" },
+      { path: "settings", label: "Paramètres", icon: "settings" },
+    ],
+  },
 ];
+
+const NAV = NAV_GROUPS.flatMap((g) => g.items);
+
+// Rattache chaque route à l'entrée de menu qui doit s'allumer.
+const ACTIVE_FOR = {
+  course: "courses", lesson: "courses", slides: "courses", slide: "courses",
+  quizc: "quiz",
+  examrun: "exam", examrunt: "exam",
+  case: "cases",
+};
 
 function Page({ route }) {
   switch (route.page) {
@@ -42,6 +73,7 @@ function Page({ route }) {
     case "exam": return <ExamHome />;
     case "examrun": return <ExamRunner key={route.hash} mode={route.params[0]} target={null} />;
     case "examrunt": return <ExamRunner key={route.hash} mode={route.params[0]} target={route.params[1]} />;
+    case "cases": return <CaseStudies />;
     case "case": return <CaseStudy id={route.params[0]} />;
     case "search": return <Search />;
     case "progress": return <Progress />;
@@ -79,19 +111,28 @@ function Sidebar({ active }) {
         </div>
       </div>
 
-      <nav className="flex flex-col gap-1 px-3">
-        {NAV.map((n) => (
-          <a
-            key={n.path}
-            href={`#/${n.path}`}
-            onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 rounded-[10px] px-3.5 py-2.5 text-sm font-semibold no-underline transition-colors ${
-              active === n.path ? `${sec.active}` : "text-textmuted hover:bg-hover hover:text-textmain"
-            }`}
-          >
-            <Icon name={n.icon} size={18} className="shrink-0" />
-            {n.label}
-          </a>
+      <nav className="flex flex-col px-3" aria-label="Sections">
+        {NAV_GROUPS.map((g, gi) => (
+          <div key={gi} className="flex flex-col gap-0.5">
+            {g.label && <div className="nav-group">{g.label}</div>}
+            {g.items.map((n) => {
+              const on = active === n.path;
+              return (
+                <a
+                  key={n.path}
+                  href={`#/${n.path}`}
+                  onClick={() => setOpen(false)}
+                  aria-current={on ? "page" : undefined}
+                  className={`flex items-center gap-3 rounded-[9px] px-3 py-2.5 text-[13.5px] font-semibold no-underline transition-colors ${
+                    on ? sec.active : "text-textmuted hover:bg-hover hover:text-textmain"
+                  }`}
+                >
+                  <Icon name={n.icon} size={17} className="shrink-0" />
+                  {n.label}
+                </a>
+              );
+            })}
+          </div>
         ))}
       </nav>
 
@@ -101,12 +142,12 @@ function Sidebar({ active }) {
           <span className="font-bold text-cyan">{st.pct}%</span>
         </div>
         <div className="h-[6px] overflow-hidden rounded-full bg-borderline">
-          <div className="h-full rounded-full bg-gradient-to-r from-cyan to-blue transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
+          <div className="h-full rounded-full bg-cyan transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
         </div>
-        <div className="mt-1.5 text-[10.5px] text-textmuted">{st.done} / {st.total} leçons lues</div>
+        <div className="mt-1.5 text-[11px] text-textmuted">{st.done} / {st.total} leçons lues</div>
         <button
           onClick={toggleTheme}
-          className="mt-4 flex w-full items-center gap-2.5 rounded-[10px] bg-hover px-3 py-2.5 text-sm font-semibold text-textmuted transition-colors hover:bg-borderline hover:text-textmain"
+          className="mt-4 flex w-full items-center gap-2.5 rounded-[9px] bg-hover px-3 py-2.5 text-[13.5px] font-semibold text-textmuted transition-colors hover:bg-active hover:text-textmain"
         >
           <Icon name={dark ? "moon" : "sun"} size={17} />
           {dark ? "Mode sombre" : "Mode clair"}
@@ -119,7 +160,7 @@ function Sidebar({ active }) {
     <>
       <aside
         aria-label="Navigation principale"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] flex-col border-r border-borderline bg-bg/95 backdrop-blur-2xl transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[276px] max-w-[84vw] flex-col border-r border-borderline bg-bg transition-transform duration-300 ease-out lg:static lg:z-auto lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -128,10 +169,10 @@ function Sidebar({ active }) {
 
       <div
         onClick={() => setOpen(false)}
-        className={`fixed inset-0 z-40 bg-black/55 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-40 bg-scrim/80 transition-opacity duration-300 lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       />
 
-      <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft/95 px-3.5 backdrop-blur-xl lg:hidden">
+      <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft px-3.5 lg:hidden">
         <button className="icon-btn" onClick={() => setOpen(true)} aria-label="Ouvrir le menu"><Icon name="menu" size={20} /></button>
         <div className="flex-1 truncate text-[15px] font-bold">GCP Étude</div>
         <button className="icon-btn" onClick={toggleTheme} aria-label="Basculer le thème"><Icon name={dark ? "moon" : "sun"} size={18} /></button>
@@ -145,11 +186,7 @@ export default function App() {
   const { onboarding, closeOnboarding } = useStore();
   const active = NAV.some((n) => n.path === route.page)
     ? route.page
-    : (route.page === "course" || route.page === "lesson" || route.page === "slides" || route.page === "slide")
-      ? "courses"
-      : route.page === "quizc" ? "quiz"
-      : (route.page === "examrun" || route.page === "examrunt" || route.page === "case") ? "exam"
-      : "home";
+    : ACTIVE_FOR[route.page] || "home";
 
   useEffect(() => {
     window.scrollTo(0, 0);
