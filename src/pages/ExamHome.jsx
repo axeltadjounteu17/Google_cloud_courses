@@ -40,19 +40,21 @@ function ModeCard({ mode, href, children, disabled }) {
   const inner = (
     <>
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] bg-tintblue text-blue">
+        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] ${disabled ? "bg-hover text-textmuted" : "bg-tintblue text-blue"}`}>
           <Icon name={m.icon} size={19} />
         </span>
         <div className="min-w-0 flex-1">
-          <div className="text-[15px] font-bold">{m.label}</div>
+          <div className={`text-[15px] font-bold ${disabled ? "text-textmuted" : ""}`}>{m.label}</div>
           <div className="mt-0.5 text-[12.5px] leading-snug text-textmuted">{m.desc}</div>
         </div>
       </div>
       {children}
     </>
   );
+  // Un état désactivé doit rester lisible : l'opacité globale rendait le texte
+  // illisible et donnait l'impression d'un défaut d'affichage.
   if (disabled) {
-    return <Card className="p-4 opacity-45">{inner}</Card>;
+    return <Card className="p-4">{inner}</Card>;
   }
   return (
     <Link
@@ -167,15 +169,17 @@ export default function ExamHome() {
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2 border-t border-borderline pt-3">
+              {/* Même hiérarchie que la page Études de cas : lire la fiche est
+                  l'action principale, s'entraîner vient après. */}
               <Link
                 href={`#/case/${c.id}`}
-                className="inline-flex items-center gap-1.5 rounded-[9px] border border-borderline px-3 py-1.5 text-[12px] font-bold text-textmain no-underline transition-colors hover:bg-hover"
+                className="inline-flex items-center gap-1.5 rounded-[9px] bg-violet px-3 py-1.5 text-[12px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
               >
-                <Icon name="book-open" size={13} /> Lire
+                <Icon name="book-open" size={13} /> Lire la fiche
               </Link>
               <Link
                 href={`#/exam/run/case/${c.id}`}
-                className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue px-3 py-1.5 text-[12px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-[9px] border border-borderline px-3 py-1.5 text-[12px] font-bold text-textmain no-underline transition-colors hover:bg-hover"
               >
                 <Icon name="target" size={13} /> {bank.perCase[c.id]} questions
               </Link>

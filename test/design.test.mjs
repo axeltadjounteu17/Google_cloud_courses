@@ -172,3 +172,37 @@ for (const [label, selector, cardKey] of [
     assert.ok(muted >= 4.5, `texte secondaire : ${muted.toFixed(2)}:1`);
   });
 }
+
+// ── Icônes ────────────────────────────────────────────────────────────────
+
+test("toute icône référencée existe dans le jeu d'icônes", async () => {
+  const icons = readFileSync(join(SRC, "lib", "icons.jsx"), "utf8");
+  // Clés du dictionnaire P : `nom:` ou `"nom-compose":`
+  const known = new Set(
+    [...icons.matchAll(/^\s{2}(?:"([a-z0-9-]+)"|([a-z0-9-]+)):/gm)].map((m) => m[1] || m[2])
+  );
+  assert.ok(known.size > 20, `jeu d'icônes non détecté (${known.size} clés)`);
+
+  const used = new Set();
+  // Études de cas et modes d'examen déclarent leur icône dans les données.
+  for (const f of [join(SRC, "data", "caseStudies.js"), join(SRC, "lib", "exam.js"), join(SRC, "App.jsx")]) {
+    const src = readFileSync(f, "utf8");
+    for (const m of src.matchAll(/\bicon:\s*"([a-z0-9-]+)"/g)) used.add(m[1]);
+  }
+  // Usages littéraux dans les composants : <Icon name="..." />
+  for (const f of jsx) {
+    const src = readFileSync(f, "utf8");
+    for (const m of src.matchAll(/name="([a-z0-9-]+)"\s+size=/g)) used.add(m[1]);
+  }
+
+  const missing = [...used].filter((i) => !known.has(i));
+  assert.deepEqual(missing, [], `icônes inexistantes, rendues en repli silencieux : ${missing}`);
+});
+
+test("le thème n'a qu'une source de vérité", () => {
+  // La barre latérale lisait localStorage en brut alors que le store y écrit du
+  // JSON : la comparaison échouait et le libellé du bouton était toujours faux.
+  const app = readFileSync(join(SRC, "App.jsx"), "utf8");
+  assert.doesNotMatch(app, /localStorage\.getItem\(\s*["']gcp_theme["']\s*\)/, "lecture directe du thème dans App.jsx");
+  assert.doesNotMatch(app, /localStorage\.setItem\(\s*["']gcp_theme["']/, "écriture directe du thème dans App.jsx");
+});

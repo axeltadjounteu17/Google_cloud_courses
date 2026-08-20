@@ -332,11 +332,18 @@ export default function ExamRunner({ mode, target }) {
         </div>
       </div>
 
+      {/* La barre reflète les réponses données, pas la position : le libellé
+          annonce « répondues », les deux doivent concorder. */}
       <div className="mb-4 flex items-center gap-3">
         <div className="h-[6px] flex-1 overflow-hidden rounded-full bg-borderline">
-          <div className="h-full rounded-full bg-blue transition-[width] duration-300" style={{ width: `${((idx + 1) / nb) * 100}%` }} />
+          <div
+            className="h-full rounded-full bg-blue transition-[width] duration-300"
+            style={{ width: `${nb ? (answeredCount / nb) * 100 : 0}%` }}
+          />
         </div>
-        <span className="shrink-0 text-[11.5px] text-textmuted tabular-nums">{answeredCount}/{nb} répondues</span>
+        <span className="shrink-0 text-[11.5px] text-textmuted tabular-nums">
+          {answeredCount}/{nb} répondues
+        </span>
       </div>
 
       <Card className="p-6 max-sm:p-4">
@@ -441,9 +448,14 @@ export default function ExamRunner({ mode, target }) {
       </div>
 
       {nb > 1 && (
-        <button onClick={finish} className="mt-5 text-[12.5px] font-semibold text-textmuted hover:text-textmain">
-          Terminer maintenant et voir le résultat
-        </button>
+        <div className="mt-6 border-t border-borderline pt-4">
+          <button
+            onClick={finish}
+            className="inline-flex items-center gap-2 rounded-[9px] border border-borderline px-3.5 py-2 text-[12.5px] font-semibold text-textmuted transition-colors hover:bg-hover hover:text-textmain"
+          >
+            <Icon name="award" size={14} /> Terminer maintenant et voir le résultat
+          </button>
+        </div>
       )}
     </div>
   );

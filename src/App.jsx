@@ -86,19 +86,13 @@ function Sidebar({ active }) {
   const store = useStore();
   const st = store.globalStats();
   const sec = SECTION[active] || SECTION.home;
-  const [theme, setTheme] = useState(() => localStorage.getItem("gcp_theme") || "dark");
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme((t) => {
-    const nt = t === "dark" ? "light" : "dark";
-    localStorage.setItem("gcp_theme", nt);
-    return nt;
-  });
-
+  // Le thème vient du store, qui l'écrit dans localStorage en JSON et applique
+  // `data-theme`. La barre latérale lisait auparavant la clé en brut, donc
+  // recevait `"dark"` guillemets inclus : la comparaison échouait toujours et
+  // le bouton affichait « Mode clair » quel que soit le thème réel.
+  const { theme, toggleTheme } = store;
   const dark = theme === "dark";
 
   const nav = (
@@ -149,8 +143,8 @@ function Sidebar({ active }) {
           onClick={toggleTheme}
           className="mt-4 flex w-full items-center gap-2.5 rounded-[9px] bg-hover px-3 py-2.5 text-[13.5px] font-semibold text-textmuted transition-colors hover:bg-active hover:text-textmain"
         >
-          <Icon name={dark ? "moon" : "sun"} size={17} />
-          {dark ? "Mode sombre" : "Mode clair"}
+          <Icon name={dark ? "sun" : "moon"} size={17} />
+          {dark ? "Passer en clair" : "Passer en sombre"}
         </button>
       </div>
     </>
@@ -175,7 +169,7 @@ function Sidebar({ active }) {
       <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft px-3.5 lg:hidden">
         <button className="icon-btn" onClick={() => setOpen(true)} aria-label="Ouvrir le menu"><Icon name="menu" size={20} /></button>
         <div className="flex-1 truncate text-[15px] font-bold">GCP Étude</div>
-        <button className="icon-btn" onClick={toggleTheme} aria-label="Basculer le thème"><Icon name={dark ? "moon" : "sun"} size={18} /></button>
+        <button className="icon-btn" onClick={toggleTheme} aria-label={dark ? "Passer en thème clair" : "Passer en thème sombre"}><Icon name={dark ? "sun" : "moon"} size={18} /></button>
       </header>
     </>
   );
