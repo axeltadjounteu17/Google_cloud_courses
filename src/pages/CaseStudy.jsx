@@ -4,6 +4,12 @@ import { Link } from "../lib/router.jsx";
 import { Badge, Breadcrumb, Card, EmptyState } from "../components/ui.jsx";
 import { CASE_STUDIES, QUESTIONS, caseStudyById } from "../lib/exam.js";
 
+/**
+ * Chaque étude de cas officielle garde sa couleur propre : c'est ce qui permet
+ * de reconnaître un dossier d'un coup d'œil dans la liste comme dans le détail.
+ * Les teintes de fond et les bordures sont les variantes opaques de la palette,
+ * donc aucune superposition translucide.
+ */
 const TONE = {
   violet: { chip: "bg-tintviolet text-violet", text: "text-violet", border: "border-edgeviolet", soft: "bg-tintviolet" },
   orange: { chip: "bg-tintorange text-orange", text: "text-orange", border: "border-edgeorange", soft: "bg-tintorange" },
@@ -38,7 +44,7 @@ function Bullets({ items }) {
     <ul className="flex flex-col gap-2">
       {items.map((t, i) => (
         <li key={i} className="flex gap-2.5 text-[13.5px] leading-relaxed text-textmuted">
-          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-borderline" />
+          <span className="mt-[7px] h-1.5 w-1.5 shrink-0 bg-borderline" />
           <span><RichText>{t}</RichText></span>
         </li>
       ))}
@@ -56,7 +62,7 @@ export default function CaseStudy({ id }) {
         <EmptyState title="Étude de cas introuvable" sub="Choisissez une étude de cas depuis le mode Examen." />
         <div className="mt-4 flex flex-wrap gap-2">
           {CASE_STUDIES.map((x) => (
-            <Link key={x.id} href={`#/case/${x.id}`} className="rounded-[9px] border border-borderline px-3 py-1.5 text-[12.5px] font-bold no-underline">
+            <Link key={x.id} href={`#/case/${x.id}`} className="rounded-[4px] border border-borderline px-3 py-1.5 text-[12.5px] font-bold no-underline">
               {x.name}
             </Link>
           ))}
@@ -73,7 +79,7 @@ export default function CaseStudy({ id }) {
       <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: c.name }]} />
 
       <div className="mb-5 flex items-start gap-4">
-        <span className={`flex h-14 w-14 shrink-0 items-center justify-center hex  ${tone.chip}`}>
+        <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[4px]  ${tone.chip}`}>
           <Icon name={c.icon} size={26} />
         </span>
         <div className="min-w-0 flex-1">
@@ -90,7 +96,7 @@ export default function CaseStudy({ id }) {
       <div className="mb-6 flex flex-wrap items-center gap-2.5">
         <Link
           href={`#/exam/run/case/${c.id}`}
-          className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
         >
           <Icon name="target" size={15} /> S'entraîner — {nq} questions
         </Link>
@@ -98,7 +104,7 @@ export default function CaseStudy({ id }) {
           href={c.source}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-[10px] border border-borderline px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover"
+          className="inline-flex items-center gap-2 rounded-[8px] border border-borderline px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover"
         >
           <Icon name="link" size={15} /> PDF officiel
         </a>
@@ -125,7 +131,7 @@ export default function CaseStudy({ id }) {
           <Bullets items={c.technical} />
         </Block>
 
-        <div className={`rounded-[12px] border ${tone.border} ${tone.soft} p-5 max-sm:p-4`}>
+        <div className={`rounded-[8px] border ${tone.border} ${tone.soft} p-5 max-sm:p-4`}>
           <div className="mb-2.5 flex items-center gap-2">
             <Icon name="award" size={16} className={tone.text} />
             <h2 className={`text-[14px] font-bold tracking-wide uppercase ${tone.text}`}>Déclaration de la direction</h2>
@@ -136,7 +142,7 @@ export default function CaseStudy({ id }) {
 
       <div className="mt-8 mb-3 flex items-baseline justify-between gap-2">
         <h2 className="text-[17px] font-semibold">Autres études de cas</h2>
-        <Link href="#/exam" className="text-[13px] font-semibold text-cyan no-underline">Mode Examen ›</Link>
+        <Link href="#/exam" className="text-[13px] font-semibold text-textmain no-underline">Mode Examen ›</Link>
       </div>
       <div className="grid grid-cols-3 gap-2.5 max-sm:grid-cols-1">
         {CASE_STUDIES.filter((x) => x.id !== c.id).map((x) => {
@@ -145,9 +151,9 @@ export default function CaseStudy({ id }) {
             <Link
               key={x.id}
               href={`#/case/${x.id}`}
-              className="flex items-center gap-2.5 rounded-[12px] border border-borderline bg-secondary p-3 no-underline transition-colors hover:bg-hover"
+              className="flex items-center gap-2.5 rounded-[8px] border border-borderline bg-secondary p-3 no-underline transition-colors hover:bg-hover"
             >
-              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] ${t.chip}`}>
+              <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[4px] ${t.chip}`}>
                 <Icon name={x.icon} size={15} />
               </span>
               <span className="min-w-0">

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Icon from "../lib/icons.jsx";
 import { Link } from "../lib/router.jsx";
 import { Badge, Breadcrumb, Card, EmptyState } from "../components/ui.jsx";
+import Button, { ActionBar } from "../components/Button.jsx";
 import {
   SECTIONS, PASS_MARK, buildSession, gradeSession, requiredPicks,
   saveAttempt, caseStudyById, questionById, fmtClock, fmtDuration,
@@ -18,26 +19,26 @@ const TONE = {
 
 function OptionRow({ letter, text, state, onClick, disabled }) {
   const tone = {
-    idle: "border-borderline bg-transparent text-textmuted hover:border-edgeblue hover:bg-hover",
+    idle: "border-borderline bg-transparent text-textmuted hover:border-borderline hover:bg-hover",
     picked: "border-blue bg-tintblue text-textmain",
     correct: "border-green bg-tintgreen text-textmain",
     wrong: "border-red bg-tintred text-textmain",
-    missed: "border-edgegreen bg-transparent text-textmain",
+    missed: "border-borderline bg-transparent text-textmain",
   }[state];
   const badge = {
     idle: "border-borderline text-textmuted",
-    picked: "border-blue text-blue",
-    correct: "border-green bg-green text-onaccent",
+    picked: "border-textmain text-textmain",
+    correct: "border-accent bg-accent text-onaccent",
     wrong: "border-red bg-red text-onaccent",
-    missed: "border-green text-green",
+    missed: "border-textmain text-textmain",
   }[state];
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`flex w-full items-start gap-3 rounded-[12px] border px-4 py-3 text-left text-[14px] leading-snug transition-colors ${tone} ${disabled ? "cursor-default" : ""}`}
+      className={`flex w-full items-start gap-3 rounded-[8px] border px-4 py-3 text-left text-[14px] leading-snug transition-colors ${tone} ${disabled ? "cursor-default" : ""}`}
     >
-      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold ${badge}`}>
+      <span className={`font-mono-ui mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold ${badge}`}>
         {state === "correct" ? <Icon name="check" size={12} /> : state === "wrong" ? <Icon name="x" size={12} /> : letter}
       </span>
       <span className="min-w-0 flex-1">{text}</span>
@@ -48,7 +49,7 @@ function OptionRow({ letter, text, state, onClick, disabled }) {
 function Explanation({ q, order, picked }) {
   const expected = new Set(q.answer);
   return (
-    <div className="mt-4 rounded-[12px] border border-borderline bg-hover p-4">
+    <div className="mt-4 rounded-[8px] border border-borderline bg-hover p-4">
       <div className="mb-2 flex items-center gap-2 text-[11px] font-bold tracking-wider text-textmuted uppercase">
         <Icon name="sparkles" size={13} /> Pourquoi
       </div>
@@ -60,7 +61,7 @@ function Explanation({ q, order, picked }) {
           const chosen = picked.includes(di);
           return (
             <div key={di} className="flex gap-2.5 text-[12.5px] leading-snug">
-              <span className={`mt-px shrink-0 font-bold ${good ? "text-green" : chosen ? "text-red" : "text-textmuted"}`}>
+              <span className={`mt-px shrink-0 font-bold ${good ? "text-textmain" : chosen ? "text-red" : "text-textmuted"}`}>
                 {LETTER(di)}.
               </span>
               <span className={good ? "text-textmain" : "text-textmuted"}>{q.why[orig]}</span>
@@ -99,7 +100,7 @@ function Results({ session, result, elapsed, onRestart }) {
   return (
     <div>
       <Card className="p-6 text-center max-sm:p-4">
-        <span className={`mx-auto flex h-16 w-16 items-center justify-center hex ${tone.chip}`}>
+        <span className={`mx-auto flex h-16 w-16 items-center justify-center rounded-[4px] ${tone.chip}`}>
           <Icon name={result.passed ? "award" : "target"} size={30} />
         </span>
         <div className={`mt-3 text-[34px] leading-none font-bold ${tone.text}`}>{result.score} %</div>
@@ -122,7 +123,7 @@ function Results({ session, result, elapsed, onRestart }) {
               return (
                 <div key={s.id} className="flex items-center gap-3">
                   <span className="w-[132px] shrink-0 truncate text-[12px] text-textmuted">S{s.id} {s.short}</span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-hover">
+                  <div className="h-2 flex-1 overflow-hidden bg-borderline">
                     <div
                       className={`h-full rounded-full ${pct >= PASS_MARK ? "bg-green" : pct >= 50 ? "bg-yellow" : "bg-red"}`}
                       style={{ width: `${pct}%` }}
@@ -138,21 +139,21 @@ function Results({ session, result, elapsed, onRestart }) {
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={onRestart}
-            className="inline-flex items-center gap-2 rounded-[10px] border border-borderline px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
+            className="inline-flex items-center gap-2 rounded-[8px] border border-borderline px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
           >
             <Icon name="rotate" size={15} /> Refaire
           </button>
           {wrong.length > 0 && (
             <Link
               href="#/exam/run/review"
-              className="inline-flex items-center gap-2 rounded-[10px] bg-yellow px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
             >
               <Icon name="target" size={15} /> Rejouer mes {wrong.length} erreur(s)
             </Link>
           )}
           <Link
             href="#/exam"
-            className="inline-flex items-center gap-2 rounded-[10px] bg-blue px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
           >
             <Icon name="award" size={15} /> Mode Examen
           </Link>
@@ -214,6 +215,13 @@ export default function ExamRunner({ mode, target }) {
   const [answers, setAnswers] = useState({});
   const [idx, setIdx] = useState(0);
   const [revealed, setRevealed] = useState(() => new Set());
+  // Questions signalées pour relecture, comme « FLAG FOR REVIEW » dans la maquette.
+  const [flagged, setFlagged] = useState(() => new Set());
+  const toggleFlag = (id) => setFlagged((s) => {
+    const n = new Set(s);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -275,7 +283,7 @@ export default function ExamRunner({ mode, target }) {
       <div className="container mx-auto max-w-[820px]">
         <div className="mb-4">
           <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: "Résultat" }]} />
-          <h1 className="text-h2 leading-snug text-blue">{session.label}</h1>
+          <h1 className="text-h2 leading-snug text-accent">{session.label}</h1>
         </div>
         <Results session={session} result={result} elapsed={elapsed} onRestart={restart} />
       </div>
@@ -323,9 +331,15 @@ export default function ExamRunner({ mode, target }) {
       <div className="mb-4">
         <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: session.label }]} />
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-h3 leading-snug text-blue">{session.label}</h1>
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
+            <h1 className="text-h3 leading-snug text-accent">{session.label}</h1>
+            {/* Bandeau de mode, comme « EXAM_MODE: SECURE » dans la maquette. */}
+            <span className="label-mono-sm rounded-[4px] border border-borderline bg-hover px-2 py-1 text-textmuted">
+              {session.timed ? "EXAM_MODE: CHRONO" : "EXAM_MODE: LIBRE"}
+            </span>
+          </div>
           {session.timed && (
-            <span className={`inline-flex items-center gap-1.5 rounded-[9px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-tintred text-red" : "bg-hover text-textmain"}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-tintred text-red" : "bg-tintblue text-blue"}`}>
               <Icon name="clock" size={14} /> {fmtClock(remaining)}
             </span>
           )}
@@ -335,9 +349,9 @@ export default function ExamRunner({ mode, target }) {
       {/* La barre reflète les réponses données, pas la position : le libellé
           annonce « répondues », les deux doivent concorder. */}
       <div className="mb-4 flex items-center gap-3">
-        <div className="h-[6px] flex-1 overflow-hidden rounded-full bg-borderline">
+        <div className="h-[6px] flex-1 overflow-hidden bg-borderline">
           <div
-            className="h-full rounded-full bg-blue transition-[width] duration-300"
+            className="h-full bg-accent transition-[width] duration-300"
             style={{ width: `${nb ? (answeredCount / nb) * 100 : 0}%` }}
           />
         </div>
@@ -359,7 +373,7 @@ export default function ExamRunner({ mode, target }) {
         {cs && (
           <Link
             href={`#/case/${cs.id}`}
-            className="mb-3 flex items-center gap-2 rounded-[10px] border border-edgeviolet bg-tintviolet px-3 py-2 text-[12.5px] font-semibold text-violet no-underline transition-colors hover:bg-tintviolet"
+            className="mb-3 flex items-center gap-2 rounded-[8px] border border-borderline bg-hover px-3 py-2 text-[12.5px] font-semibold text-textmain no-underline transition-colors hover:bg-hover"
           >
             <Icon name="book-open" size={14} />
             Étude de cas : {cs.name}
@@ -390,7 +404,7 @@ export default function ExamRunner({ mode, target }) {
             <button
               onClick={reveal}
               disabled={picked.length === 0}
-              className="inline-flex items-center gap-1.5 rounded-[10px] border border-edgeblue px-3.5 py-2 text-[12.5px] font-bold text-blue transition-colors hover:bg-tintblue disabled:cursor-not-allowed disabled:opacity-35"
+              className="inline-flex items-center gap-1.5 rounded-[8px] border border-borderline px-3.5 py-2 text-[12.5px] font-bold text-textmain transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-35"
             >
               <Icon name="check" size={13} /> Vérifier
             </button>
@@ -400,31 +414,34 @@ export default function ExamRunner({ mode, target }) {
         {graded && <Explanation q={question} order={order} picked={picked} />}
       </Card>
 
-      <div className="mt-5 flex items-center justify-between gap-3">
-        <button
-          onClick={() => go(idx - 1)}
-          disabled={idx === 0}
-          className="inline-flex h-11 items-center gap-1.5 rounded-[10px] border border-borderline px-4 text-sm font-bold text-textmain transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-35"
-        >
-          <Icon name="chevron-left" size={16} /> Précédent
-        </button>
-
+      {/* Pied d'action de la maquette d'évaluation : filet horizontal, action
+          secondaire à gauche, groupe retour / avancer aligné à droite. */}
+      <ActionBar
+        left={
+          <Button
+            variant="ghost"
+            icon="bookmark"
+            onClick={() => toggleFlag(qid)}
+            aria-pressed={flagged.has(qid)}
+            className={flagged.has(qid) ? "text-textmain" : ""}
+          >
+            {flagged.has(qid) ? "Marquée" : "Marquer"}
+          </Button>
+        }
+      >
+        <Button variant="secondary" icon="chevron-left" onClick={() => go(idx - 1)} disabled={idx === 0}>
+          Précédent
+        </Button>
         {idx === nb - 1 ? (
-          <button
-            onClick={finish}
-            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-green px-5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
-          >
-            <Icon name="award" size={16} /> Terminer et corriger
-          </button>
+          <Button variant="primary" icon="award" onClick={finish}>
+            Terminer
+          </Button>
         ) : (
-          <button
-            onClick={() => go(idx + 1)}
-            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-blue px-5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
-          >
-            Suivant <Icon name="chevron-right" size={16} />
-          </button>
+          <Button variant="primary" iconEnd="arrow-right" onClick={() => go(idx + 1)}>
+            Question suivante
+          </Button>
         )}
-      </div>
+      </ActionBar>
 
       <div className="mt-5 flex flex-wrap gap-1.5">
         {ids.map((id, i) => {
@@ -434,27 +451,30 @@ export default function ExamRunner({ mode, target }) {
               key={id}
               onClick={() => go(i)}
               title={`Question ${i + 1}`}
-              className={`h-7 w-7 rounded-[7px] text-[11px] font-bold tabular-nums transition-colors ${
-                i === idx ? "bg-blue text-onaccent"
-                : revealed.has(id) ? "bg-hover text-textmain ring-1 ring-edgeblue"
+              className={`relative h-7 w-7 rounded-[4px] text-[11px] font-bold tabular-nums transition-colors ${
+                i === idx ? "bg-accent text-onaccent"
+                : revealed.has(id) ? "bg-hover text-textmain ring-1 ring-borderline"
                 : done ? "bg-hover text-textmain"
                 : "border border-borderline text-textmuted hover:bg-hover"
               }`}
             >
               {i + 1}
+              {flagged.has(id) && (
+                <span
+                  aria-hidden="true"
+                  className={`absolute top-0.5 right-0.5 h-1.5 w-1.5 ${i === idx ? "bg-onaccent" : "bg-accent"}`}
+                />
+              )}
             </button>
           );
         })}
       </div>
 
-      {nb > 1 && (
+      {nb > 1 && idx !== nb - 1 && (
         <div className="mt-6 border-t border-borderline pt-4">
-          <button
-            onClick={finish}
-            className="inline-flex items-center gap-2 rounded-[9px] border border-borderline px-3.5 py-2 text-[12.5px] font-semibold text-textmuted transition-colors hover:bg-hover hover:text-textmain"
-          >
-            <Icon name="award" size={14} /> Terminer maintenant et voir le résultat
-          </button>
+          <Button variant="ghost" size="sm" icon="award" onClick={finish}>
+            Terminer et corriger maintenant
+          </Button>
         </div>
       )}
     </div>

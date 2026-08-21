@@ -81,7 +81,7 @@ export default function SecurityGuard({ children }) {
       {toast && (
         <div
           role="status"
-          className="fixed right-6 bottom-6 z-[10000] flex items-center gap-2.5 rounded-[10px] border border-edgered bg-tintred px-4 py-3 text-[13px] font-semibold text-red"
+          className="fixed right-6 bottom-6 z-[10000] flex items-center gap-2.5 rounded-[8px] border border-edgered bg-tintred px-4 py-3 text-[13px] font-semibold text-red"
         >
           {toast}
         </div>
@@ -89,7 +89,7 @@ export default function SecurityGuard({ children }) {
 
       {!isOnline && (
         <div className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-bg p-6 text-center">
-          <div className="hex mb-4 flex h-16 w-16 items-center justify-center bg-tintred text-[30px] text-red">
+          <div className="rounded-[4px] mb-4 flex h-16 w-16 items-center justify-center bg-tintred text-[30px] text-red">
             &#9888;
           </div>
           <h2 className="text-h2">Connexion requise</h2>
@@ -99,7 +99,7 @@ export default function SecurityGuard({ children }) {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-[10px] bg-cyan px-6 py-2.5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
+            className="mt-6 rounded-[8px] bg-accent px-6 py-2.5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             Réessayer
           </button>
@@ -108,7 +108,7 @@ export default function SecurityGuard({ children }) {
 
       {isOnline && isHidden && (
         <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-bg p-6 text-center">
-          <div className="hex mb-4 flex h-16 w-16 items-center justify-center bg-tintcyan text-[28px] text-cyan">
+          <div className="rounded-[4px] mb-4 flex h-16 w-16 items-center justify-center bg-hover text-[28px] text-textmain">
             &#128274;
           </div>
           <h2 className="text-h3">Contenu masqué</h2>

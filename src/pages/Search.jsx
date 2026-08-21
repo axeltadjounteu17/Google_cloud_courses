@@ -1,16 +1,39 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Icon from "../lib/icons.jsx";
 import { useStore } from "../lib/store.jsx";
-import { Link } from "../lib/router.jsx";
+import { Link, queryParam } from "../lib/router.jsx";
 import { Card, EmptyState, SectionTitle } from "../components/ui.jsx";
 
 export default function Search() {
   const { ALL_COURSES, DATA } = useStore();
-  const [query, setQuery] = useState("");
+  // Amorcée par ?q= : la recherche lancée depuis la barre supérieure arrive
+  // ici avec son terme déjà appliqué.
+  const [query, setQuery] = useState(() => queryParam("q"));
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Une nouvelle recherche depuis la barre supérieure alors que la page est
+  // déjà ouverte doit mettre le champ à jour.
+  useEffect(() => {
+    const sync = () => {
+      const q = queryParam("q");
+      if (q) setQuery(q);
+    };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
+
+  // Le terme reste dans l'URL : la recherche devient partageable et
+  // survit à un rechargement.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const target = query.trim() ? `#/search?q=${encodeURIComponent(query.trim())}` : "#/search";
+      if (location.hash !== target) history.replaceState(null, "", target);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [query]);
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -44,7 +67,7 @@ export default function Search() {
     return (
       <>
         {txt.slice(0, i)}
-        <mark className="rounded bg-tintcyan px-0.5 text-inherit">{txt.slice(i, i + q.length)}</mark>
+        <mark className="rounded bg-hover px-0.5 text-inherit">{txt.slice(i, i + q.length)}</mark>
         {txt.slice(i + q.length)}
       </>
     );
@@ -52,10 +75,10 @@ export default function Search() {
 
   return (
     <div className="container mx-auto max-w-[860px]">
-      <h1 className="mb-1.5 text-h2 text-cyan">Recherche dans les cours</h1>
+      <h1 className="mb-1.5 text-h2 text-accent">Recherche dans les cours</h1>
       <p className="mb-5 text-sm text-textmuted">Cherchez dans {DATA.courses.length} cours et {DATA.courses.reduce((a, c) => a + (c.lessons?.length || 0), 0)} leçons.</p>
 
-      <div className="mb-6 flex items-center gap-3 rounded-xl border border-borderline bg-secondary px-4">
+      <div className="mb-6 flex items-center gap-3 rounded-[8px] border border-borderline bg-secondary px-4">
         <Icon name="search" size={18} className="shrink-0 text-textmuted" />
         <input
           autoFocus
@@ -74,7 +97,7 @@ export default function Search() {
       {!query && (
         <div className="grid grid-cols-3 gap-3 max-sm:grid-cols-1">
           {["IAM", "VPC", "Cloud Storage", "Kubernetes", "BigQuery", "Cloud Run"].map((s) => (
-            <button key={s} onClick={() => setQuery(s)} className="rounded-xl border border-borderline bg-secondary px-4 py-3.5 text-sm font-semibold text-textmain transition-colors hover:bg-hover">
+            <button key={s} onClick={() => setQuery(s)} className="rounded-[8px] border border-borderline bg-secondary px-4 py-3.5 text-sm font-semibold text-textmain transition-colors hover:bg-hover">
               {s}
             </button>
           ))}
@@ -87,7 +110,7 @@ export default function Search() {
             {items.map((h, i) => (
               <Card key={i} className="p-4">
                 <Link href={`#/lesson/${h.c.id}/${h.li}`} className="no-underline">
-                  <div className="mb-1 flex items-center gap-2 text-[11px] font-semibold tracking-wide text-cyan uppercase">
+                  <div className="mb-1 flex items-center gap-2 text-[11px] font-semibold tracking-wide text-textmain uppercase">
                     {h.c.title} · Leçon {h.li + 1}
                   </div>
                   <div className="mb-1 text-sm font-bold">{h.l.title}</div>
@@ -104,7 +127,7 @@ export default function Search() {
       {!query && (
         <div className="mt-8">
           <SectionTitle>Suggestions</SectionTitle>
-          <div className="rounded-[12px] border border-borderline bg-secondary p-5 text-sm leading-relaxed text-textmuted">
+          <div className="rounded-[8px] border border-borderline bg-secondary p-5 text-sm leading-relaxed text-textmuted">
             La recherche parcourt les titres des leçons et le contenu des transcriptions vidéo. Tapez un sujet (ex : « bucket », « service account », « cluster ») pour trouver les leçons concernées.
           </div>
         </div>

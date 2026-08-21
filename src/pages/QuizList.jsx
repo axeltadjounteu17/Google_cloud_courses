@@ -27,8 +27,8 @@ export default function QuizList() {
 
   return (
     <div className="ambient container mx-auto max-w-[1080px]">
-      <div className="mb-6 rounded-[12px] border border-edgeorange bg-tintorange p-6 max-sm:p-4">
-        <h1 className="mb-1 text-h2 font-semibold text-orange">Quiz de révision</h1>
+      <div className="mb-6 rounded-[8px] border border-borderline bg-hover p-6 max-sm:p-4">
+        <h1 className="mb-1 text-h2 font-semibold text-accent">Quiz de révision</h1>
         <p className="text-sm text-textmuted">
           <strong className="text-textmain">{items.length} cours</strong>, <strong className="text-textmain">{total} questions</strong> pour consolider vos acquis avant l'examen. Vérifiez ce que vous retenez de chaque module.
         </p>
@@ -38,8 +38,8 @@ export default function QuizList() {
       <div className="grid grid-cols-2 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
         {items.map((q) => (
           <Link key={q.courseId} href={`#/quiz/${q.courseId}`} className="group no-underline">
-            <Card className="flex h-full items-center gap-4 p-5 transition-colors group-hover:border-edgeorange max-sm:p-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center hex  bg-tintorange text-orange">
+            <Card className="flex h-full items-center gap-4 p-5 transition-colors group-hover:border-borderline max-sm:p-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px]  bg-tintaccent text-accent">
                 <Icon name={q.icon} size={22} />
               </span>
               <div className="min-w-0 flex-1">

@@ -32,7 +32,7 @@ export default function SlideViewer({ cid, deckId, page }) {
 
   const navBtn = (target, iconName, label) =>
     target ? (
-      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-edgeviolet hover:bg-tintviolet">
+      <Link href={`#/slide/${cid}/${deck.id}/${target}`} aria-label={label} className="flex h-11 w-11 max-sm:h-9 max-sm:w-9 shrink-0 items-center justify-center rounded-full border border-borderline bg-hover text-textmain no-underline transition-colors hover:border-borderline hover:bg-hover">
         <Icon name={iconName} size={24} />
       </Link>
     ) : (
@@ -48,13 +48,13 @@ export default function SlideViewer({ cid, deckId, page }) {
         <h1 className="mb-3.5 text-h2 leading-snug">{deck.title}</h1>
         <div className="flex flex-wrap items-center gap-2.5">
           <Badge color="violet">Diapositive {p} / {n}</Badge>
-          <Link href={`#/course/${cid}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
+          <Link href={`#/course/${cid}`} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
             <Icon name="arrow-left" size={16} /> Cours
           </Link>
         </div>
       </div>
 
-      <div className="mb-4 flex items-center gap-3.5 rounded-[12px] border border-borderline bg-secondary p-4 max-sm:gap-2 max-sm:p-2">
+      <div className="mb-4 flex items-center gap-3.5 rounded-[8px] border border-borderline bg-secondary p-4 max-sm:gap-2 max-sm:p-2">
         {navBtn(prevPage, "chevron-left", "Précédente")}
         <button
           onClick={() => setZoom(true)}
@@ -71,7 +71,7 @@ export default function SlideViewer({ cid, deckId, page }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.16 }}
-              className="max-h-[76vh] max-w-full rounded-lg bg-white object-contain max-sm:max-h-[58vh]"
+              className="max-h-[76vh] max-w-full rounded-[8px] bg-white object-contain max-sm:max-h-[58vh]"
             />
           </AnimatePresence>
         </button>
@@ -111,7 +111,7 @@ export default function SlideViewer({ cid, deckId, page }) {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
-              className="max-h-[92vh] max-w-[96vw] rounded-lg bg-white object-contain"
+              className="max-h-[92vh] max-w-[96vw] rounded-[8px] bg-white object-contain"
             />
 
             {prevPage && (
@@ -139,19 +139,19 @@ export default function SlideViewer({ cid, deckId, page }) {
       </AnimatePresence>
 
       {pg.bullets?.length ? (
-        <div className="mb-4 rounded-[12px] border border-borderline bg-secondary p-5 max-sm:p-3.5">
+        <div className="mb-4 rounded-[8px] border border-borderline bg-secondary p-5 max-sm:p-3.5">
           {pg.title && <h3 className="mb-3 text-[17px] font-semibold">{pg.title}</h3>}
           <ul className="list-none">
             {pg.bullets.map((b, i) => (
               <li key={i} className="relative border-b border-dashed border-borderline px-0 py-1.5 pl-5 text-[14.5px] leading-relaxed last:border-none">
-                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[2px] bg-violet" />
+                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[4px] bg-accent" />
                 {b}
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="mb-4 rounded-[12px] border border-borderline bg-secondary p-5">
+        <div className="mb-4 rounded-[8px] border border-borderline bg-secondary p-5">
           <p className="text-sm text-textmuted">Schéma — aucun texte exploitable sur cette diapositive.</p>
         </div>
       )}
@@ -162,8 +162,8 @@ export default function SlideViewer({ cid, deckId, page }) {
             key={i}
             href={`#/slide/${cid}/${deck.id}/${i + 1}`}
             title={`Diapositive ${i + 1}`}
-            className={`h-[70px] w-[124px] shrink-0 overflow-hidden rounded-lg border-2 transition-opacity max-sm:h-[56px] max-sm:w-[96px] ${
-              i + 1 === p ? "border-violet opacity-100" : "border-borderline opacity-75 hover:opacity-100 hover:border-edgeviolet"
+            className={`h-[70px] w-[124px] shrink-0 overflow-hidden rounded-[8px] border-2 transition-opacity max-sm:h-[56px] max-sm:w-[96px] ${
+              i + 1 === p ? "border-textmain opacity-100" : "border-borderline opacity-75 hover:opacity-100 hover:border-borderline"
             }`}
           >
             <img loading="lazy" src={x.img} alt={`Diapositive ${i + 1}`} className="block h-full w-full object-cover" />
@@ -173,16 +173,16 @@ export default function SlideViewer({ cid, deckId, page }) {
 
       <div className="flex flex-wrap justify-between gap-3">
         {prevPage ? (
-          <Link href={`#/slide/${cid}/${deck.id}/${prevPage}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
+          <Link href={`#/slide/${cid}/${deck.id}/${prevPage}`} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
             <Icon name="chevron-left" size={16} /> Diapositive {prevPage}
           </Link>
         ) : <span />}
         {nextPage ? (
-          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             Diapositive {nextPage} <Icon name="chevron-right" size={16} />
           </Link>
         ) : (
-          <Link href={`#/slides/${cid}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
+          <Link href={`#/slides/${cid}`} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
             <Icon name="check" size={14} /> Fin du module
           </Link>
         )}

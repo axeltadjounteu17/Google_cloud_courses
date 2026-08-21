@@ -117,18 +117,37 @@ const contrast = (a, b) => {
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 };
 
-/** Extrait les tokens d'un bloc de thème de index.css. */
+/**
+ * Extrait les tokens d'un bloc de thème de index.css.
+ *
+ * Les accents pointent désormais vers `var(--neutral)` : le système est
+ * achromatique et une seule valeur sert de référence. La résolution suit donc
+ * un niveau d'indirection.
+ */
 function tokens(selector) {
   const i = css.indexOf(selector);
   assert.ok(i >= 0, `bloc ${selector} introuvable`);
   const block = css.slice(i, css.indexOf("}", i));
-  const get = (n) => (block.match(new RegExp(`${n}:\\s*([^;]+);`)) || [])[1]?.trim();
+
+  const raw = (n) => (block.match(new RegExp(`${n}:\\s*([^;]+);`)) || [])[1]?.trim();
+
+  const get = (n) => {
+    let v = raw(n);
+    let guard = 0;
+    while (v && v.startsWith("var(") && guard++ < 4) {
+      v = raw(v.slice(4, -1).trim());
+    }
+    return v;
+  };
+
   const accent = (n) => {
     const v = get(`--${n}`);
+    assert.ok(v, `--${n} non résolu`);
     const [h, s, l] = v.replace(/%/g, "").split(/\s+/).map(Number);
     return hslToRgb(h, s, l);
   };
-  return { get, accent };
+
+  return { get, raw, accent };
 }
 
 const ACCENTS = ["red", "blue", "cyan", "green", "violet", "orange", "yellow"];
@@ -240,4 +259,176 @@ test("le contenu n'est pas masqué sur une simple perte de focus", () => {
   // Le masquage reste actif sur passage réel en arrière-plan, avec un délai.
   assert.match(guard, /visibilitychange/, "masquage sur arrière-plan supprimé");
   assert.match(guard, /HIDE_DELAY_MS/, "délai de grâce absent");
+});
+
+// ── Palette colorée : chaque accent reste une vraie teinte ────────────────
+
+for (const [label, selector] of [
+  ["sombre", ":root {"],
+  ["clair", 'html[data-theme="light"] {'],
+]) {
+  test(`thème ${label} : les sept accents sont des teintes distinctes`, () => {
+    const t = tokens(selector);
+    const hues = {};
+    for (const a of ["red", "blue", "cyan", "green", "violet", "orange", "yellow"]) {
+      const [h, sat] = t.get(`--${a}`).replace(/%/g, "").split(/\s+/).map(Number);
+      assert.ok(sat > 40, `--${a} : saturation de ${sat}%, la couleur doit rester franche`);
+      hues[a] = h;
+    }
+    // Deux accents ne doivent pas se confondre : au moins 12° d'écart de teinte.
+    const keys = Object.keys(hues);
+    for (let i = 0; i < keys.length; i++) {
+      for (let j = i + 1; j < keys.length; j++) {
+        const d = Math.min(
+          Math.abs(hues[keys[i]] - hues[keys[j]]),
+          360 - Math.abs(hues[keys[i]] - hues[keys[j]])
+        );
+        assert.ok(d >= 12, `${keys[i]} et ${keys[j]} trop proches : ${d}° d'écart`);
+      }
+    }
+  });
+
+  test(`thème ${label} : chaque teinte de fond dérive de son accent`, () => {
+    const t = tokens(selector);
+    for (const a of ["red", "blue", "cyan", "green", "violet", "orange", "yellow"]) {
+      const hex = t.get(`--tint-${a}`);
+      assert.match(hex, /^#[0-9a-f]{6}$/i, `--tint-${a} devrait être une couleur pleine`);
+      // Une teinte plate et grise signifierait que l'accent a été neutralisé.
+      const [r, g, b] = hexToRgb(hex);
+      const spread = Math.max(r, g, b) - Math.min(r, g, b);
+      assert.ok(spread >= 4, `--tint-${a} (${hex}) est gris : écart RVB de ${spread}`);
+    }
+  });
+}
+
+test("les couleurs de repérage du menu existent pour chaque entrée", () => {
+  // La couleur est conservée uniquement sur la navigation : c'est là qu'elle
+  // aide à se situer. Ces tokens sont séparés des surfaces pour qu'elle ne
+  // puisse pas fuiter dans les pages.
+  const entries = ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"];
+  for (const e of entries) {
+    assert.equal(
+      (css.match(new RegExp(`--nav-${e}:`, "g")) || []).length,
+      2,
+      `--nav-${e} doit être défini dans les deux thèmes`
+    );
+  }
+});
+
+test("les couleurs de menu sont lisibles sur la surface de la barre latérale", () => {
+  for (const [label, selector] of [["sombre", ":root {"], ["clair", 'html[data-theme="light"] {']]) {
+    const t = tokens(selector);
+    const bg = hexToRgb(t.get("--bg"));
+
+    /**
+     * Les couleurs de menu référencent la palette : `hsl(var(--cyan))` ou
+     * `var(--text-muted)`. La résolution suit donc l'indirection avant de
+     * mesurer le contraste.
+     */
+    const resolve = (raw) => {
+      const v = raw.trim();
+      const hslVar = v.match(/^hsl\(var\((--[a-z-]+)\)\)$/);
+      if (hslVar) {
+        const [h, s, l] = t.get(hslVar[1]).replace(/%/g, "").split(/\s+/).map(Number);
+        return hslToRgb(h, s, l);
+      }
+      const plain = v.match(/^var\((--[a-z-]+)\)$/);
+      if (plain) return resolve(t.get(plain[1]));
+      if (v.startsWith("#")) return hexToRgb(v);
+      const [h, s, l] = v.replace(/%/g, "").split(/\s+/).map(Number);
+      return hslToRgb(h, s, l);
+    };
+
+    for (const e of ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"]) {
+      const c = resolve(t.get(`--nav-${e}`));
+      const r = contrast(c, bg);
+      // Seuil « élément graphique » : ces couleurs portent une icône et un
+      // libellé de 13,5 px en gras.
+      assert.ok(r >= 3, `${label} : --nav-${e} à ${r.toFixed(2)}:1 sur le fond`);
+    }
+  }
+});
+
+test("les couleurs de menu ne servent qu'à la navigation", () => {
+  const bad = [];
+  for (const f of jsx) {
+    const src = readFileSync(f, "utf8");
+    if (f.endsWith("App.jsx")) continue; // la barre latérale est le seul lieu légitime
+    for (const m of src.matchAll(/\b(?:text|bg|border)-nav[a-z]+/g)) {
+      bad.push(`${f.replace(SRC, "src")}: ${m[0]}`);
+    }
+  }
+  assert.deepEqual(bad, [], "une couleur de menu a fuité dans le contenu");
+});
+
+// ── Typographie du système ────────────────────────────────────────────────
+
+test("Inter et JetBrains Mono sont déclarées et embarquées", () => {
+  assert.match(css, /font-family:\s*"Inter"/, "Inter absente");
+  assert.match(css, /font-family:\s*"JetBrains Mono"/, "JetBrains Mono absente");
+  assert.match(css, /Inter-latin\.woff2/, "fichier Inter non référencé");
+  assert.match(css, /JetBrainsMono-latin\.woff2/, "fichier JetBrains Mono non référencé");
+  // Space Grotesk a été remplacée : plus aucune trace ne doit subsister.
+  assert.doesNotMatch(css, /SpaceGrotesk/, "reste de Space Grotesk");
+});
+
+test("le libellé technique en mono capitales est disponible", () => {
+  for (const cls of ["label-mono", "label-mono-sm"]) {
+    assert.match(css, new RegExp(`\\.${cls}\\s*\\{`), `.${cls} absent`);
+  }
+  const rule = css.match(/\.label-mono\s*\{[^}]*\}/)[0];
+  assert.match(rule, /text-transform:\s*uppercase/, "label-mono devrait être en capitales");
+  assert.match(rule, /JetBrains Mono/, "label-mono devrait être en mono");
+});
+
+// ── Formes ────────────────────────────────────────────────────────────────
+
+test("les rayons restent techniques : 4 px et 8 px", () => {
+  const found = new Set();
+  for (const f of jsx) {
+    for (const m of readFileSync(f, "utf8").matchAll(/rounded-\[(\d+)px\]/g)) found.add(Number(m[1]));
+  }
+  const tooRound = [...found].filter((r) => r > 8);
+  assert.deepEqual(tooRound, [], `rayons supérieurs à 8 px : ${tooRound.join(", ")}`);
+});
+
+test("les barres de progression ont des bouts carrés", () => {
+  const track = css.match(/\.bar-track\s*\{[^}]*\}/);
+  const fill = css.match(/\.bar-fill\s*\{[^}]*\}/);
+  assert.ok(track && fill, "classes .bar-track / .bar-fill absentes");
+  for (const r of [track[0], fill[0]]) {
+    assert.doesNotMatch(r, /border-radius:\s*9999px|border-radius:\s*50%/, "capuchon arrondi sur une barre");
+  }
+});
+
+// ── Accent par section ────────────────────────────────────────────────────
+
+test("chaque section déclare son accent", () => {
+  for (const sec of ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"]) {
+    assert.match(
+      css,
+      new RegExp(`\\[data-section="${sec}"\\]\\s*\\{[^}]*--accent:`),
+      `pas d'accent déclaré pour la section ${sec}`
+    );
+  }
+});
+
+test("l'accent de section est dérivé en teinte et bordure opaques", () => {
+  for (const token of ["--color-tintaccent", "--color-edgeaccent"]) {
+    const m = css.match(new RegExp(`${token}:\\s*([^;]+);`));
+    assert.ok(m, `${token} absent`);
+    // color-mix produit une couleur pleine : pas d'alpha, donc pas de verre.
+    assert.match(m[1], /color-mix\(/, `${token} devrait dériver de --accent`);
+    assert.doesNotMatch(m[1], /rgba?\(|\/\s*\d+%/, `${token} introduit de la transparence`);
+  }
+});
+
+test("le menu et la page d'une section partagent la même teinte", () => {
+  // --nav-* pointe vers les accents de la palette : l'entrée de menu et la page
+  // qu'elle ouvre ne peuvent pas diverger.
+  for (const sec of ["home", "courses", "quiz", "exam", "progress"]) {
+    const m = css.match(new RegExp(`--nav-${sec}:\\s*([^;]+);`));
+    assert.ok(m, `--nav-${sec} absent`);
+    assert.match(m[1].trim(), /^hsl\(var\(--|^var\(--/, `--nav-${sec} devrait référencer la palette`);
+  }
 });

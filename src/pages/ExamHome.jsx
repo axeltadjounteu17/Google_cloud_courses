@@ -10,7 +10,7 @@ import {
 function ScoreRing({ score, size = 74 }) {
   const r = (size - 8) / 2;
   const c = 2 * Math.PI * r;
-  const tone = score >= PASS_MARK ? "text-green" : score >= 50 ? "text-yellow" : "text-red";
+  const tone = score >= PASS_MARK ? "text-textmain" : score >= 50 ? "text-textmain" : "text-red";
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
@@ -40,7 +40,7 @@ function ModeCard({ mode, href, children, disabled }) {
   const inner = (
     <>
       <div className="flex items-start gap-3">
-        <span className={`flex h-10 w-10 shrink-0 items-center justify-center hex  ${disabled ? "bg-hover text-textmuted" : "bg-tintblue text-blue"}`}>
+        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px]  ${disabled ? "bg-hover text-textmuted" : "bg-tintblue text-blue"}`}>
           <Icon name={m.icon} size={19} />
         </span>
         <div className="min-w-0 flex-1">
@@ -59,7 +59,7 @@ function ModeCard({ mode, href, children, disabled }) {
   return (
     <Link
       href={href}
-      className="block rounded-[12px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-edgeblue hover:bg-hover"
+      className="block rounded-[8px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-borderline hover:bg-hover"
     >
       {inner}
     </Link>
@@ -80,7 +80,7 @@ export default function ExamHome() {
   return (
     <div className="ambient container mx-auto max-w-[900px]">
       <div className="mb-5">
-        <h1 className="text-h2 leading-snug text-blue">Mode Examen</h1>
+        <h1 className="text-h2 leading-snug text-accent">Mode Examen</h1>
         <p className="mt-1.5 max-w-[640px] text-[13.5px] leading-relaxed text-textmuted">
           Questions de type examen pour la certification Professional Cloud Architect, ancrées sur
           les quatre études de cas officielles du guide v6.1. Correction automatique et justification
@@ -105,7 +105,7 @@ export default function ExamHome() {
                 <span className="text-textmuted">Moyenne <b className="text-textmain">{st.avg} %</b></span>
                 <span className="text-textmuted">Sessions <b className="text-textmain">{st.attempts}</b></span>
                 {st.missed > 0 && (
-                  <span className="text-textmuted">À revoir <b className="text-yellow">{st.missed}</b></span>
+                  <span className="text-textmuted">À revoir <b className="text-textmain">{st.missed}</b></span>
                 )}
               </div>
             </div>
@@ -137,11 +137,11 @@ export default function ExamHome() {
             <Link
               key={s.id}
               href={`#/exam/run/section/${s.id}`}
-              className="block rounded-[12px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-edgecyan hover:bg-hover"
+              className="block rounded-[8px] border border-borderline bg-secondary p-4 no-underline transition-colors hover:border-borderline hover:bg-hover"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="text-[11px] font-bold tracking-wider text-cyan uppercase">
+                  <div className="text-[11px] font-bold tracking-wider text-textmain uppercase">
                     Section {s.id} · {s.weight} % de l'examen
                   </div>
                   <div className="mt-1 text-[14px] leading-snug font-semibold">{s.label}</div>
@@ -159,7 +159,7 @@ export default function ExamHome() {
         {CASE_STUDIES.map((c) => (
           <Card key={c.id} className="p-4">
             <div className="flex items-start gap-3">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center hex  ${CASE_TONE[c.color] || CASE_TONE.blue}`}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px]  ${CASE_TONE[c.color] || CASE_TONE.blue}`}>
                 <Icon name={c.icon} size={19} />
               </span>
               <div className="min-w-0 flex-1">
@@ -173,13 +173,13 @@ export default function ExamHome() {
                   l'action principale, s'entraîner vient après. */}
               <Link
                 href={`#/case/${c.id}`}
-                className="inline-flex items-center gap-1.5 rounded-[9px] bg-violet px-3 py-1.5 text-[12px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-[4px] bg-accent px-3 py-1.5 text-[12px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
               >
                 <Icon name="book-open" size={13} /> Lire la fiche
               </Link>
               <Link
                 href={`#/exam/run/case/${c.id}`}
-                className="inline-flex items-center gap-1.5 rounded-[9px] border border-borderline px-3 py-1.5 text-[12px] font-bold text-textmain no-underline transition-colors hover:bg-hover"
+                className="inline-flex items-center gap-1.5 rounded-[4px] border border-borderline px-3 py-1.5 text-[12px] font-bold text-textmain no-underline transition-colors hover:bg-hover"
               >
                 <Icon name="target" size={13} /> {bank.perCase[c.id]} questions
               </Link>

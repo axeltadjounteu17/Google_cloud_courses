@@ -28,4 +28,9 @@ dist-ssr
 shots/
 shots*/
 *-shots/
+mono*/
 refs/
+refs/
+ref-prod/
+ref-local/
+mono4/
