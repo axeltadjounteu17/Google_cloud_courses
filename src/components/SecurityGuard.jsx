@@ -99,7 +99,7 @@ export default function SecurityGuard({ children }) {
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-[8px] bg-textmain px-6 py-2.5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
+            className="mt-6 rounded-[8px] bg-accent px-6 py-2.5 text-sm font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             Réessayer
           </button>

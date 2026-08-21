@@ -9,28 +9,44 @@ import Icon from "../lib/icons.jsx";
  * l'entrée active se distingue par l'inversion — surface claire, encre sombre —
  * plutôt que par une couleur, comme dans les maquettes.
  */
+/**
+ * Rôle visuel commun. `accent` est fixé par `data-section` dans App.jsx :
+ * chaque page reprend donc la couleur de son entrée de menu, alors que les
+ * surfaces restent monochromes.
+ */
 const ROLE = {
-  title: "text-textmain",
-  chip: "bg-hover text-textmain",
-  // Entrée de menu active : inversion, comme « Home » dans la maquette.
-  active: "bg-textmain text-onaccent",
-  // Bouton primaire : surface claire, encre sombre en thème sombre, et
-  // l'inverse en thème clair. C'est le contraste maximal de la spécification.
-  btn: "bg-textmain text-onaccent",
+  title: "text-accent",
+  chip: "bg-tintaccent text-accent",
+  active: "bg-tintaccent text-accent",
+  btn: "bg-accent text-onaccent",
   badge: "",
 };
 
 export const SECTION = {
   home: ROLE, courses: ROLE, quiz: ROLE, exam: ROLE,
-  cases: ROLE, progress: ROLE, search: ROLE, settings: ROLE,
+  cases: ROLE, progress: ROLE, search: ROLE, settings: ROLE, about: ROLE,
 };
 
 /**
  * Puce de statut. Seule forme en pilule autorisée par la spécification.
  * Achromatique : `red` est la seule teinte, réservée à l'erreur.
  */
+/**
+ * Puce de statut. Seule forme en pilule du système.
+ * Sans couleur précisée, elle prend l'accent de la section courante.
+ */
 export function Badge({ children, color = "" }) {
-  const tone = color === "red" ? "bg-tintred text-red border-edgered" : "bg-hover text-textmuted border-borderline";
+  const TONES = {
+    blue: "bg-tintblue text-blue border-edgeblue",
+    cyan: "bg-tintcyan text-cyan border-edgecyan",
+    green: "bg-tintgreen text-green border-edgegreen",
+    violet: "bg-tintviolet text-violet border-edgeviolet",
+    orange: "bg-tintorange text-orange border-edgeorange",
+    yellow: "bg-tintyellow text-yellow border-edgeyellow",
+    red: "bg-tintred text-red border-edgered",
+    neutral: "bg-hover text-textmuted border-borderline",
+  };
+  const tone = TONES[color] || "bg-tintaccent text-accent border-edgeaccent";
   return (
     <span className={`label-mono-sm inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 ${tone}`}>
       {children}

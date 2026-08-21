@@ -24,7 +24,7 @@ export default function Home() {
     const marked = isBookmarked(c.id, r.l);
     return (
       <Link key={`${r.c}-${r.l}`} href={`#/lesson/${c.id}/${r.l}`} className="flex items-center gap-3 rounded-[8px] px-3.5 py-2.5 no-underline transition-colors hover:bg-hover">
-        <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-textmain bg-textmain text-onaccent" : "border-borderline text-transparent"}`}>
+        <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-accent bg-accent text-onaccent" : "border-borderline text-transparent"}`}>
           {read && <Icon name="check" size={12} />}
         </span>
         <span className="min-w-0 flex-1">
@@ -40,10 +40,10 @@ export default function Home() {
   }).filter(Boolean);
 
   const stats = [
-    { icon: "book", chip: "bg-hover", color: "text-textmain", num: st.done, lbl: "Leçons lues" },
-    { icon: "award", chip: "bg-hover", color: "text-textmain", num: st.doneCourses, lbl: "Cours terminés" },
-    { icon: "flame", chip: "bg-hover", color: "text-textmain", num: streak, lbl: "Jours d'étude d'affilée" },
-    { icon: "bookmark", chip: "bg-hover", color: "text-textmain", num: bookmarks, lbl: "Leçons à réviser" },
+    { icon: "book", chip: "bg-tintviolet", color: "text-violet", num: st.done, lbl: "Leçons lues" },
+    { icon: "award", chip: "bg-tintgreen", color: "text-green", num: st.doneCourses, lbl: "Cours terminés" },
+    { icon: "flame", chip: "bg-tintorange", color: "text-orange", num: streak, lbl: "Jours d'étude d'affilée" },
+    { icon: "bookmark", chip: "bg-tintyellow", color: "text-yellow", num: bookmarks, lbl: "Leçons à réviser" },
   ];
 
   return (
@@ -51,7 +51,11 @@ export default function Home() {
       {/* Titre court puis sous-titre, comme « Welcome back. / Pick up exactly
           where you left off. » de la maquette de tableau de bord. */}
       <header className="rise pb-8">
-        <h1 className="text-h1">Bon retour.</h1>
+        {/* Le titre reste lisible en encre neutre et ne porte la couleur de la
+            section que sur un fragment, comme les autres pages d'entrée. */}
+        <h1 className="text-h1">
+          Bon retour, <span className="text-accent">on continue</span>.
+        </h1>
         <p className="mt-1.5 text-[15px] text-textmuted">
           {resume ? "Reprenez exactement où vous vous êtes arrêté." : "Choisissez un cours pour démarrer."}
         </p>
@@ -139,7 +143,7 @@ export default function Home() {
             </div>
             <div className="mt-1.5 text-[11.5px] text-textmuted">{coursePct(resume.course)}% du cours lu</div>
           </div>
-          <Link href={`#/lesson/${resume.course.id}/${resume.index}`} className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <Link href={`#/lesson/${resume.course.id}/${resume.index}`} className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             <Icon name="play" size={18} /> Continuer
           </Link>
         </div>

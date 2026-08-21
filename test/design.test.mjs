@@ -261,31 +261,42 @@ test("le contenu n'est pas masqué sur une simple perte de focus", () => {
   assert.match(guard, /HIDE_DELAY_MS/, "délai de grâce absent");
 });
 
-// ── Monochrome Logic : le contenu est achromatique ────────────────────────
+// ── Palette colorée : chaque accent reste une vraie teinte ────────────────
 
 for (const [label, selector] of [
   ["sombre", ":root {"],
   ["clair", 'html[data-theme="light"] {'],
 ]) {
-  test(`thème ${label} : les accents de contenu sont achromatiques`, () => {
+  test(`thème ${label} : les sept accents sont des teintes distinctes`, () => {
     const t = tokens(selector);
-    // `red` est la seule teinte autorisée par la spécification : elle sert à
-    // l'erreur et aux actions destructrices.
-    for (const a of ["blue", "cyan", "green", "violet", "orange", "yellow"]) {
-      const [h, s] = t.get(`--${a}`).replace(/%/g, "").split(/\s+/).map(Number);
-      assert.equal(s, 0, `--${a} a une saturation de ${s}% : le contenu doit rester achromatique`);
+    const hues = {};
+    for (const a of ["red", "blue", "cyan", "green", "violet", "orange", "yellow"]) {
+      const [h, sat] = t.get(`--${a}`).replace(/%/g, "").split(/\s+/).map(Number);
+      assert.ok(sat > 40, `--${a} : saturation de ${sat}%, la couleur doit rester franche`);
+      hues[a] = h;
     }
-    const [, rs] = t.get("--red").replace(/%/g, "").split(/\s+/).map(Number);
-    assert.ok(rs > 40, `--red devrait rester une vraie teinte (saturation ${rs}%)`);
+    // Deux accents ne doivent pas se confondre : au moins 12° d'écart de teinte.
+    const keys = Object.keys(hues);
+    for (let i = 0; i < keys.length; i++) {
+      for (let j = i + 1; j < keys.length; j++) {
+        const d = Math.min(
+          Math.abs(hues[keys[i]] - hues[keys[j]]),
+          360 - Math.abs(hues[keys[i]] - hues[keys[j]])
+        );
+        assert.ok(d >= 12, `${keys[i]} et ${keys[j]} trop proches : ${d}° d'écart`);
+      }
+    }
   });
 
-  test(`thème ${label} : les teintes de surface sont grises`, () => {
+  test(`thème ${label} : chaque teinte de fond dérive de son accent`, () => {
     const t = tokens(selector);
-    for (const a of ["blue", "cyan", "green", "violet", "orange", "yellow"]) {
+    for (const a of ["red", "blue", "cyan", "green", "violet", "orange", "yellow"]) {
       const hex = t.get(`--tint-${a}`);
+      assert.match(hex, /^#[0-9a-f]{6}$/i, `--tint-${a} devrait être une couleur pleine`);
+      // Une teinte plate et grise signifierait que l'accent a été neutralisé.
       const [r, g, b] = hexToRgb(hex);
       const spread = Math.max(r, g, b) - Math.min(r, g, b);
-      assert.ok(spread <= 6, `--tint-${a} (${hex}) n'est pas gris : écart RVB de ${spread}`);
+      assert.ok(spread >= 4, `--tint-${a} (${hex}) est gris : écart RVB de ${spread}`);
     }
   });
 }
@@ -308,11 +319,31 @@ test("les couleurs de menu sont lisibles sur la surface de la barre latérale", 
   for (const [label, selector] of [["sombre", ":root {"], ["clair", 'html[data-theme="light"] {']]) {
     const t = tokens(selector);
     const bg = hexToRgb(t.get("--bg"));
+
+    /**
+     * Les couleurs de menu référencent la palette : `hsl(var(--cyan))` ou
+     * `var(--text-muted)`. La résolution suit donc l'indirection avant de
+     * mesurer le contraste.
+     */
+    const resolve = (raw) => {
+      const v = raw.trim();
+      const hslVar = v.match(/^hsl\(var\((--[a-z-]+)\)\)$/);
+      if (hslVar) {
+        const [h, s, l] = t.get(hslVar[1]).replace(/%/g, "").split(/\s+/).map(Number);
+        return hslToRgb(h, s, l);
+      }
+      const plain = v.match(/^var\((--[a-z-]+)\)$/);
+      if (plain) return resolve(t.get(plain[1]));
+      if (v.startsWith("#")) return hexToRgb(v);
+      const [h, s, l] = v.replace(/%/g, "").split(/\s+/).map(Number);
+      return hslToRgb(h, s, l);
+    };
+
     for (const e of ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"]) {
-      const c = hexToRgb(t.get(`--nav-${e}`));
+      const c = resolve(t.get(`--nav-${e}`));
       const r = contrast(c, bg);
-      // Seuil « gros texte / élément graphique » : ces couleurs portent une
-      // icône et un libellé de 13,5 px en gras.
+      // Seuil « élément graphique » : ces couleurs portent une icône et un
+      // libellé de 13,5 px en gras.
       assert.ok(r >= 3, `${label} : --nav-${e} à ${r.toFixed(2)}:1 sur le fond`);
     }
   }
@@ -367,5 +398,37 @@ test("les barres de progression ont des bouts carrés", () => {
   assert.ok(track && fill, "classes .bar-track / .bar-fill absentes");
   for (const r of [track[0], fill[0]]) {
     assert.doesNotMatch(r, /border-radius:\s*9999px|border-radius:\s*50%/, "capuchon arrondi sur une barre");
+  }
+});
+
+// ── Accent par section ────────────────────────────────────────────────────
+
+test("chaque section déclare son accent", () => {
+  for (const sec of ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"]) {
+    assert.match(
+      css,
+      new RegExp(`\\[data-section="${sec}"\\]\\s*\\{[^}]*--accent:`),
+      `pas d'accent déclaré pour la section ${sec}`
+    );
+  }
+});
+
+test("l'accent de section est dérivé en teinte et bordure opaques", () => {
+  for (const token of ["--color-tintaccent", "--color-edgeaccent"]) {
+    const m = css.match(new RegExp(`${token}:\\s*([^;]+);`));
+    assert.ok(m, `${token} absent`);
+    // color-mix produit une couleur pleine : pas d'alpha, donc pas de verre.
+    assert.match(m[1], /color-mix\(/, `${token} devrait dériver de --accent`);
+    assert.doesNotMatch(m[1], /rgba?\(|\/\s*\d+%/, `${token} introduit de la transparence`);
+  }
+});
+
+test("le menu et la page d'une section partagent la même teinte", () => {
+  // --nav-* pointe vers les accents de la palette : l'entrée de menu et la page
+  // qu'elle ouvre ne peuvent pas diverger.
+  for (const sec of ["home", "courses", "quiz", "exam", "progress"]) {
+    const m = css.match(new RegExp(`--nav-${sec}:\\s*([^;]+);`));
+    assert.ok(m, `--nav-${sec} absent`);
+    assert.match(m[1].trim(), /^hsl\(var\(--|^var\(--/, `--nav-${sec} devrait référencer la palette`);
   }
 });

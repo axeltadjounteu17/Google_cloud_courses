@@ -5,17 +5,17 @@ import { Badge, Card } from "../components/ui.jsx";
 import { CASE_STUDIES, QUESTIONS } from "../lib/exam.js";
 
 const TONE = {
-  violet: { chip: "bg-hover text-textmain", text: "text-textmain", edge: "hover:border-borderline" },
-  orange: { chip: "bg-hover text-textmain", text: "text-textmain", edge: "hover:border-borderline" },
-  cyan: { chip: "bg-hover text-textmain", text: "text-textmain", edge: "hover:border-borderline" },
-  green: { chip: "bg-hover text-textmain", text: "text-textmain", edge: "hover:border-borderline" },
+  violet: { chip: "bg-tintviolet text-violet", text: "text-violet", edge: "hover:border-edgeviolet" },
+  orange: { chip: "bg-tintorange text-orange", text: "text-orange", edge: "hover:border-edgeorange" },
+  cyan: { chip: "bg-tintcyan text-cyan", text: "text-cyan", edge: "hover:border-edgecyan" },
+  green: { chip: "bg-tintgreen text-green", text: "text-green", edge: "hover:border-edgegreen" },
 };
 
 export default function CaseStudies() {
   return (
     <div className="ambient container mx-auto max-w-[900px]">
       <header className="mb-6">
-        <h1 className="text-h2 leading-snug text-textmain">Études de cas</h1>
+        <h1 className="text-h2 leading-snug text-accent">Études de cas</h1>
         <p className="mt-1.5 max-w-[680px] text-[13.5px] leading-relaxed text-textmuted">
           Les quatre études de cas officielles du guide d'examen v6.1. Entre 30 et 40 % de
           l'épreuve s'appuie dessus : il faut les connaître avant le jour J, pas les découvrir
@@ -51,7 +51,7 @@ export default function CaseStudies() {
                   <div className="mt-3.5 flex flex-wrap items-center gap-2">
                     <Link
                       href={`#/case/${c.id}`}
-                      className="inline-flex items-center gap-1.5 rounded-[4px] bg-textmain px-3.5 py-2 text-[12.5px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+                      className="inline-flex items-center gap-1.5 rounded-[4px] bg-accent px-3.5 py-2 text-[12.5px] font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
                     >
                       <Icon name="book-open" size={14} /> Lire la fiche
                     </Link>
@@ -79,7 +79,7 @@ export default function CaseStudies() {
 
       <Card className="mt-6 p-5 max-sm:p-4">
         <div className="flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[4px]  bg-hover text-textmain">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[4px]  bg-tintaccent text-accent">
             <Icon name="help-circle" size={17} />
           </span>
           <div className="min-w-0">

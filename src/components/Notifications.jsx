@@ -140,14 +140,14 @@ export default function Notifications() {
         aria-expanded={open}
         aria-label={n > 0 ? `Notifications, ${n} en attente` : "Notifications, aucune en attente"}
         className={`relative flex h-9 w-9 items-center justify-center rounded-[4px] border transition-colors ${
-          open ? "border-textmain bg-hover text-textmain" : "border-transparent text-textmuted hover:bg-hover hover:text-textmain"
+          open ? "border-edgeaccent bg-tintaccent text-accent" : "border-transparent text-textmuted hover:bg-hover hover:text-textmain"
         }`}
       >
         <Icon name="bell" size={18} />
         {n > 0 && (
           <span
             aria-hidden="true"
-            className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-textmain ring-2 ring-bg"
+            className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-accent ring-2 ring-bg"
           />
         )}
       </button>
@@ -180,7 +180,7 @@ export default function Notifications() {
                     onClick={() => setOpen(false)}
                     className="flex gap-3 px-4 py-3.5 no-underline transition-colors hover:bg-hover"
                   >
-                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-hover text-textmain">
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] bg-tintaccent text-accent">
                       <Icon name={it.icon} size={14} />
                     </span>
                     <span className="min-w-0">

@@ -13,7 +13,7 @@ export function CourseCard({ c }) {
     return (
       <Link href={`#/course/${c.id}`} className="card card-lift card-lift group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
         <div className="flex items-center justify-between">
-          <div className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></div>
+          <div className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
           <Badge color="violet">Slides</Badge>
         </div>
         <div className="flex-1 text-[15px] font-bold leading-snug">{c.title}</div>
@@ -30,7 +30,7 @@ export function CourseCard({ c }) {
   return (
     <Link href={`#/course/${c.id}`} className="card card-lift card-lift group flex flex-col gap-2.5 p-5 no-underline transition-transform duration-150 hover:-translate-y-[3px]">
       <div className="flex items-center justify-between">
-        <div className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></div>
+        <div className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></div>
         <Badge color={doneClass}>{status}</Badge>
       </div>
       <div className="flex-1 text-[15px] font-bold leading-snug">{c.title}</div>

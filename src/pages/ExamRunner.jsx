@@ -12,23 +12,23 @@ const LETTER = (i) => String.fromCharCode(65 + i);
 
 // Classes statiques : Tailwind ne résout pas `bg-${var}` à la compilation.
 const TONE = {
-  green: { chip: "bg-hover text-textmain", text: "text-textmain" },
-  yellow: { chip: "bg-hover text-textmain", text: "text-textmain" },
+  green: { chip: "bg-tintgreen text-green", text: "text-green" },
+  yellow: { chip: "bg-tintyellow text-yellow", text: "text-yellow" },
   red: { chip: "bg-tintred text-red", text: "text-red" },
 };
 
 function OptionRow({ letter, text, state, onClick, disabled }) {
   const tone = {
     idle: "border-borderline bg-transparent text-textmuted hover:border-borderline hover:bg-hover",
-    picked: "border-textmain bg-hover text-textmain",
-    correct: "border-textmain bg-hover text-textmain",
+    picked: "border-blue bg-tintblue text-textmain",
+    correct: "border-green bg-tintgreen text-textmain",
     wrong: "border-red bg-tintred text-textmain",
     missed: "border-borderline bg-transparent text-textmain",
   }[state];
   const badge = {
     idle: "border-borderline text-textmuted",
     picked: "border-textmain text-textmain",
-    correct: "border-textmain bg-textmain text-onaccent",
+    correct: "border-accent bg-accent text-onaccent",
     wrong: "border-red bg-red text-onaccent",
     missed: "border-textmain text-textmain",
   }[state];
@@ -125,7 +125,7 @@ function Results({ session, result, elapsed, onRestart }) {
                   <span className="w-[132px] shrink-0 truncate text-[12px] text-textmuted">S{s.id} {s.short}</span>
                   <div className="h-2 flex-1 overflow-hidden bg-borderline">
                     <div
-                      className={`h-full rounded-full ${pct >= PASS_MARK ? "bg-textmain" : pct >= 50 ? "bg-textmain" : "bg-red"}`}
+                      className={`h-full rounded-full ${pct >= PASS_MARK ? "bg-green" : pct >= 50 ? "bg-yellow" : "bg-red"}`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -146,14 +146,14 @@ function Results({ session, result, elapsed, onRestart }) {
           {wrong.length > 0 && (
             <Link
               href="#/exam/run/review"
-              className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
             >
               <Icon name="target" size={15} /> Rejouer mes {wrong.length} erreur(s)
             </Link>
           )}
           <Link
             href="#/exam"
-            className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
           >
             <Icon name="award" size={15} /> Mode Examen
           </Link>
@@ -170,7 +170,7 @@ function Results({ session, result, elapsed, onRestart }) {
           return (
             <Card key={d.id} className="overflow-hidden">
               <button onClick={() => toggle(d.id)} className="flex w-full items-start gap-3 p-4 text-left">
-                <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${d.correct ? "bg-hover text-textmain" : d.answered ? "bg-tintred text-red" : "bg-hover text-textmuted"}`}>
+                <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${d.correct ? "bg-tintgreen text-green" : d.answered ? "bg-tintred text-red" : "bg-hover text-textmuted"}`}>
                   <Icon name={d.correct ? "check" : d.answered ? "x" : "help-circle"} size={13} />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -283,7 +283,7 @@ export default function ExamRunner({ mode, target }) {
       <div className="container mx-auto max-w-[820px]">
         <div className="mb-4">
           <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: "Résultat" }]} />
-          <h1 className="text-h2 leading-snug text-textmain">{session.label}</h1>
+          <h1 className="text-h2 leading-snug text-accent">{session.label}</h1>
         </div>
         <Results session={session} result={result} elapsed={elapsed} onRestart={restart} />
       </div>
@@ -332,14 +332,14 @@ export default function ExamRunner({ mode, target }) {
         <Breadcrumb items={[{ label: "Examen", href: "#/exam" }, { label: session.label }]} />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex min-w-0 flex-wrap items-center gap-3">
-            <h1 className="text-h3 leading-snug text-textmain">{session.label}</h1>
+            <h1 className="text-h3 leading-snug text-accent">{session.label}</h1>
             {/* Bandeau de mode, comme « EXAM_MODE: SECURE » dans la maquette. */}
             <span className="label-mono-sm rounded-[4px] border border-borderline bg-hover px-2 py-1 text-textmuted">
               {session.timed ? "EXAM_MODE: CHRONO" : "EXAM_MODE: LIBRE"}
             </span>
           </div>
           {session.timed && (
-            <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-tintred text-red" : "bg-hover text-textmain"}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1.5 font-mono text-[14px] font-bold tabular-nums ${lowTime ? "bg-tintred text-red" : "bg-tintblue text-blue"}`}>
               <Icon name="clock" size={14} /> {fmtClock(remaining)}
             </span>
           )}
@@ -351,7 +351,7 @@ export default function ExamRunner({ mode, target }) {
       <div className="mb-4 flex items-center gap-3">
         <div className="h-[6px] flex-1 overflow-hidden bg-borderline">
           <div
-            className="h-full bg-textmain transition-[width] duration-300"
+            className="h-full bg-accent transition-[width] duration-300"
             style={{ width: `${nb ? (answeredCount / nb) * 100 : 0}%` }}
           />
         </div>
@@ -452,7 +452,7 @@ export default function ExamRunner({ mode, target }) {
               onClick={() => go(i)}
               title={`Question ${i + 1}`}
               className={`relative h-7 w-7 rounded-[4px] text-[11px] font-bold tabular-nums transition-colors ${
-                i === idx ? "bg-textmain text-onaccent"
+                i === idx ? "bg-accent text-onaccent"
                 : revealed.has(id) ? "bg-hover text-textmain ring-1 ring-borderline"
                 : done ? "bg-hover text-textmain"
                 : "border border-borderline text-textmuted hover:bg-hover"
@@ -462,7 +462,7 @@ export default function ExamRunner({ mode, target }) {
               {flagged.has(id) && (
                 <span
                   aria-hidden="true"
-                  className={`absolute top-0.5 right-0.5 h-1.5 w-1.5 ${i === idx ? "bg-onaccent" : "bg-textmain"}`}
+                  className={`absolute top-0.5 right-0.5 h-1.5 w-1.5 ${i === idx ? "bg-onaccent" : "bg-accent"}`}
                 />
               )}
             </button>

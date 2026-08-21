@@ -16,6 +16,7 @@ const ROUTES = {
   examrunt: /^exam\/run\/(section|case)\/([^/]+)$/,
   cases: /^cases$/,
   case: /^case\/([^/]+)$/,
+  about: /^about$/,
 };
 
 function parse(hash) {

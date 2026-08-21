@@ -18,6 +18,7 @@ import ExamHome from "./pages/ExamHome.jsx";
 import ExamRunner from "./pages/ExamRunner.jsx";
 import CaseStudy from "./pages/CaseStudy.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
+import About from "./pages/About.jsx";
 import Onboarding from "./components/Onboarding.jsx";
 import Logo, { LogoMark } from "./components/Logo.jsx";
 import TopBar from "./components/TopBar.jsx";
@@ -49,6 +50,7 @@ const NAV_GROUPS = [
     items: [
       { path: "progress", label: "Progression", icon: "chart" },
       { path: "settings", label: "Paramètres", icon: "settings" },
+      { path: "about", label: "À propos", icon: "help-circle" },
     ],
   },
 ];
@@ -93,6 +95,7 @@ function Page({ route }) {
     case "examrunt": return <ExamRunner key={route.hash} mode={route.params[0]} target={route.params[1]} />;
     case "cases": return <CaseStudies />;
     case "case": return <CaseStudy id={route.params[0]} />;
+    case "about": return <About />;
     case "search": return <Search />;
     case "progress": return <Progress />;
     case "settings": return <Settings />;
@@ -127,7 +130,7 @@ function StreakStrip({ days, streak }) {
   return (
     <div className="rounded-[8px] border border-borderline bg-secondary p-3">
       <div className="flex items-center gap-2">
-        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] ${streak > 0 ? "bg-hover text-textmain" : "bg-hover text-textmuted"}`}>
+        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] ${streak > 0 ? "bg-tintorange text-orange" : "bg-hover text-textmuted"}`}>
           <Icon name="flame" size={15} />
         </span>
         <div className="min-w-0">
@@ -147,7 +150,7 @@ function StreakStrip({ days, streak }) {
             key={c.key}
             title={c.label.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}
             className={`h-6 flex-1 rounded-[4px] ${
-              c.on ? "bg-textmain" : "bg-hover"
+              c.on ? "bg-accent" : "bg-hover"
             } ${c.isToday ? "ring-1 ring-borderline" : ""}`}
           />
         ))}
@@ -213,7 +216,7 @@ function Sidebar({ active, open, setOpen }) {
           <span className="font-bold text-textmain">{st.pct}%</span>
         </div>
         <div className="h-[6px] overflow-hidden bg-borderline">
-          <div className="h-full bg-textmain transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
+          <div className="h-full bg-accent transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
         </div>
         <div className="mt-1.5 text-[11px] text-textmuted">{st.done} / {st.total} leçons lues</div>
       </div>
@@ -264,7 +267,10 @@ export default function App() {
         {/* Colonne de contenu : barre supérieure fixe puis zone de lecture,
             comme dans les maquettes où la recherche et les notifications
             restent accessibles en permanence. */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        {/* `data-section` fixe `--accent` pour toute la page : la teinte de
+            l'entrée de menu active se retrouve sur les titres, les pastilles et
+            les boutons principaux, sans couleur codée dans chaque composant. */}
+        <div className="flex min-w-0 flex-1 flex-col" data-section={active}>
           <TopBar onOpenMenu={() => setMenuOpen(true)} />
           <main className="main" tabIndex="-1">
             <div key={route.hash} className="page-fade">

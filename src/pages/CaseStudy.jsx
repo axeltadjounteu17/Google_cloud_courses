@@ -4,11 +4,17 @@ import { Link } from "../lib/router.jsx";
 import { Badge, Breadcrumb, Card, EmptyState } from "../components/ui.jsx";
 import { CASE_STUDIES, QUESTIONS, caseStudyById } from "../lib/exam.js";
 
+/**
+ * Chaque étude de cas officielle garde sa couleur propre : c'est ce qui permet
+ * de reconnaître un dossier d'un coup d'œil dans la liste comme dans le détail.
+ * Les teintes de fond et les bordures sont les variantes opaques de la palette,
+ * donc aucune superposition translucide.
+ */
 const TONE = {
-  violet: { chip: "bg-hover text-textmain", text: "text-textmain", border: "border-borderline", soft: "bg-hover" },
-  orange: { chip: "bg-hover text-textmain", text: "text-textmain", border: "border-borderline", soft: "bg-hover" },
-  cyan: { chip: "bg-hover text-textmain", text: "text-textmain", border: "border-borderline", soft: "bg-hover" },
-  green: { chip: "bg-hover text-textmain", text: "text-textmain", border: "border-borderline", soft: "bg-hover" },
+  violet: { chip: "bg-tintviolet text-violet", text: "text-violet", border: "border-edgeviolet", soft: "bg-tintviolet" },
+  orange: { chip: "bg-tintorange text-orange", text: "text-orange", border: "border-edgeorange", soft: "bg-tintorange" },
+  cyan: { chip: "bg-tintcyan text-cyan", text: "text-cyan", border: "border-edgecyan", soft: "bg-tintcyan" },
+  green: { chip: "bg-tintgreen text-green", text: "text-green", border: "border-edgegreen", soft: "bg-tintgreen" },
 };
 
 // Rend les **passages en gras** des fiches sans injecter de HTML.
@@ -90,7 +96,7 @@ export default function CaseStudy({ id }) {
       <div className="mb-6 flex flex-wrap items-center gap-2.5">
         <Link
           href={`#/exam/run/case/${c.id}`}
-          className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90"
         >
           <Icon name="target" size={15} /> S'entraîner — {nq} questions
         </Link>

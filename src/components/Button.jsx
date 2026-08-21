@@ -19,7 +19,7 @@ import Icon from "../lib/icons.jsx";
  */
 
 const VARIANTS = {
-  primary: "bg-textmain text-onaccent border border-textmain hover:opacity-90",
+  primary: "bg-accent text-onaccent border border-textmain hover:opacity-90",
   secondary: "bg-transparent text-textmain border border-textmain hover:bg-hover",
   outline: "bg-transparent text-textmain border border-borderline hover:bg-hover hover:border-edgered",
   ghost: "bg-transparent text-textmuted border border-transparent hover:text-textmain hover:bg-hover",

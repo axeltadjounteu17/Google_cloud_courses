@@ -68,7 +68,7 @@ export default function Settings() {
           <div className="text-sm font-bold">À propos</div>
         </div>
         <p className="text-[12.5px] leading-relaxed text-textmuted">
-          Plateforme d'étude hors-ligne pour la certification <strong className="text-textmain">Google Cloud Professional Cloud Architect</strong>. Cours compilés depuis des transcripts vidéo officiels et les diapositives des modules, traduits en français.
+          Plateforme d'étude gratuite pour la certification <strong className="text-textmain">Google Cloud Professional Cloud Architect</strong>. Cours compilés depuis des transcripts vidéo officiels et les diapositives des modules, traduits en français.
         </p>
         <div className="mt-4 overflow-hidden rounded-[8px] border border-borderline bg-bg px-4 py-3 font-mono text-[12px] text-textmuted">
           <span className="text-textmain">$</span> gcloud certifications describe cloud-architect

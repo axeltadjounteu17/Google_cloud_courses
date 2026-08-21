@@ -21,7 +21,7 @@ export default function Courses() {
 
   return (
     <div className="ambient container mx-auto max-w-[1080px]">
-      <h1 className="mb-1.5 text-h2 text-textmain">Tous les cours</h1>
+      <h1 className="mb-1.5 text-h2 text-accent">Tous les cours</h1>
       <p className="mb-5 text-sm text-textmuted">{DATA.courses.length} cours · {totalLessons()} leçons</p>
 
       <div className="mb-5 flex flex-wrap gap-3">
@@ -42,7 +42,7 @@ export default function Courses() {
               key={x.f}
               onClick={() => setFilter(x.f)}
               className={`rounded-full border px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
-                filter === x.f ? "border-textmain bg-textmain text-onaccent" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"
+                filter === x.f ? "border-accent bg-accent text-onaccent" : "border-borderline bg-transparent text-textmuted hover:bg-hover hover:text-textmain"
               }`}
             >
               {x.l}

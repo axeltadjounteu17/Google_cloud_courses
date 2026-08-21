@@ -24,7 +24,7 @@ export default function CourseDetail({ id }) {
         <Card className="mb-5 p-6 max-sm:p-4">
           <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
           <div className="mb-2 flex items-center gap-3">
-            <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></span>
+            <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-tintaccent text-accent"><Icon name={c.icon} size={22} /></span>
             <h1 className="text-h3">{c.title}</h1>
           </div>
           <div className="mb-3 flex flex-wrap gap-2.5">
@@ -50,7 +50,7 @@ export default function CourseDetail({ id }) {
       <Card className="mb-5 p-6 max-sm:p-4">
         <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
         <div className="mb-2 flex items-center gap-3">
-          <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></span>
+          <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-tintaccent text-accent"><Icon name={c.icon} size={22} /></span>
           <h1 className="text-h3">{c.title}</h1>
         </div>
         <div className="mb-4 flex flex-wrap gap-2.5">
@@ -66,7 +66,7 @@ export default function CourseDetail({ id }) {
         </div>
         <div className="flex flex-wrap gap-2.5">
           {position.courseId === c.id && position.lessonIdx != null && c.lessons[position.lessonIdx] && (
-            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
               <Icon name="play" size={15} /> Continuer la lecture
             </Link>
           )}
@@ -104,7 +104,7 @@ export default function CourseDetail({ id }) {
           const isPos = position.courseId === c.id && position.lessonIdx === i;
           return (
             <Link key={i} href={`#/lesson/${c.id}/${i}`} className="flex items-center gap-3.5 rounded-[8px] border border-borderline bg-secondary p-3.5 no-underline transition-colors hover:bg-hover max-sm:gap-2.5 max-sm:p-3">
-              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-textmain bg-textmain text-onaccent" : "border-borderline text-transparent"}`}>
+              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-accent bg-accent text-onaccent" : "border-borderline text-transparent"}`}>
                 {read && <Icon name="check" size={12} />}
               </span>
               <span className="w-[26px] font-mono text-xs text-textmuted">{String(i + 1).padStart(2, "0")}</span>

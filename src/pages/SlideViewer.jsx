@@ -144,7 +144,7 @@ export default function SlideViewer({ cid, deckId, page }) {
           <ul className="list-none">
             {pg.bullets.map((b, i) => (
               <li key={i} className="relative border-b border-dashed border-borderline px-0 py-1.5 pl-5 text-[14.5px] leading-relaxed last:border-none">
-                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[4px] bg-textmain" />
+                <span className="absolute left-1 top-[15px] h-[7px] w-[7px] rounded-[4px] bg-accent" />
                 {b}
               </li>
             ))}
@@ -178,7 +178,7 @@ export default function SlideViewer({ cid, deckId, page }) {
           </Link>
         ) : <span />}
         {nextPage ? (
-          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <Link href={`#/slide/${cid}/${deck.id}/${nextPage}`} className="inline-flex items-center gap-2 rounded-[8px] bg-accent px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             Diapositive {nextPage} <Icon name="chevron-right" size={16} />
           </Link>
         ) : (
