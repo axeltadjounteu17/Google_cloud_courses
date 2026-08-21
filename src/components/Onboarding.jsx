@@ -36,10 +36,10 @@ const STEPS = [
 ];
 
 const COLORS = {
-  cyan: "bg-tintcyan text-cyan border-edgecyan",
-  blue: "bg-tintblue text-blue border-edgeblue",
-  green: "bg-tintgreen text-green border-edgegreen",
-  orange: "bg-tintorange text-orange border-edgeorange",
+  cyan: "bg-hover text-textmain border-borderline",
+  blue: "bg-hover text-textmain border-borderline",
+  green: "bg-hover text-textmain border-borderline",
+  orange: "bg-hover text-textmain border-borderline",
   red: "bg-tintred text-red border-edgered",
 };
 
@@ -61,10 +61,10 @@ export default function Onboarding({ onClose }) {
     <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-scrim/85" />
 
-      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[12px] border border-borderline bg-bgsoft">
+      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[8px] border border-borderline bg-bgsoft">
         <button
           onClick={onClose}
-          className="absolute top-3.5 right-3.5 z-10 rounded-[9px] border border-borderline bg-transparent px-3 py-1.5 text-[12px] font-bold text-textmuted transition-colors hover:bg-hover hover:text-textmain"
+          className="absolute top-3.5 right-3.5 z-10 rounded-[4px] border border-borderline bg-transparent px-3 py-1.5 text-[12px] font-bold text-textmuted transition-colors hover:bg-hover hover:text-textmain"
         >
           Passer
         </button>
@@ -82,7 +82,7 @@ export default function Onboarding({ onClose }) {
               initial={{ scale: 0.4, rotate: -12 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.08 }}
-              className={`flex h-[72px] w-[72px] items-center justify-center rounded-[14px] border ${COLORS[s.color]}`}
+              className={`flex h-[72px] w-[72px] items-center justify-center rounded-[8px] border ${COLORS[s.color]}`}
             >
               <Icon name={s.icon} size={34} />
             </motion.div>
@@ -96,7 +96,7 @@ export default function Onboarding({ onClose }) {
           <button
             onClick={back}
             disabled={step === 0}
-            className="inline-flex h-10 items-center gap-1.5 rounded-[10px] border border-borderline bg-transparent px-3.5 text-[13px] font-bold text-textmain transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-10 items-center gap-1.5 rounded-[8px] border border-borderline bg-transparent px-3.5 text-[13px] font-bold text-textmain transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-35"
           >
             <Icon name="chevron-left" size={15} /> Précédent
           </button>
@@ -105,14 +105,14 @@ export default function Onboarding({ onClose }) {
             {STEPS.map((_, i) => (
               <span
                 key={i}
-                className={`h-1.5 rounded-full transition-all duration-300 ${i === step ? "w-6 bg-cyan" : "w-1.5 bg-borderline"}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === step ? "w-6 bg-textmain" : "w-1.5 bg-borderline"}`}
               />
             ))}
           </div>
 
           <button
             onClick={next}
-            className="inline-flex h-10 items-center gap-2 rounded-[10px] bg-blue px-4 text-[13px] font-bold text-onaccent transition-opacity hover:opacity-90"
+            className="inline-flex h-10 items-center gap-2 rounded-[8px] bg-textmain px-4 text-[13px] font-bold text-onaccent transition-opacity hover:opacity-90"
           >
             {last ? "Commencer" : "Suivant"} <Icon name="chevron-right" size={15} />
           </button>

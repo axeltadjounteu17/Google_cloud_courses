@@ -19,12 +19,26 @@ const ROUTES = {
 };
 
 function parse(hash) {
-  const path = hash.replace(/^#\/?/, "").replace(/\?.*$/, "") || "home";
+  const raw = hash.replace(/^#\/?/, "");
+  const qIdx = raw.indexOf("?");
+  const path = (qIdx >= 0 ? raw.slice(0, qIdx) : raw) || "home";
+  // La query était supprimée sans être conservée : la recherche lancée depuis
+  // la barre supérieure arrivait donc sur une page vide.
+  const query = Object.fromEntries(new URLSearchParams(qIdx >= 0 ? raw.slice(qIdx + 1) : ""));
+
   for (const [page, re] of Object.entries(ROUTES)) {
     const m = path.match(re);
-    if (m) return { page, params: m.slice(1) };
+    if (m) return { page, params: m.slice(1), query };
   }
-  return { page: "home", params: [] };
+  return { page: "home", params: [], query };
+}
+
+/** Lit un paramètre de query depuis le hash courant, hors composant React. */
+export function queryParam(name) {
+  const raw = (location.hash || "").replace(/^#\/?/, "");
+  const qIdx = raw.indexOf("?");
+  if (qIdx < 0) return "";
+  return new URLSearchParams(raw.slice(qIdx + 1)).get(name) || "";
 }
 
 export function useRoute() {

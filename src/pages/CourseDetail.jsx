@@ -24,7 +24,7 @@ export default function CourseDetail({ id }) {
         <Card className="mb-5 p-6 max-sm:p-4">
           <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
           <div className="mb-2 flex items-center gap-3">
-            <span className="flex h-[44px] w-[44px] items-center justify-center hex bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></span>
+            <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></span>
             <h1 className="text-h3">{c.title}</h1>
           </div>
           <div className="mb-3 flex flex-wrap gap-2.5">
@@ -50,7 +50,7 @@ export default function CourseDetail({ id }) {
       <Card className="mb-5 p-6 max-sm:p-4">
         <Breadcrumb items={[{ label: "Cours", href: "#/courses" }, { label: c.title }]} />
         <div className="mb-2 flex items-center gap-3">
-          <span className="flex h-[44px] w-[44px] items-center justify-center hex bg-tintviolet text-violet"><Icon name={c.icon} size={22} /></span>
+          <span className="flex h-[44px] w-[44px] items-center justify-center rounded-[4px] bg-hover text-textmain"><Icon name={c.icon} size={22} /></span>
           <h1 className="text-h3">{c.title}</h1>
         </div>
         <div className="mb-4 flex flex-wrap gap-2.5">
@@ -66,18 +66,18 @@ export default function CourseDetail({ id }) {
         </div>
         <div className="flex flex-wrap gap-2.5">
           {position.courseId === c.id && position.lessonIdx != null && c.lessons[position.lessonIdx] && (
-            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+            <Link href={`#/lesson/${c.id}/${position.lessonIdx}`} className="inline-flex items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
               <Icon name="play" size={15} /> Continuer la lecture
             </Link>
           )}
-          <button onClick={() => markAll(c)} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
+          <button onClick={() => markAll(c)} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
             <Icon name="check" size={14} /> Tout marquer comme lu
           </button>
-          <button onClick={() => unmarkAll(c)} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
+          <button onClick={() => unmarkAll(c)} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover">
             Réinitialiser
           </button>
           {quizCourse && (
-            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[10px] bg-tintviolet px-4 py-2.5 text-sm font-bold text-violet no-underline transition-colors hover:bg-tintviolet">
+            <Link href={`#/quiz/${quizCourse.courseId}`} className="inline-flex items-center gap-2 rounded-[8px] bg-hover px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
               <Icon name="target" size={15} /> Quiz du cours
             </Link>
           )}
@@ -88,7 +88,7 @@ export default function CourseDetail({ id }) {
         <>
           <div className="mb-3.5 mt-7 flex items-baseline justify-between gap-2">
             <h2 className="text-[17px] font-semibold">Diapositives du cours</h2>
-            <Link href={`#/slides/${c.id}`} className="text-[13px] font-semibold text-cyan no-underline">Tout voir</Link>
+            <Link href={`#/slides/${c.id}`} className="text-[13px] font-semibold text-textmain no-underline">Tout voir</Link>
           </div>
           <p className="mb-4 text-sm text-textmuted">Schémas d'architecture, titres et points clés des modules — en français.</p>
           <DeckGrid cid={c.id} />
@@ -103,15 +103,15 @@ export default function CourseDetail({ id }) {
           const read = !!p[i];
           const isPos = position.courseId === c.id && position.lessonIdx === i;
           return (
-            <Link key={i} href={`#/lesson/${c.id}/${i}`} className="flex items-center gap-3.5 rounded-xl border border-borderline bg-secondary p-3.5 no-underline transition-colors hover:bg-hover max-sm:gap-2.5 max-sm:p-3">
-              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-green bg-green text-onaccent" : "border-borderline text-transparent"}`}>
+            <Link key={i} href={`#/lesson/${c.id}/${i}`} className="flex items-center gap-3.5 rounded-[8px] border border-borderline bg-secondary p-3.5 no-underline transition-colors hover:bg-hover max-sm:gap-2.5 max-sm:p-3">
+              <span className={`inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-2 ${read ? "border-textmain bg-textmain text-onaccent" : "border-borderline text-transparent"}`}>
                 {read && <Icon name="check" size={12} />}
               </span>
               <span className="w-[26px] font-mono text-xs text-textmuted">{String(i + 1).padStart(2, "0")}</span>
               <span className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-sm font-semibold">
                   <span className="truncate">{l.title}</span>
-                  {isBookmarked(c.id, i) && <Icon name="bookmark" size={13} className="shrink-0 text-yellow" />}
+                  {isBookmarked(c.id, i) && <Icon name="bookmark" size={13} className="shrink-0 text-textmain" />}
                 </div>
                 <div className="mt-0.5 text-[11.5px] text-textmuted">
                   {l.segments.length} segments{l.segments[0] && l.segments[0].t ? " · horodaté" : ""}{isPos ? " · en cours de lecture" : ""}

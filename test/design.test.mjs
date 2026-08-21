@@ -117,18 +117,37 @@ const contrast = (a, b) => {
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 };
 
-/** Extrait les tokens d'un bloc de thème de index.css. */
+/**
+ * Extrait les tokens d'un bloc de thème de index.css.
+ *
+ * Les accents pointent désormais vers `var(--neutral)` : le système est
+ * achromatique et une seule valeur sert de référence. La résolution suit donc
+ * un niveau d'indirection.
+ */
 function tokens(selector) {
   const i = css.indexOf(selector);
   assert.ok(i >= 0, `bloc ${selector} introuvable`);
   const block = css.slice(i, css.indexOf("}", i));
-  const get = (n) => (block.match(new RegExp(`${n}:\\s*([^;]+);`)) || [])[1]?.trim();
+
+  const raw = (n) => (block.match(new RegExp(`${n}:\\s*([^;]+);`)) || [])[1]?.trim();
+
+  const get = (n) => {
+    let v = raw(n);
+    let guard = 0;
+    while (v && v.startsWith("var(") && guard++ < 4) {
+      v = raw(v.slice(4, -1).trim());
+    }
+    return v;
+  };
+
   const accent = (n) => {
     const v = get(`--${n}`);
+    assert.ok(v, `--${n} non résolu`);
     const [h, s, l] = v.replace(/%/g, "").split(/\s+/).map(Number);
     return hslToRgb(h, s, l);
   };
-  return { get, accent };
+
+  return { get, raw, accent };
 }
 
 const ACCENTS = ["red", "blue", "cyan", "green", "violet", "orange", "yellow"];
@@ -240,4 +259,113 @@ test("le contenu n'est pas masqué sur une simple perte de focus", () => {
   // Le masquage reste actif sur passage réel en arrière-plan, avec un délai.
   assert.match(guard, /visibilitychange/, "masquage sur arrière-plan supprimé");
   assert.match(guard, /HIDE_DELAY_MS/, "délai de grâce absent");
+});
+
+// ── Monochrome Logic : le contenu est achromatique ────────────────────────
+
+for (const [label, selector] of [
+  ["sombre", ":root {"],
+  ["clair", 'html[data-theme="light"] {'],
+]) {
+  test(`thème ${label} : les accents de contenu sont achromatiques`, () => {
+    const t = tokens(selector);
+    // `red` est la seule teinte autorisée par la spécification : elle sert à
+    // l'erreur et aux actions destructrices.
+    for (const a of ["blue", "cyan", "green", "violet", "orange", "yellow"]) {
+      const [h, s] = t.get(`--${a}`).replace(/%/g, "").split(/\s+/).map(Number);
+      assert.equal(s, 0, `--${a} a une saturation de ${s}% : le contenu doit rester achromatique`);
+    }
+    const [, rs] = t.get("--red").replace(/%/g, "").split(/\s+/).map(Number);
+    assert.ok(rs > 40, `--red devrait rester une vraie teinte (saturation ${rs}%)`);
+  });
+
+  test(`thème ${label} : les teintes de surface sont grises`, () => {
+    const t = tokens(selector);
+    for (const a of ["blue", "cyan", "green", "violet", "orange", "yellow"]) {
+      const hex = t.get(`--tint-${a}`);
+      const [r, g, b] = hexToRgb(hex);
+      const spread = Math.max(r, g, b) - Math.min(r, g, b);
+      assert.ok(spread <= 6, `--tint-${a} (${hex}) n'est pas gris : écart RVB de ${spread}`);
+    }
+  });
+}
+
+test("les couleurs de repérage du menu existent pour chaque entrée", () => {
+  // La couleur est conservée uniquement sur la navigation : c'est là qu'elle
+  // aide à se situer. Ces tokens sont séparés des surfaces pour qu'elle ne
+  // puisse pas fuiter dans les pages.
+  const entries = ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"];
+  for (const e of entries) {
+    assert.equal(
+      (css.match(new RegExp(`--nav-${e}:`, "g")) || []).length,
+      2,
+      `--nav-${e} doit être défini dans les deux thèmes`
+    );
+  }
+});
+
+test("les couleurs de menu sont lisibles sur la surface de la barre latérale", () => {
+  for (const [label, selector] of [["sombre", ":root {"], ["clair", 'html[data-theme="light"] {']]) {
+    const t = tokens(selector);
+    const bg = hexToRgb(t.get("--bg"));
+    for (const e of ["home", "courses", "search", "quiz", "exam", "cases", "progress", "settings"]) {
+      const c = hexToRgb(t.get(`--nav-${e}`));
+      const r = contrast(c, bg);
+      // Seuil « gros texte / élément graphique » : ces couleurs portent une
+      // icône et un libellé de 13,5 px en gras.
+      assert.ok(r >= 3, `${label} : --nav-${e} à ${r.toFixed(2)}:1 sur le fond`);
+    }
+  }
+});
+
+test("les couleurs de menu ne servent qu'à la navigation", () => {
+  const bad = [];
+  for (const f of jsx) {
+    const src = readFileSync(f, "utf8");
+    if (f.endsWith("App.jsx")) continue; // la barre latérale est le seul lieu légitime
+    for (const m of src.matchAll(/\b(?:text|bg|border)-nav[a-z]+/g)) {
+      bad.push(`${f.replace(SRC, "src")}: ${m[0]}`);
+    }
+  }
+  assert.deepEqual(bad, [], "une couleur de menu a fuité dans le contenu");
+});
+
+// ── Typographie du système ────────────────────────────────────────────────
+
+test("Inter et JetBrains Mono sont déclarées et embarquées", () => {
+  assert.match(css, /font-family:\s*"Inter"/, "Inter absente");
+  assert.match(css, /font-family:\s*"JetBrains Mono"/, "JetBrains Mono absente");
+  assert.match(css, /Inter-latin\.woff2/, "fichier Inter non référencé");
+  assert.match(css, /JetBrainsMono-latin\.woff2/, "fichier JetBrains Mono non référencé");
+  // Space Grotesk a été remplacée : plus aucune trace ne doit subsister.
+  assert.doesNotMatch(css, /SpaceGrotesk/, "reste de Space Grotesk");
+});
+
+test("le libellé technique en mono capitales est disponible", () => {
+  for (const cls of ["label-mono", "label-mono-sm"]) {
+    assert.match(css, new RegExp(`\\.${cls}\\s*\\{`), `.${cls} absent`);
+  }
+  const rule = css.match(/\.label-mono\s*\{[^}]*\}/)[0];
+  assert.match(rule, /text-transform:\s*uppercase/, "label-mono devrait être en capitales");
+  assert.match(rule, /JetBrains Mono/, "label-mono devrait être en mono");
+});
+
+// ── Formes ────────────────────────────────────────────────────────────────
+
+test("les rayons restent techniques : 4 px et 8 px", () => {
+  const found = new Set();
+  for (const f of jsx) {
+    for (const m of readFileSync(f, "utf8").matchAll(/rounded-\[(\d+)px\]/g)) found.add(Number(m[1]));
+  }
+  const tooRound = [...found].filter((r) => r > 8);
+  assert.deepEqual(tooRound, [], `rayons supérieurs à 8 px : ${tooRound.join(", ")}`);
+});
+
+test("les barres de progression ont des bouts carrés", () => {
+  const track = css.match(/\.bar-track\s*\{[^}]*\}/);
+  const fill = css.match(/\.bar-fill\s*\{[^}]*\}/);
+  assert.ok(track && fill, "classes .bar-track / .bar-fill absentes");
+  for (const r of [track[0], fill[0]]) {
+    assert.doesNotMatch(r, /border-radius:\s*9999px|border-radius:\s*50%/, "capuchon arrondi sur une barre");
+  }
 });

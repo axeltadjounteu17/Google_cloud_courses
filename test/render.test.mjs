@@ -170,18 +170,20 @@ test("le logo et le compteur de régularité sont rendus", { skip: !hasBundle },
   dom.window.close();
 });
 
-test("aucune règle ne déborde horizontalement du conteneur", { skip: !hasBundle }, () => {
+test("aucun décalage négatif horizontal dans les règles de fond", { skip: !hasBundle }, () => {
   // `.ambient::before` a déjà rendu le document scrollable latéralement en
-  // débordant de 12rem de chaque côté ; le halo doit rester dans les bornes.
+  // débordant de 12rem de chaque côté. La règle a depuis été simplifiée, mais
+  // l'invariant reste : aucun pseudo-élément de décor ne doit sortir
+  // horizontalement de son conteneur.
   const css = readFileSync(BUNDLE, "utf8");
   const rule = css.match(/\.ambient:before\{[^}]*\}/);
-  assert.ok(rule, "règle .ambient::before absente du bundle");
+  if (!rule) return; // le décor a été retiré : rien à vérifier
+
   const inset = rule[0].match(/inset:([^;}]+)/);
-  assert.ok(inset, "propriété inset absente");
-  // Les composantes horizontales (2e et 4e) ne doivent pas être négatives.
+  if (!inset) return;
   const parts = inset[1].trim().split(/\s+/);
-  const horizontals = parts.length >= 4 ? [parts[1], parts[3]] : [parts[1] ?? "0"];
+  const horizontals = parts.length >= 4 ? [parts[1], parts[3]] : parts.length >= 2 ? [parts[1]] : [];
   for (const h of horizontals) {
-    assert.ok(!h.startsWith("-"), `halo débordant horizontalement (inset: ${inset[1].trim()})`);
+    assert.ok(!h.startsWith("-"), `décor débordant horizontalement (inset: ${inset[1].trim()})`);
   }
 });

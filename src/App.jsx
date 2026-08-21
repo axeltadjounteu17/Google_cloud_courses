@@ -20,6 +20,7 @@ import CaseStudy from "./pages/CaseStudy.jsx";
 import CaseStudies from "./pages/CaseStudies.jsx";
 import Onboarding from "./components/Onboarding.jsx";
 import Logo, { LogoMark } from "./components/Logo.jsx";
+import TopBar from "./components/TopBar.jsx";
 import { SECTION } from "./components/ui.jsx";
 
 // Navigation groupée par intention : apprendre, s'entraîner, se situer.
@@ -53,6 +54,22 @@ const NAV_GROUPS = [
 ];
 
 const NAV = NAV_GROUPS.flatMap((g) => g.items);
+
+/**
+ * Couleurs de repérage du menu. Classes statiques : Tailwind ne résout pas
+ * `text-${var}`. Le contenu des pages reste achromatique, seule la navigation
+ * est colorée, car c'est là que la couleur aide à se situer.
+ */
+const NAV_TONE = {
+  home:     { text: "text-navhome",     bg: "bg-hover", border: "border-navhome" },
+  courses:  { text: "text-navcourses",  bg: "bg-hover", border: "border-navcourses" },
+  search:   { text: "text-navsearch",   bg: "bg-hover", border: "border-navsearch" },
+  quiz:     { text: "text-navquiz",     bg: "bg-hover", border: "border-navquiz" },
+  exam:     { text: "text-navexam",     bg: "bg-hover", border: "border-navexam" },
+  cases:    { text: "text-navcases",    bg: "bg-hover", border: "border-navcases" },
+  progress: { text: "text-navprogress", bg: "bg-hover", border: "border-navprogress" },
+  settings: { text: "text-navsettings", bg: "bg-hover", border: "border-navsettings" },
+};
 
 // Rattache chaque route à l'entrée de menu qui doit s'allumer.
 const ACTIVE_FOR = {
@@ -108,9 +125,9 @@ function StreakStrip({ days, streak }) {
   const last14 = cells.filter((c) => c.on).length;
 
   return (
-    <div className="rounded-[10px] border border-borderline bg-secondary p-3">
+    <div className="rounded-[8px] border border-borderline bg-secondary p-3">
       <div className="flex items-center gap-2">
-        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] ${streak > 0 ? "bg-tintorange text-orange" : "bg-hover text-textmuted"}`}>
+        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] ${streak > 0 ? "bg-hover text-textmain" : "bg-hover text-textmuted"}`}>
           <Icon name="flame" size={15} />
         </span>
         <div className="min-w-0">
@@ -129,9 +146,9 @@ function StreakStrip({ days, streak }) {
           <span
             key={c.key}
             title={c.label.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}
-            className={`h-6 flex-1 rounded-[3px] ${
-              c.on ? "bg-orange" : "bg-hover"
-            } ${c.isToday ? "ring-1 ring-edgeorange" : ""}`}
+            className={`h-6 flex-1 rounded-[4px] ${
+              c.on ? "bg-textmain" : "bg-hover"
+            } ${c.isToday ? "ring-1 ring-borderline" : ""}`}
           />
         ))}
       </div>
@@ -143,18 +160,10 @@ function StreakStrip({ days, streak }) {
   );
 }
 
-function Sidebar({ active }) {
+function Sidebar({ active, open, setOpen }) {
   const store = useStore();
   const st = store.globalStats();
   const sec = SECTION[active] || SECTION.home;
-  const [open, setOpen] = useState(false);
-
-  // Le thème vient du store, qui l'écrit dans localStorage en JSON et applique
-  // `data-theme`. La barre latérale lisait auparavant la clé en brut, donc
-  // recevait `"dark"` guillemets inclus : la comparaison échouait toujours et
-  // le bouton affichait « Mode clair » quel que soit le thème réel.
-  const { theme, toggleTheme } = store;
-  const dark = theme === "dark";
 
   const nav = (
     <>
@@ -168,17 +177,22 @@ function Sidebar({ active }) {
             {g.label && <div className="nav-group">{g.label}</div>}
             {g.items.map((n) => {
               const on = active === n.path;
+              const tone = NAV_TONE[n.path] || NAV_TONE.home;
               return (
                 <a
                   key={n.path}
                   href={`#/${n.path}`}
                   onClick={() => setOpen(false)}
                   aria-current={on ? "page" : undefined}
-                  className={`flex items-center gap-3 rounded-[9px] px-3 py-2.5 text-[13.5px] font-semibold no-underline transition-colors ${
-                    on ? sec.active : "text-textmuted hover:bg-hover hover:text-textmain"
+                  className={`group flex items-center gap-3 rounded-[4px] px-3 py-2.5 text-[13.5px] font-semibold no-underline transition-colors ${
+                    on
+                      ? `${tone.bg} ${tone.text} border-l-2 ${tone.border}`
+                      : "border-l-2 border-transparent text-textmuted hover:bg-hover hover:text-textmain"
                   }`}
                 >
-                  <Icon name={n.icon} size={17} className="shrink-0" />
+                  {/* L'icône garde sa couleur de rôle même inactive : c'est
+                      elle qui permet de se repérer dans le menu. */}
+                  <Icon name={n.icon} size={17} className={`shrink-0 ${tone.text}`} />
                   {n.label}
                 </a>
               );
@@ -196,19 +210,12 @@ function Sidebar({ active }) {
       <div className="mt-auto px-5 pb-5">
         <div className="mb-1.5 flex items-baseline justify-between text-[11px]">
           <span className="text-textmuted">Progression globale</span>
-          <span className="font-bold text-cyan">{st.pct}%</span>
+          <span className="font-bold text-textmain">{st.pct}%</span>
         </div>
-        <div className="h-[6px] overflow-hidden rounded-full bg-borderline">
-          <div className="h-full rounded-full bg-cyan transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
+        <div className="h-[6px] overflow-hidden bg-borderline">
+          <div className="h-full bg-textmain transition-[width] duration-300" style={{ width: `${st.pct}%` }} />
         </div>
         <div className="mt-1.5 text-[11px] text-textmuted">{st.done} / {st.total} leçons lues</div>
-        <button
-          onClick={toggleTheme}
-          className="mt-4 flex w-full items-center gap-2.5 rounded-[9px] bg-hover px-3 py-2.5 text-[13.5px] font-semibold text-textmuted transition-colors hover:bg-active hover:text-textmain"
-        >
-          <Icon name={dark ? "sun" : "moon"} size={17} />
-          {dark ? "Passer en clair" : "Passer en sombre"}
-        </button>
       </div>
     </>
   );
@@ -231,14 +238,6 @@ function Sidebar({ active }) {
         className={`fixed inset-0 z-40 bg-scrim/80 transition-opacity duration-300 lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       />
 
-      <header className="sticky top-0 z-30 flex h-[58px] w-full items-center gap-2 border-b border-borderline bg-bgsoft px-3.5 lg:hidden">
-        <button className="icon-btn" onClick={() => setOpen(true)} aria-label="Ouvrir le menu"><Icon name="menu" size={20} /></button>
-        <div className="flex flex-1 items-center gap-2 truncate">
-          <LogoMark size={24} />
-          <span className="truncate text-[15px] font-bold">GCP Étude</span>
-        </div>
-        <button className="icon-btn" onClick={toggleTheme} aria-label={dark ? "Passer en thème clair" : "Passer en thème sombre"}><Icon name={dark ? "sun" : "moon"} size={18} /></button>
-      </header>
     </>
   );
 }
@@ -246,23 +245,33 @@ function Sidebar({ active }) {
 export default function App() {
   const route = useRoute();
   const { onboarding, closeOnboarding } = useStore();
+  // L'ouverture du menu mobile est portée ici : la barre supérieure la
+  // déclenche, la barre latérale la consomme.
+  const [menuOpen, setMenuOpen] = useState(false);
   const active = NAV.some((n) => n.path === route.page)
     ? route.page
     : ACTIVE_FOR[route.page] || "home";
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setMenuOpen(false);
   }, [route.hash]);
 
   return (
     <SecurityGuard>
       <div className="app">
-        <Sidebar active={active} />
-        <main className="main" tabIndex="-1">
-          <div key={route.hash} className="page-fade">
-            <Page route={route} />
-          </div>
-        </main>
+        <Sidebar active={active} open={menuOpen} setOpen={setMenuOpen} />
+        {/* Colonne de contenu : barre supérieure fixe puis zone de lecture,
+            comme dans les maquettes où la recherche et les notifications
+            restent accessibles en permanence. */}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <TopBar onOpenMenu={() => setMenuOpen(true)} />
+          <main className="main" tabIndex="-1">
+            <div key={route.hash} className="page-fade">
+              <Page route={route} />
+            </div>
+          </main>
+        </div>
       </div>
       {onboarding && <Onboarding onClose={closeOnboarding} />}
     </SecurityGuard>

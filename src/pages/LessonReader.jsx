@@ -71,34 +71,34 @@ export default function LessonReader({ cid, lidx }) {
           <Badge color={read ? "green" : "violet"}>{read ? "Leçon lue" : `Leçon ${lidx + 1} / ${c.lessons.length}`}</Badge>
           <button
             onClick={() => toggleBookmark(c.id, lidx)}
-            className={`inline-flex items-center gap-2 rounded-[10px] border px-4 py-2.5 text-sm font-bold transition-colors ${
-              marked ? "border-edgeyellow bg-tintyellow text-yellow hover:bg-tintyellow" : "border-borderline bg-transparent text-textmain hover:bg-hover"
+            className={`inline-flex items-center gap-2 rounded-[8px] border px-4 py-2.5 text-sm font-bold transition-colors ${
+              marked ? "border-borderline bg-hover text-textmain hover:bg-hover" : "border-borderline bg-transparent text-textmain hover:bg-hover"
             }`}
           >
             <Icon name="bookmark" size={15} /> {marked ? "Marquée à réviser" : "À réviser"}
           </button>
           <button
             onClick={() => setSettings((s) => ({ ...s, timestamps: !s.timestamps }))}
-            className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
+            className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain transition-colors hover:bg-hover"
           >
             <Icon name="clock" size={15} /> Horodatages : {settings.timestamps ? "ON" : "OFF"}
           </button>
           {deck && (
-            <Link href={`#/slide/${c.id}/${deck.id}/1`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
+            <Link href={`#/slide/${c.id}/${deck.id}/1`} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
               <Icon name="layers" size={16} /> Slides du module
             </Link>
           )}
-          <Link href={`#/course/${c.id}`} className="inline-flex items-center gap-2 rounded-[10px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
+          <Link href={`#/course/${c.id}`} className="inline-flex items-center gap-2 rounded-[8px] border border-borderline bg-transparent px-4 py-2.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover">
             <Icon name="arrow-left" size={16} /> Liste
           </Link>
         </div>
       </div>
 
-      <div className={`rounded-[12px] border border-borderline bg-secondary p-8 max-lg:p-5 max-sm:p-3.5 ${fontSizes[settings.font] || fontSizes.md}`}>
+      <div className={`rounded-[8px] border border-borderline bg-secondary p-8 max-lg:p-5 max-sm:p-3.5 ${fontSizes[settings.font] || fontSizes.md}`}>
         {lesson.segments.map((s, i) => {
-          if (s.h) return <div key={i} className="mb-2.5 mt-5 font-bold text-cyan" style={{ fontSize: "1.02em" }}>{s.text}</div>;
+          if (s.h) return <div key={i} className="mb-2.5 mt-5 font-bold text-textmain" style={{ fontSize: "1.02em" }}>{s.text}</div>;
           const time = s.t && settings.timestamps ? (
-            <span className="mt-1 shrink-0 rounded-md border border-edgecyan bg-tintcyan px-1.5 py-0.5 font-mono text-[11px] font-semibold text-cyan whitespace-nowrap">{fmtTime(s.t)}</span>
+            <span className="mt-1 shrink-0 rounded-[4px] border border-borderline bg-hover px-1.5 py-0.5 font-mono text-[11px] font-semibold text-textmain whitespace-nowrap">{fmtTime(s.t)}</span>
           ) : null;
           return (
             <div key={i} className="mb-3.5 flex items-start gap-3.5">
@@ -113,47 +113,47 @@ export default function LessonReader({ cid, lidx }) {
         <Link
           href={`#/lesson/${c.id}/${lidx + 1}`}
           onClick={() => setRead(c.id, lidx, true)}
-          className="mt-5 flex items-center justify-between gap-4 rounded-[12px] border border-borderline bg-secondary p-5 no-underline transition-colors hover:border-edgeviolet hover:bg-hover max-sm:p-4"
+          className="mt-5 flex items-center justify-between gap-4 rounded-[8px] border border-borderline bg-secondary p-5 no-underline transition-colors hover:border-borderline hover:bg-hover max-sm:p-4"
         >
           <div className="min-w-0">
             <div className="text-[11px] font-bold text-textmuted uppercase tracking-wide">À suivre</div>
             <div className="mt-1 truncate text-[15px] font-semibold text-textmain">{next.title}</div>
             <div className="mt-0.5 text-[12px] text-textmuted">Leçon {lidx + 2} / {c.lessons.length}</div>
           </div>
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet text-onaccent"><Icon name="arrow-right" size={18} /></span>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-textmain text-onaccent"><Icon name="arrow-right" size={18} /></span>
         </Link>
       ) : (
-        <div className="mt-5 flex items-center justify-between gap-4 rounded-[12px] border border-borderline bg-secondary p-5 max-sm:p-4">
+        <div className="mt-5 flex items-center justify-between gap-4 rounded-[8px] border border-borderline bg-secondary p-5 max-sm:p-4">
           <div className="min-w-0">
             <div className="text-[11px] font-bold text-textmuted uppercase tracking-wide">Fin du cours</div>
             <div className="mt-1 text-[15px] font-semibold text-textmain">Vous avez terminé toutes les leçons.</div>
           </div>
-          <Link href={`#/course/${c.id}`} className="inline-flex shrink-0 items-center gap-2 rounded-[10px] bg-violet px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <Link href={`#/course/${c.id}`} className="inline-flex shrink-0 items-center gap-2 rounded-[8px] bg-textmain px-4 py-2.5 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             <Icon name="check" size={14} /> Terminer
           </Link>
         </div>
       )}
 
-      <div className="sticky bottom-3 z-20 mt-5 flex items-center justify-between gap-3 rounded-[12px] border border-borderline bg-bgsoft p-3 max-sm:gap-2 max-sm:p-2.5">
+      <div className="sticky bottom-3 z-20 mt-5 flex items-center justify-between gap-3 rounded-[8px] border border-borderline bg-bgsoft p-3 max-sm:gap-2 max-sm:p-2.5">
         {prev ? (
-          <Link href={`#/lesson/${c.id}/${lidx - 1}`} aria-label="Leçon précédente" className="inline-flex h-11 items-center gap-1.5 rounded-[10px] border border-borderline bg-transparent px-3.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover max-sm:px-3">
+          <Link href={`#/lesson/${c.id}/${lidx - 1}`} aria-label="Leçon précédente" className="inline-flex h-11 items-center gap-1.5 rounded-[8px] border border-borderline bg-transparent px-3.5 text-sm font-bold text-textmain no-underline transition-colors hover:bg-hover max-sm:px-3">
             <Icon name="chevron-left" size={16} /> <span className="max-sm:hidden">Précédent</span>
           </Link>
         ) : <span className="w-[110px] max-sm:hidden" />}
 
         <button
           onClick={() => toggleRead(c.id, lidx)}
-          className={`inline-flex h-11 items-center gap-2 rounded-[10px] px-4 text-sm font-bold transition-opacity ${read ? "border border-borderline bg-transparent text-textmain hover:bg-hover" : "bg-green text-onaccent hover:opacity-90"}`}
+          className={`inline-flex h-11 items-center gap-2 rounded-[8px] px-4 text-sm font-bold transition-opacity ${read ? "border border-borderline bg-transparent text-textmain hover:bg-hover" : "bg-textmain text-onaccent hover:opacity-90"}`}
         >
           <Icon name="check" size={15} /> {read ? "Marquée lue ✓" : "Marquer comme lue"}
         </button>
 
         {next ? (
-          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-violet px-4 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-textmain px-4 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             Suivant <Icon name="chevron-right" size={16} />
           </button>
         ) : (
-          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-violet px-4 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
+          <button onClick={goNext} className="inline-flex h-11 items-center gap-2 rounded-[8px] bg-textmain px-4 text-sm font-bold text-onaccent no-underline transition-opacity hover:opacity-90">
             Terminer <Icon name="check" size={15} />
           </button>
         )}

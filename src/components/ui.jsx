@@ -1,41 +1,48 @@
 import React from "react";
 import Icon from "../lib/icons.jsx";
 
-export const SECTION = {
-  home:     { title: "text-cyan",       chip: "bg-tintcyan text-cyan",         active: "bg-tintcyan text-cyan",         btn: "bg-cyan text-onaccent",   badge: "cyan" },
-  courses:  { title: "text-violet",     chip: "bg-tintviolet text-violet",     active: "bg-tintviolet text-violet",     btn: "bg-violet text-onaccent",  badge: "violet" },
-  quiz:     { title: "text-orange",     chip: "bg-tintorange text-orange",     active: "bg-tintorange text-orange",     btn: "bg-orange text-onaccent",  badge: "orange" },
-  exam:     { title: "text-blue",       chip: "bg-tintblue text-blue",         active: "bg-tintblue text-blue",         btn: "bg-blue text-onaccent",  badge: "blue" },
-  cases:    { title: "text-violet",   chip: "bg-tintviolet text-violet", active: "bg-tintviolet text-violet", btn: "bg-violet text-onaccent",  badge: "violet" },
-  progress: { title: "text-green",      chip: "bg-tintgreen text-green",       active: "bg-tintgreen text-green",       btn: "bg-green text-onaccent",  badge: "green" },
-  search:   { title: "text-cyan",       chip: "bg-tintcyan text-cyan",         active: "bg-tintcyan text-cyan",         btn: "bg-cyan text-onaccent",   badge: "cyan" },
-  settings: { title: "text-textmain",   chip: "bg-hover text-textmuted",      active: "bg-hover text-textmain",       btn: "bg-textmain text-bg", badge: "" },
+/**
+ * Rôles de section.
+ *
+ * Le système est achromatique : les sept teintes d'origine pointent toutes
+ * vers le neutre dans index.css. Ce tableau conserve donc la même forme, mais
+ * l'entrée active se distingue par l'inversion — surface claire, encre sombre —
+ * plutôt que par une couleur, comme dans les maquettes.
+ */
+const ROLE = {
+  title: "text-textmain",
+  chip: "bg-hover text-textmain",
+  // Entrée de menu active : inversion, comme « Home » dans la maquette.
+  active: "bg-textmain text-onaccent",
+  // Bouton primaire : surface claire, encre sombre en thème sombre, et
+  // l'inverse en thème clair. C'est le contraste maximal de la spécification.
+  btn: "bg-textmain text-onaccent",
+  badge: "",
 };
 
+export const SECTION = {
+  home: ROLE, courses: ROLE, quiz: ROLE, exam: ROLE,
+  cases: ROLE, progress: ROLE, search: ROLE, settings: ROLE,
+};
+
+/**
+ * Puce de statut. Seule forme en pilule autorisée par la spécification.
+ * Achromatique : `red` est la seule teinte, réservée à l'erreur.
+ */
 export function Badge({ children, color = "" }) {
-  const colors = {
-    blue: "bg-tintblue text-blue",
-    green: "bg-tintgreen text-green",
-    cyan: "bg-tintcyan text-cyan",
-    red: "bg-tintred text-red",
-    violet: "bg-tintviolet text-violet",
-    orange: "bg-tintorange text-orange",
-    yellow: "bg-tintyellow text-yellow",
-  };
+  const tone = color === "red" ? "bg-tintred text-red border-edgered" : "bg-hover text-textmuted border-borderline";
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${colors[color] || "bg-hover text-textmuted"}`}>
+    <span className={`label-mono-sm inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 ${tone}`}>
       {children}
     </span>
   );
 }
 
-export function ProgressBar({ pct = 0, h = "h-1.5" }) {
+/** Barre de progression à bouts carrés : aspect architectural, pas de capuchons. */
+export function ProgressBar({ pct = 0, h = "h-1" }) {
   return (
-    <div className={`w-full overflow-hidden rounded-full bg-hover ${h}`}>
-      <div
-        className="h-full rounded-full bg-blue transition-[width] duration-500 ease-out"
-        style={{ width: `${Math.max(0, Math.min(100, pct))}%` }}
-      />
+    <div className={`bar-track w-full ${h}`}>
+      <div className="bar-fill" style={{ width: `${Math.max(0, Math.min(100, pct))}%` }} />
     </div>
   );
 }
@@ -55,7 +62,7 @@ export function SectionTitle({ children, link, linkHref, className = "" }) {
     <div className={`mb-3.5 mt-7 flex items-baseline justify-between gap-2 max-sm:flex-col max-sm:items-start ${className}`}>
       <h2 className="text-h3">{children}</h2>
       {link && (
-        <a className="text-[13px] font-semibold text-cyan no-underline" href={linkHref}>
+        <a className="text-[13px] font-semibold text-textmain no-underline" href={linkHref}>
           {link}
         </a>
       )}
@@ -65,7 +72,7 @@ export function SectionTitle({ children, link, linkHref, className = "" }) {
 
 export function Card({ children, className = "", style }) {
   return (
-    <div className={`rounded-[12px] border border-borderline bg-secondary ${className}`} style={style}>
+    <div className={`rounded-[8px] border border-borderline bg-secondary ${className}`} style={style}>
       {children}
     </div>
   );
@@ -77,7 +84,7 @@ export function Breadcrumb({ items }) {
       {items.map((it, i) => (
         <React.Fragment key={i}>
           {it.href ? (
-            <a className="text-cyan no-underline" href={it.href}>{it.label}</a>
+            <a className="text-textmain no-underline" href={it.href}>{it.label}</a>
           ) : (
             <span>{it.label}</span>
           )}
